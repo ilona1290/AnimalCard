@@ -1,0 +1,295 @@
+.visit__element{
+    font-size: 2.8rem;
+    padding: 1em;
+    margin: 1em 10em;
+    border: 1px solid black;
+    border-radius: 40px;
+    position: relative;
+    /* box-shadow: 0.25em 0.25em  0.25em  rgba( 0, 0, 0, 0.3 ); */
+}
+
+.displayNone__div{
+  display: none;
+}
+
+.displayBlock__div{
+  display: block;
+}
+
+.arrow {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: inline-block;
+  position: absolute;
+  margin: 0 1rem;
+  left: 1em;
+  cursor: pointer;
+}
+.arrow span {
+  top: 1.7rem;
+  position: absolute;
+  width: 1.9rem;
+  height: 0.1rem;
+  background-color: black;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+.arrow span:first-of-type {
+  left: 0;
+  transform: rotate(45deg);
+}
+.arrow span:last-of-type {
+  right: 0;
+  transform: rotate(-45deg);
+}
+.arrow.active span:first-of-type {
+  transform: rotate(-45deg);
+}
+.arrow.active span:last-of-type {
+  transform: rotate(45deg);
+}
+
+.visit__addNewItem{
+    font-size: 3rem;
+    float: right;
+    border-radius: 50%;
+    padding: 0.5em;
+    line-height: 0.5em;
+    margin-top: -0.5%;
+    background-color: green;
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.visit__removeItem{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 3rem;
+    border-radius: 55%;
+    padding: 0.5em;
+    line-height: 0.5em;
+    background-color: red;
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.visit__addNewItem:hover{
+    transform: scale(1);
+}
+
+.visit__removeItem:hover{
+  transform: scale(1);
+}
+
+.visit__addNewItem .tooltiptext {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.703);
+    color: #fff;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px; 
+    font-size: 1.3rem;
+  }
+
+.visit__removeItem .tooltiptext {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.703);
+    color: #fff;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px; 
+    font-size: 1.3rem;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .visit__addNewItem:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .visit__removeItem:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .visit__addNewItem .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+
+  .visit__removeItem .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+
+/* Rodzic musi mieć display flex i justify-content center, aby dziecko wyświetliło się na środku jeśli flex Direcrion = row. Jeśli flex-direction = column
+to centrujemy w poziomie używając align-items*/
+.visit__container__form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.visit__form{
+    border: 1px solid black;
+    width: 60%;
+    padding: 1em;
+    border-radius: 40px;
+    margin-bottom: 1em;
+    position: relative;
+}
+
+.visit__firstInput{
+    margin-right: 1em !important;
+    margin-bottom: 1em !important;
+}
+
+.visit__dateField{
+    margin-bottom: 1em !important;
+    width: 40%;
+}
+
+/* Animacja zwiększania elementu wewnętrznego przy 
+otwieraniu z ustawieniem czasów trwania animacji*/
+.animateIn {
+    -webkit-animation-name: accordionIn;
+    -webkit-animation-duration: 0.65s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: normal;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-delay: 0s;
+    -moz-animation-name: normal;
+    -moz-animation-duration: 0.65s;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-direction: alternate;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-fill-mode: both;
+    -moz-animation-delay: 0s;
+    animation-name: accordionIn;
+    animation-duration: 0.65s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+    animation-delay: 0s;
+  }
+  
+  /* Animacja zmniejszania elementu wewnętrznego przy zamykaniu z ustawieniem czasów trwania animacji */
+  .animateOut {
+    -webkit-animation-name: accordionOut;
+    -webkit-animation-duration: 0.75s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-delay: 0s;
+    -moz-animation-name: accordionOut;
+    -moz-animation-duration: 0.75s;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-direction: alternate;
+    -moz-animation-timing-function: ease-in-out;
+    -moz-animation-fill-mode: both;
+    -moz-animation-delay: 0s;
+    animation-name: accordionOut;
+    animation-duration: 0.75s;
+    animation-iteration-count: 1;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+    animation-delay: 0s;
+  }
+  
+  /* Trzy poniższe definicja animacji zwiększania się przy 
+  pojawianiu*/
+  @-webkit-keyframes accordionIn {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+    }
+  }
+  @-moz-keyframes accordionIn {
+    0% {
+      opacity: 0;
+      -moz-transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      -moz-transform: scale(1);
+    }
+  }
+  @keyframes accordionIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  
+  /* Trzy poniższe definicja animacji zmniejszania się przy 
+  zamykaniu*/
+  @-webkit-keyframes accordionOut {
+    0% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      -webkit-transform: scale(0.8);
+    }
+  }
+  @-moz-keyframes accordionOut {
+    0% {
+      opacity: 1;
+      -moz-transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      -moz-transform: scale(0.8);
+    }
+  }
+  @keyframes accordionOut {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+  }

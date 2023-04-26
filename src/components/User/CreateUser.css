@@ -1,0 +1,153 @@
+.wm-hero {
+    --duration1: 2.5s;
+    --duration2: calc(var(--duration1) / 2);
+    --delay1: calc(var(--duration2) / 2);
+    --delay2: calc(var(--duration2) + var(--delay1));
+    --easing: cubic-bezier(0.65, 0.05, 0.36, 1);
+    overflow: hidden;
+    text-align: center;
+    height: 90vh;
+  }
+  .wm-hero h1 {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    opacity: 0;
+    transform: translateY(3em);
+    -webkit-animation: loadH1 var(--duration1) var(--easing) var(--delay1) forwards;
+            animation: loadH1 var(--duration1) var(--easing) var(--delay1) forwards;
+  }
+  @media screen and (min-width: 981px) {
+    .wm-hero h1 {
+      font-size: 56px;
+    }
+  }
+
+.container_roles{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20em;
+    padding-top: 5em;
+    transform: translateY(110%);
+    -webkit-animation: loadImg var(--duration2) var(--easing) var(--delay2) forwards;
+            animation: loadImg var(--duration2) var(--easing) var(--delay2) forwards;
+}
+
+.container_roles__role{
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #46468b;
+    height: 50vh;
+    width: 20vw;
+    border-radius: 20px;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.container_roles__role:hover{
+    transform: scale(1.1);
+}
+
+
+.container_roles__role__img{
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid lightgrey;
+    transform: scale(0.5);
+}
+
+.container_roles__role__text{
+    position: absolute;
+    font-size: 3rem;
+    top: 65%;
+    margin-top: 1em;
+}
+
+.wrapper form .field select{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    font-size: 17px;
+    padding-left: 20px;
+    border: 2px solid lightgrey;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+  }
+  .wrapper form .field select:focus,
+  form .field select:focus{
+    border-color: #4158d0;
+  }
+
+  .wrapper form .field select label{
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color: #999999;
+    font-weight: 600;
+    font-size: 17px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+  }
+  form .field select:focus ~ label,
+  form .field select:valid ~ label{
+    top: 0%;
+    font-size: 16px;
+    color: #4158d0;
+    background: #fff;
+    transform: translateY(-50%);
+  }
+
+@-webkit-keyframes loadH1 {
+    0% {
+      opacity: 0;
+      transform: translateY(3em);
+    }
+    30%, 50% {
+      opacity: 1;
+      transform: translateY(3em);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  
+  @keyframes loadH1 {
+    0% {
+      opacity: 0;
+      transform: translateY(3em);
+    }
+    30%, 50% {
+      opacity: 1;
+      transform: translateY(3em);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @-webkit-keyframes loadImg {
+    0% {
+      transform: translateY(110%);
+    }
+    100% {
+      transform: none;
+    }
+  }
+  @keyframes loadImg {
+    0% {
+      transform: translateY(110%);
+    }
+    100% {
+      transform: none;
+    }
+  }

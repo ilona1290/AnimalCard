@@ -1,0 +1,32 @@
+.icon__circle{
+    border-radius: 50%;
+    margin-bottom: 3em;
+}
+
+.searchbox{
+    width: 30%;
+}
+
+.container__animals{
+    padding-top: 10em;
+}
+
+.animals{
+    display: flex;
+    justify-content: center;
+    padding-top: 3em;
+    row-gap: 3em;
+    column-gap: 3em;
+    flex-wrap: wrap;
+    /* Wraper musi  mieć ustawioną wysokość i szerokość, jeśli w dziecku ustawiamy wysokość i szerokość procentowo. */
+    width: 100%;
+    height: auto;
+    padding-bottom: 3em;
+}
+
+.animals__card{
+    padding: 3em;
+    padding-bottom: 8em;
+}
+
+

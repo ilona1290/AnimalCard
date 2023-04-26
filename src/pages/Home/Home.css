@@ -1,0 +1,120 @@
+.home{
+    background-image: url('./job4562-nunoon-10.jpg'); 
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+}
+
+.header{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2em;
+    height: 80vh;
+    text-align: center;
+    color: black;
+    opacity: 1;
+    animation: headerIn 0.8s linear;
+}
+
+.header__heading{
+    margin-top: 2em;
+    font-size: 3.4rem;
+    font-style: italic;
+    font-weight: 800;
+    padding-bottom: 0.5em;
+}
+
+.header__text{
+    font-size: 1.6rem;
+}
+
+.header__buttons{
+    display: flex;
+    column-gap: 1em;
+}
+
+.header__buttons__btn{
+    margin-top: 2em;
+        padding: 0.8em 1.6em;
+        font-size: 1.6rem;
+        background: green;
+        border: none;
+        border-radius: 5rem;
+        color: white;
+        text-decoration: none;
+        /* text-transform: uppercase; */
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+
+}
+
+.header__buttons__btn:hover{
+    transform: scale(1.2);
+}
+
+@keyframes headerIn {
+    0% {
+        opacity: 0;
+        transform: translateY(8%);
+    }
+    25%  {
+        opacity: 0.25;
+        transform: translateY(6%);
+    }
+    50%  {
+        opacity: 0.5;
+        transform: translateY(4%);
+    }
+    75% {
+        opacity: 0.75;
+        transform: translateY(2%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}
+
+@media(min-width: 576px){
+    .header__heading{
+        font-size: 4.8rem;
+    }
+
+    .header__text{
+        font-size: 1.8rem;
+    }
+}
+
+@media(min-width: 992px){
+    .header__heading{
+        font-size: 7.6rem;
+    }
+
+    .header__text{
+        font-size: 2.4rem;
+    }
+
+    .header__buttons__btn{
+        font-size: 2.4rem;
+    }
+
+    .header__buttons{
+        column-gap: 3em;
+    }
+}
+
+@media(min-width: 1200px){
+    .header__heading{
+        font-size: 9rem;
+    }
+
+    .header__text{
+        font-size: 3rem;
+        width: 60vw;
+    }
+}
+

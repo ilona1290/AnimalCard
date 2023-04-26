@@ -1,0 +1,12 @@
+.menu__animalCard{
+    height: 45%;
+    width: 15%;
+}
+
+.animal__card{
+    padding-top: 8em;
+}
+
+.menu__animalCard__icon{
+    transform: scale(0.7);
+}

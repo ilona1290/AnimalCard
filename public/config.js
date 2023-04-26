@@ -1,0 +1,1 @@
+var baseURL = "https://animalcardapi.somee.com/";

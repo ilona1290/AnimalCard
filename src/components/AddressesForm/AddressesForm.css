@@ -1,0 +1,15 @@
+.form__addMore{
+    margin: 1em 0em;
+    padding: 1em 2.5em;
+    font-size: 1.2em;
+    background-color: dodgerblue;
+    border: none;
+    border-radius: 2em;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.form__addMore:hover{
+    transform: scale(1.2);
+}
