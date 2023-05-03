@@ -14,6 +14,7 @@ import { styled } from '@mui/material/styles';
 
 import CorrectIcon from "./correct.svg";
 import RejectIcon from './remove.svg';
+import Loader from "../../components/Loader";
 
 const theme = createTheme({
     typography: {
@@ -208,22 +209,17 @@ function AdminConfirmCustoms(){
     }
 
     return(
-        <div>
-            <div className="header__buttons__end">
-                <Link to="/logout">
-                    <button className="header__buttons__end__btn">
-                        <p>Wyloguj</p>
-                    </button>
-                </Link>
-            </div>
-            {isLoading && <p>Loading...</p>}
+        <div style={{paddingTop: "9%"}}>
+            {isLoading && <Loader />}
             <ThemeProvider theme={theme}>
                 <Typography component={'span'} variant={'body2'}>
+                    {!isLoading &&
                     <Box sx={{ mb: 1 }}>
-                        <Button onClick={handleExpandClick}>
+                        <button className="open__close__btn"
+                          onClick={handleExpandClick}>
                         {expanded.length === 0 ? 'Otwórz wszystkie' : 'Zamknij wszystkie'}
-                        </Button>
-                    </Box>
+                        </button>
+                    </Box>}
                     <div style={{width: "100%"}}>
                     <TreeView
                         aria-label="controlled"
@@ -272,9 +268,10 @@ function AdminConfirmCustoms(){
                     </div>
             </Typography>
             </ThemeProvider>
-            <button className="header__buttons__end__btn" onClick={send}>Zatwierdź</button><br />
+            {!isLoading && 
+            <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "15em"}} onClick={send}>Zapisz</button>}
             <Link to="/adminMenu">
-                <button className="header__buttons__end__btn">Powrót</button>
+                <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "6em"}}>Powrót</button>
             </Link>
         </div>
     );

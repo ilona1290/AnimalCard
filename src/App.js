@@ -25,12 +25,14 @@ import AnimalCard from "./pages/AnimalCard";
 import OwnerMenu from "./pages/OwnerMenu";
 import VetCalendar from "./pages/VetCalendar";
 import StartVisit from "./pages/StartVisit";
+import CustomAppBar from "./components/CustomAppBar";
 
 function App() {
   return (
     <div className="App">
         {SessionManager.getToken() ?
           <Router>
+            <CustomAppBar />
             <Routes>
               <Route path="/start" element={<StartPage/>}/>
               <Route path="/logout" element={<Logout/>}/>

@@ -15,13 +15,8 @@ function AnimalCard(){
     const {petId} = useParams();
     return(
         <div style={{height: "100%", width: "100%"}}>
-            <Link to="/logout">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "1em", top: "1em"}}>
-                    <p>Wyloguj</p>
-                </button>
-            </Link>
             <Link to="/pets">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "10em", top: "1em"}}>
+                <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
                     <p>Powrót</p>
                 </button>
             </Link>

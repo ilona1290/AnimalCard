@@ -18,11 +18,6 @@ function OwnerMenu() {
 
     return(
         <div style={{height: "100%"}}>
-            <Link to="/logout">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "1em", top: "1em"}}>
-                    <p>Wyloguj</p>
-                </button>
-            </Link>
             <div className="menu">
                     <div className="menu__card" onClick={goToProfile}>
                         <img className="menu__icon" src={ownerIcon} alt="vetIcon"></img>

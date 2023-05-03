@@ -9,6 +9,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import 'dayjs/locale/pl';
 
 import "./StartVisit.css";
+import PreviewVisit from "../../components/PreviewVisit/PreviewVisit";
 
 const theme = createTheme({
     typography: {
@@ -22,15 +23,30 @@ const theme = createTheme({
 
 function StartVisit(){
     const [num, setNum] = useState("");
+    const [showPreview, setShowPreview] = useState(false);
+
     const [rabiesVaccinations, setrabiesVaccinations] = useState([]);
+    // const [infectiousDiseaseVaccinations, setInfectiousDiseaseVaccinations] = useState([]);
+    // const [diseases, setDiseases] = useState([]);
+    // const [treatments, setTreatments] = useState([]);
+    // const [researches, setResearches] = useState([]);
+    // const [weight, setWeight] = useState([]);
+
     const [isToggle, setToggle] = useState(false);
     const arrowRef = React.useRef(null)
 
-    const handleChangeNumber = (e) => {
+    const handleShowPreview = () => {
+        setShowPreview(!showPreview)
+    }
+
+    const handleChangeNumber = (event, index) => {
         const regex = /^[0-9\b]+$/;
-        if (e.target.value === "" || regex.test(e.target.value)) {
-        setNum(e.target.value);
+        if (event.target.value === "" || regex.test(event.target.value)) {
+            let data = [...rabiesVaccinations];
+            data[index][event.target.name] = event.target.value;
+            setrabiesVaccinations(data);
         }
+        
     };
 
     const handleAddNewItem = () => {
@@ -63,9 +79,15 @@ function StartVisit(){
         }, 700)
     }
 
-    const handleNameChange = (event, index) => {
+    const handleNameChange = (event, index, date) => {
         let data = [...rabiesVaccinations];
-        data[index][event.target.name] = event.target.value;
+        if(typeof date === "undefined"){
+            data[index][event.target.name] = event.target.value;
+        }
+        else{
+            data[index][date] = event.$d.toLocaleDateString();;
+        }
+        
         setrabiesVaccinations(data);
     }
 
@@ -87,53 +109,53 @@ function StartVisit(){
     }
 
     return(
-        <div>
-            <Link to="/logout">
-                <button className="header__buttons__end__btn">
-                    <p>Wyloguj</p>
+        <div style={{paddingTop: "7%"}}>
+            {showPreview === true ? <PreviewVisit handleShowPreview={handleShowPreview} rabiesVaccinations={rabiesVaccinations} /> : <div>
+                <Link to="/vetMenu/calendar">
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
+                        <p>Powrót</p>
+                    </button>
+                </Link>
+                <button className="header__buttons__end__btn" style={{position: "absolute", right: "15em", top: "3.5em"}} onClick={handleShowPreview}>
+                    <p>Zakończ wizytę</p>
                 </button>
-            </Link>
-            <Link to="/vetMenu/calendar">
-                <button className="header__buttons__end__btn">
-                    <p>Powrót</p>
-                </button>
-            </Link>
-
-            <div className="visit__element">
-                <div className={rabiesVaccinations.length === 0 ? "displayNone__div" : ""}><span ref={arrowRef} className="arrow" onClick={toggleArrow}><span></span><span></span></span></div>
-                Szczepienia przeciwko wściekliźnie
-                <button className="visit__addNewItem" onClick={handleAddNewItem}>
-                    +
-                    <span className="tooltiptext">Dodaj szczepienie</span>
-                </button>
-            </div>
-            <div className="visit__container__form">
-                {rabiesVaccinations.map((elem, index) => {
-                    return (
-                <div className={`visit__form  ${index === rabiesVaccinations.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`elem-${elem.id}`}>
-                    <ThemeProvider theme={theme}>
-                        <Typography component={'span'} variant={'body2'}>
-                            <button className="visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
-                                x
-                                <span className="tooltiptext">Usuń szczepienie</span>
-                            </button>
-                            <TextField className="visit__firstInput" id="outlined-basic" name="name" label="Nazwa szczepionki" onChange={(event) => handleNameChange(event, index)} variant="outlined" value={elem.name}/>
-                            <TextField type="text" id="outlined-basic" label="Nr serii" variant="outlined" onChange={(e) => handleChangeNumber(e)} value={num}/><br></br>
-                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-                                <DatePicker className="visit__dateField" label="Data ważności szczepionki"/>
-                            </LocalizationProvider><br></br>
-                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-                                <DatePicker className="visit__dateField" label="Termin następnego szczepienia"/>
-                            </LocalizationProvider>
-                        </Typography>
-                    </ThemeProvider>
+                <div className="visit__element">
+                    <div className={rabiesVaccinations.length === 0 ? "displayNone__div" : ""}><span ref={arrowRef} className="arrow" onClick={toggleArrow}><span></span><span></span></span></div>
+                    Szczepienia przeciwko wściekliźnie
+                    <button className="visit__addNewItem" onClick={handleAddNewItem}>
+                        +
+                        <span className="tooltiptext">Dodaj szczepienie</span>
+                    </button>
                 </div>
-                )})}
-            </div>
-            <div className="visit__element">Choroby</div>
-            <div className="visit__element">Zabiegi</div>
-            <div className="visit__element">Badania</div>
-            <div className="visit__element">Waga</div>
+                <div className="visit__container__form">
+                    {rabiesVaccinations.map((elem, index) => {
+                        return (
+                    <div className={`visit__form  ${index === rabiesVaccinations.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`elem-${elem.id}`}>
+                        <ThemeProvider theme={theme}>
+                            <Typography component={'span'} variant={'body2'}>
+                                <button className="visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
+                                    x
+                                    <span className="tooltiptext">Usuń szczepienie</span>
+                                </button>
+                                <TextField className="visit__firstInput" id="outlined-basic" name="name" label="Nazwa szczepionki" onChange={(event) => handleNameChange(event, index)} variant="outlined" value={elem.name}/>
+                                <TextField type="text" id="outlined-basic" label="Nr serii" name="series" variant="outlined" onChange={(event) => handleChangeNumber(event, index)} value={elem.series}/><br></br>
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
+                                    <DatePicker className="visit__dateField" name="date1" label="Data ważności szczepionki" onChange={(event) => handleNameChange(event, index, 'date1')}/>
+                                </LocalizationProvider><br></br>
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
+                                    <DatePicker className="visit__dateField" name="date2" label="Termin następnego szczepienia" onChange={(event) => handleNameChange(event, index, 'date2')}/>
+                                </LocalizationProvider>
+                            </Typography>
+                        </ThemeProvider>
+                    </div>
+                    )})}
+                </div>
+                <div className="visit__element">Szczepienia przeciwko innym chorobom zakaźnym</div>
+                <div className="visit__element">Choroby</div>
+                <div className="visit__element">Zabiegi</div>
+                <div className="visit__element">Badania</div>
+                <div className="visit__element">Waga</div>
+            </div>}
         </div>
     )
 }

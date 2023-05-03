@@ -43,7 +43,7 @@ function Pets(){
         if(SessionManager.getRole() === "Vet"){
             return(
                 <Link to="/vetMenu">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "10em", top: "1em"}}>
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
                         <p>Powrót</p>
                     </button>
                 </Link>
@@ -52,7 +52,7 @@ function Pets(){
         else{
             return(
                 <Link to="/ownerMenu">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "10em", top: "1em"}}>
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
                         <p>Powrót</p>
                     </button>
                 </Link>
@@ -61,11 +61,6 @@ function Pets(){
     }
     return(
         <div style={{height: "100%", width: "100%"}}>
-            <Link to="/logout">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "1em", top: "1em"}}>
-                    <p>Wyloguj</p>
-                </button>
-            </Link>
             {returnBack()}
             <div className="container__animals">
                 <ThemeProvider theme={theme}>

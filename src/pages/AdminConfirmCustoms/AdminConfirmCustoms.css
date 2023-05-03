@@ -1,6 +1,14 @@
-/* css-h8e4t7-MuiTreeItem-content MuiTreeItem-content Mui-expanded Mui-selected */
+.open__close__btn{
+    background-color: green;
+    color: white;
+    border: none; 
+    border-radius: 5rem;
+    padding: 0.8em 1.6em;
+    font-size: 1.6rem; 
+    cursor: pointer; 
+    transition: all 0.3s ease-in-out;
+}
 
-/* .css-h8e4t7-MuiTreeItem-content .MuiTreeItem-label{
-    font-size: 3rem !important;
-    font-family: 'Montserrat', sans-serif !important;
-} */
+.open__close__btn:hover{
+    transform: scale(1.1)
+}

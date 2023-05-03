@@ -7,6 +7,7 @@ import './VetProfile.css';
 
 import downArrowButtonIcon from './down-arrow 2 (2).svg';
 import upArrowButtonIcon from './up-arrow 2.svg';
+import Loader from "../../components/Loader";
 
 function VetProfile(){
     const [isLoading, setLoading] = useState(true);
@@ -36,6 +37,10 @@ function VetProfile(){
     
     return(
         <div style={{height: "100%"}}>
+            {isLoading && <Loader />}
+            <Link to="/vetMenu">
+                <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "6em", zIndex: "1000"}}>Powrót</button>
+            </Link>
             {!isLoading && 
             <div className="vetProfile">
                 <div className="vetProfile__basicInfo">
@@ -47,16 +52,6 @@ function VetProfile(){
                     <div className="vetProfile__basicInfo_aboutMe">{info.aboutMe}</div></div>}
                 </div>
                 <div className="vetProfile__extraInfo">
-                <Link to="/logout">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "1em", top: "1em"}}>
-                        <p>Wyloguj</p>
-                    </button>
-                </Link>
-                <Link to="/vetMenu">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "10em", top: "1em"}}>
-                        <p>Powrót</p>
-                    </button>
-                </Link><br/>
                     <div className="vetProfile__extraInfo_header">Adresy:</div>
                     {addressesToDisplay.map((elem, index) => (
                         <div className="vetProfile__extraInfo__address">{elem.nameOfPlace}<br/>{elem.street} {elem.houseNumber} 

@@ -11,11 +11,6 @@ function AdminMenu(){
     }
     return(
         <div style={{height: "100%"}}>
-            <Link to="/logout">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "1em", top: "1em"}}>
-                    <p>Wyloguj</p>
-                </button>
-            </Link>
             <div className="menu">
                 {/* Link z biblioteki formatuje nam po swojemu klikalną kartę (element div).  Lepiej tu użyć onClicków i useNavigate*/}
                 {/* <Link to="/vetMenu/profile"> */}

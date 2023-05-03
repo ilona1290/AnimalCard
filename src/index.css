@@ -31,7 +31,10 @@ input:-webkit-autofill:active{
 html {
   font-size: 62.5%;
   scroll-behavior: smooth;
+  /* overflow-y: overlay; Aby przy pojawianiu się scroolbara, nie przesuwał on nam zawartości, czyli aby miał on pozycje absolute. Ewentualnie użycie wartości 
+  scroll, aby był widoczny, ale wyszarzony. Overlay nie działa na firefoxie, dlatego użyjemy obu.*/
   overflow-y: scroll;
+  overflow-y: overlay;
 }
 
 code {

@@ -10,6 +10,7 @@ import SessionManager from "../../components/Auth/SessionManager";
 import AddressesForm from "../../components/AddressesForm";
 
 import './UpdateVetProfile.css';
+import Loader from "../../components/Loader";
 
 const theme = createTheme({
     typography: {
@@ -156,20 +157,18 @@ function UpdateVetProfile(){
         <div>
             <div className="header__buttons__end">
                 <Link to="/vetMenu">
-                    <button className="header__buttons__end__btn">
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
                         <p>Zrobię to później</p>
                     </button>
                 </Link>
-                <Link to="/logout">
-                    <button className="header__buttons__end__btn">
-                        <p>Wyloguj</p>
-                    </button>
-                </Link>
             </div>
+            {isLoading && <Loader />}
+            {!isLoading &&
             <div className="updateProfile">
                 <div className="updateProfile__avatar">
                     <img className="updateProfile__avatar__img" src={SessionManager.getProfilePicture()} alt="ProfilePicture"></img>
-                    <input name="Avatar" id = 'img' type="file" className="updateProfile__avatar__btn" onChange={(e)=> handleImageChange(e)}/>
+                    <label htmlFor="img" className="updateProfile__avatar__btn">Zmień zdjęcie profilowe</label>
+                    <input name="Avatar" id = 'img' type="file" style={{visibility:"hidden"}} onChange={(e)=> handleImageChange(e)}/>
                 </div>
                 
                 <ThemeProvider theme={theme}>
@@ -189,7 +188,7 @@ function UpdateVetProfile(){
                 </Typography>
                 </ThemeProvider>
                 <button className="updateProfile__send" onClick={handleClick}>Wyślij</button>
-            </div>
+            </div>}
         </div>
     );
 }
