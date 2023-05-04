@@ -54,11 +54,11 @@ function CreateUser() {
                                 </div>
                                 <div className="field">
                                     <select name="sex" id="sex">
-                                        <option disabled selected value> -- select an option -- </option>
+                                        <option disabled selected value></option>
                                         <option value="Kobieta">Kobieta</option>
                                         <option value="Meżczyzna">Meżczyzna</option>
                                     </select>
-                                    {/* <label>Płeć: </label> */}
+                                    <label>Płeć: </label>
                                 </div>
                                 <div className="field">
                                     <input type="text" name="email" required/>

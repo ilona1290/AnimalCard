@@ -1,0 +1,25 @@
+.pet__img__container{
+    width: 30%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.pet__img{
+    width: 70%;
+}
+
+.pet__form{
+    width: 70%;
+    display: grid;
+    grid-template-columns: 33.334% 66.667%;	
+}
+
+.pet__form__input{
+    width: 70% !important;
+    margin: 1em !important;
+}
+
+.pet__form__textarea{
+    margin: 1em !important;
+}

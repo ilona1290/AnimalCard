@@ -26,6 +26,7 @@ import OwnerMenu from "./pages/OwnerMenu";
 import VetCalendar from "./pages/VetCalendar";
 import StartVisit from "./pages/StartVisit";
 import CustomAppBar from "./components/CustomAppBar";
+import CreateAnimalCard from "./pages/CreateAnimalCard";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
               <Route path="/vetMenu/profile" element={<VetProfile />} />
               <Route path="/vetMenu/calendar" element={<VetCalendar />} />
               <Route path="/vetMenu/calendar/startVisit" element={<StartVisit />} />
+              <Route path="/vetMenu/animalCard/create" element={<CreateAnimalCard />} />
               <Route path="/pets/:petId" element={<AnimalCard />} />
               <Route path="/pets" element={<Pets />} />
               <Route path="/confirmCustoms" element={<AdminConfirmCustoms />} />

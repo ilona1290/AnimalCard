@@ -194,18 +194,35 @@ function AdminConfirmCustoms(){
         }
     }
 
-    const send = () => {
-        const dataToSend = {
-            confirmedDiseases: confirmedDiseases,
-            rejectedDiseases: rejectedDiseases,
-            confirmedServicesTreatments: confirmedServicesTreatments,
-            rejectedServicesTreatments: rejectedServicesTreatments,
-        }
-        postData('api/Admin/ConfirmOrRejectCustoms', dataToSend).then((result) => {
-            if(result === true){
-                navigate("/adminMenu");
-            }
-        });
+    const send = (e) => {
+        e.target.innerText = ""
+        e.preventDefault();
+    //reset animation
+    e.target.classList.remove('animate');
+    
+    e.target.classList.add('animate');
+    
+    e.target.classList.add('animate');
+    
+    setTimeout(function(){
+        navigate("/adminMenu")
+      
+      },3200);
+    setTimeout(function(){
+      e.target.classList.remove('animate');
+    
+    },4000);
+        // const dataToSend = {
+        //     confirmedDiseases: confirmedDiseases,
+        //     rejectedDiseases: rejectedDiseases,
+        //     confirmedServicesTreatments: confirmedServicesTreatments,
+        //     rejectedServicesTreatments: rejectedServicesTreatments,
+        // }
+        // postData('api/Admin/ConfirmOrRejectCustoms', dataToSend).then((result) => {
+        //     if(result === true){
+        //         navigate("/adminMenu");
+        //     }
+        // });
     }
 
     return(
@@ -269,7 +286,7 @@ function AdminConfirmCustoms(){
             </Typography>
             </ThemeProvider>
             {!isLoading && 
-            <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "15em"}} onClick={send}>Zapisz</button>}
+            <button className="header__buttons__end__btn confirm__btn success" style={{position: "absolute", top: "3.5em", right: "15em"}} onClick={send}>Zapisz</button>}
             <Link to="/adminMenu">
                 <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "6em"}}>Powrót</button>
             </Link>

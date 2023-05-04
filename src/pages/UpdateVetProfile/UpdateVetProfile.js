@@ -187,7 +187,7 @@ function UpdateVetProfile(){
                     <AddressesForm addFields={addFieldsAddress} addressesArray={addressFields} handleChange={handleFormChangeAddresses}/>
                 </Typography>
                 </ThemeProvider>
-                <button className="updateProfile__send" onClick={handleClick}>Wyślij</button>
+                <button className="updateProfile__send" onClick={handleClick}>Zapisz</button>
             </div>}
         </div>
     );

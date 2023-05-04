@@ -44,7 +44,9 @@ function CustomAppBar(){
     }
 
     const goToProfile = () => {
+      if(SessionManager.getRole() === "Vet"){
         navigate("/vetMenu/profile");
+      }
     }
 
     const logout = () => {

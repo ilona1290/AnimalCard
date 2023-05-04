@@ -1,0 +1,13 @@
+.pet__info__header{
+    font-size: 3.2rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    /* font-weight: bold; */
+    /* text-decoration: underline; */
+}
+
+.pet__form__info{
+    font-size: 2.6rem;
+    font-family: "Montserrat", sans-serif;
+    margin-bottom: 0.8em;
+}

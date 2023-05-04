@@ -21,6 +21,10 @@ function VetMenu(){
     const goToCalendar = () => {
         navigate("/vetMenu/calendar")
     }
+
+    const goTCreateAnimalCard = () => {
+        navigate("/vetMenu/animalCard/create")
+    }
     return(
         <div style={{height: "100%"}}>
             <div className="menu">
@@ -40,7 +44,7 @@ function VetMenu(){
                     <h1>Leczone zwierzęta</h1>
                 </div>
                 {/* <div className="menu__card" onClick={goToProfile}> */}
-                <div className="menu__card">
+                <div className="menu__card" onClick={goTCreateAnimalCard}>
                     <img className="menu__icon" src={animalCardIcon} alt="animalCardIcon"></img>
                     <h1>Załóż książeczkę</h1>
                 </div>
