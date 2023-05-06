@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 import "./AnimalCard.css";
 
@@ -12,7 +12,12 @@ import researchIcon from './research.png'
 import weightIcon from './weight.png'
 
 function AnimalCard(){
+    let navigate = useNavigate();
     const {petId} = useParams();
+
+    const goToTreatments = () => {
+        navigate(`/pets/${petId}/treatments`)
+    }
     return(
         <div style={{height: "100%", width: "100%"}}>
             <Link to="/pets">
@@ -37,7 +42,7 @@ function AnimalCard(){
                     <img className="menu__icon menu__animalCard__icon" src={diseaseIcon} alt="diseaseIcon"></img>
                     <h1>Choroby</h1>
                 </div>
-                <div className="menu__card menu__animalCard">
+                <div className="menu__card menu__animalCard" onClick={goToTreatments}>
                     <img className="menu__icon menu__animalCard__icon" src={treatmentIcon} alt="treatmentIcon"></img>
                     <h1>Zabiegi</h1>
                 </div>
