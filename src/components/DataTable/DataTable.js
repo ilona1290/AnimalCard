@@ -1,11 +1,10 @@
 import React from "react";
-import { DataGrid, plPL, GridToolbarContainer, GridToolbarFilterButton, gridClasses, GridColumnMenu } from "@mui/x-data-grid";
+import { DataGrid, plPL, GridToolbarContainer, GridToolbarFilterButton, gridClasses, GridColumnMenu, getGridStringOperators, getGridDateOperators } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { Box, Toolbar } from "@mui/material";
 import { alpha, styled } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
 import Stack from '@mui/material/Stack';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
 
@@ -84,6 +83,7 @@ const theme = createTheme({
       
         '& div div div div >.MuiDataGrid-cell': {
           borderBottom: 'none',
+          padding: "0.5em"
         }},
     "& .MuiDataGrid-sortIcon": {
         opacity: 1,
@@ -158,6 +158,7 @@ const theme = createTheme({
   function NoRowsOverlay() {
     let element = document.querySelector(".css-i9gxme")
     element.style.flexGrow = 0
+
     return (
       <Stack className="noData" height="100%" alignItems="center" justifyContent="center">
         No rows in DataGrid
@@ -165,10 +166,15 @@ const theme = createTheme({
       </Stack>
     );
   }
+
+  
+
   
   function NoResultsOverlay() {
     let element = document.querySelector(".css-i9gxme")
     element.style.flexGrow = 0
+    let element2 = document.querySelector(".MuiDataGrid-virtualScroller")
+    element2.style.minHeight = "100%"
     return (
       <Stack className="noData" height="100%" alignItems="center" justifyContent="center">
         Brak danych po zastosowanych filtrach.
@@ -179,13 +185,28 @@ const theme = createTheme({
 function DataTable({ columns, rows }){
     const [filterButtonEl, setFilterButtonEl] = React.useState(null);
     const [selectionModel, setSelectionModel] = React.useState([]);
-    if(rows.length === 0){
-        let element = document.querySelector(".css-i9gxme")
+    let element = document.querySelector(".css-i9gxme")
         if(element !== null){
             element.style.flexGrow = 0
             
         }
-    }
+        let element2 = document.querySelector(".MuiDataGrid-virtualScroller")
+        if(element2 != null){
+          element2.style.minHeight = ""
+        }
+    
+        const stringOperators = getGridStringOperators().filter((op => ['contains'].includes(op.value)));
+        const dateOperators = getGridDateOperators().filter((op => op.value === 'is' || op.value === 'not' 
+        || op.value === "after" || op.value === "onOrAfter" || op.value === "before" || op.value === "onOrBefore" || op.value === "isEmpty"));
+
+        columns.map((item) => {
+          if(item.type === "string"){
+            item.filterOperators = stringOperators
+          }
+          else if(item.type === "date"){
+            item.filterOperators = dateOperators
+          }
+        })
     const getRowSpacing = React.useCallback((params) => {
         return {
           top: params.isFirstVisible ? 0 : 10,
@@ -193,11 +214,13 @@ function DataTable({ columns, rows }){
         };
       }, []);
     return(
-        <div style={{display: "flex", justifyContent: "center"}}>
+      // <div>
+      <div style={{ padding: "0% 7.5%", width: "100%"}}>
             <ThemeProvider theme={theme}>
                 <Typography component={'span'} variant={'body2'}>
                 <ClickAwayListener onClickAway={() => setSelectionModel([])}>
-                    <StyledDataGrid rows={rows} columns={columns} localeText={plPL.components.MuiDataGrid.defaultProps.localeText}
+                    <StyledDataGrid rows={rows} columns={columns} localeText={LocaleText}
+                    
                     components={{
                         Toolbar: CustomToolbar, NoRowsOverlay, NoResultsOverlay
                       }}
@@ -208,6 +231,13 @@ function DataTable({ columns, rows }){
                         },
                         toolbar: {
                           setFilterButtonEl
+                        },
+                        filterPanel: {
+                            filterFormProps: {
+                                operatorInputProps: {
+                                    sx: { width: "fit-content", margin: "0em 0.5em" } // If you want to remove it completely
+                                },
+                            }
                         }
                       }}
                       slots={{ columnMenu: CustomColumnMenu, toolbar: CustomToolbar, noResultsOverlay: NoResultsOverlay, NoRowsOverlay: NoRowsOverlay }}
@@ -215,7 +245,23 @@ function DataTable({ columns, rows }){
                       getRowSpacing={getRowSpacing}
                       getRowHeight={() => 'auto'}
                       freeSolo
-                      sx={{ width: "fit-content", height: "80vh"}}
+                      sx={{
+                        height: "80vh",
+                        "& .MuiDataGrid-columnHeaderTitleContainer": {
+                          whiteSpace: "normal",
+                          lineHeight: "normal",
+                          padding: "0.4em 0em"
+                        },
+                        "& .MuiDataGrid-columnHeader": {
+                          // Forced to use important since overriding inline styles
+                          height: "unset !important"
+                        },
+                        "& .MuiDataGrid-columnHeaders": {
+                          // Forced to use important since overriding inline styles
+                          maxHeight: "168px !important"
+                        }
+                      }}
+                      // sx={{ }}
                       getRowClassName={(params) =>
                         params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                       }
