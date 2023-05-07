@@ -28,6 +28,17 @@ input:-webkit-autofill:active{
     -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
+* {
+  -webkit-backface-visibility: visible !important;
+  backface-visibility: visible !important;
+  text-rendering: optimizeLegibility !important;
+-webkit-font-smoothing: antialiased !important;
+-moz-osx-font-smoothing: grayscale !important; 
+}
+.CodeMirror {
+  -webkit-font-smoothing: subpixel-antialiased !important;
+}
+
 html {
   font-size: 62.5%;
   scroll-behavior: smooth;
