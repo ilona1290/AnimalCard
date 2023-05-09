@@ -28,6 +28,11 @@ import StartVisit from "./pages/StartVisit";
 import CustomAppBar from "./components/CustomAppBar";
 import CreateAnimalCard from "./pages/CreateAnimalCard";
 import Treatments from "./pages/Treatments";
+import Weight from "./pages/Weight";
+import Diseases from "./pages/Diseases";
+import InjectionsMenu from "./pages/InjectionsMenu";
+import RabiesVaccinations from "./pages/RabiesVaccinations";
+import OtherVaccinations from "./pages/OtherVaccinations";
 
 function App() {
   return (
@@ -47,7 +52,12 @@ function App() {
               <Route path="/vetMenu/calendar/startVisit" element={<StartVisit />} />
               <Route path="/vetMenu/animalCard/create" element={<CreateAnimalCard />} />
               <Route path="/pets/:petId" element={<AnimalCard />} />
+              <Route path="/pets/:petId/injections" element={<InjectionsMenu />} />
+              <Route path="/pets/:petId/injections/rabiesVacinations" element={<RabiesVaccinations />} />
+              <Route path="/pets/:petId/injections/otherVacinations" element={<OtherVaccinations />} />
+              <Route path="/pets/:petId/diseases" element={<Diseases />} />
               <Route path="/pets/:petId/treatments" element={<Treatments />} />
+              <Route path="/pets/:petId/weight" element={<Weight />} />
               <Route path="/pets" element={<Pets />} />
               <Route path="/confirmCustoms" element={<AdminConfirmCustoms />} />
             </Routes>

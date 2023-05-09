@@ -182,7 +182,7 @@ const theme = createTheme({
     );
   }
 
-function DataTable({ columns, rows }){
+function DataTable({ columns, rows, paddingProp }){
     const [filterButtonEl, setFilterButtonEl] = React.useState(null);
     const [selectionModel, setSelectionModel] = React.useState([]);
     let element = document.querySelector(".css-i9gxme")
@@ -193,6 +193,7 @@ function DataTable({ columns, rows }){
         let element2 = document.querySelector(".MuiDataGrid-virtualScroller")
         if(element2 != null){
           element2.style.minHeight = ""
+          element2.style.minWidth = ""
         }
     
         const stringOperators = getGridStringOperators().filter((op => ['contains'].includes(op.value)));
@@ -215,7 +216,7 @@ function DataTable({ columns, rows }){
       }, []);
     return(
       // <div>
-      <div style={{ padding: "0% 7.5%", width: "100%"}}>
+      <div style={{ padding: `0% ${paddingProp}`, width: "100%"}}>
             <ThemeProvider theme={theme}>
                 <Typography component={'span'} variant={'body2'}>
                 <ClickAwayListener onClickAway={() => setSelectionModel([])}>

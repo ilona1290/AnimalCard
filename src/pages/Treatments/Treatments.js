@@ -1,6 +1,6 @@
 import React from "react";
 import DataTable from "../../components/DataTable";
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const rows = [
     {
@@ -69,7 +69,7 @@ function Treatments(){
             <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "6.5%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>
-            <DataTable rows={rows} columns={columns} />
+            <DataTable rows={rows} columns={columns} paddingProp="7%"/>
         </div>
     )
 }
