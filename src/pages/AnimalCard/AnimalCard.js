@@ -15,6 +15,10 @@ function AnimalCard(){
     let navigate = useNavigate();
     const {petId} = useParams();
 
+    const goToVisits = () => {
+        navigate(`/pets/${petId}/visits`)
+    }
+
     const goToInjectionsMenu = () => {
         navigate(`/pets/${petId}/injections`)
     }
@@ -25,6 +29,10 @@ function AnimalCard(){
 
     const goToTreatments = () => {
         navigate(`/pets/${petId}/treatments`)
+    }
+
+    const goToResearchResult = () => {
+        navigate(`/pets/${petId}/researchResults`)
     }
 
     const goToWeight = () => {
@@ -42,7 +50,7 @@ function AnimalCard(){
                     <img className="menu__icon menu__animalCard__icon" src={petProfileIcon} alt="petProfileIcon"></img>
                     <h1>Profil</h1>
                 </div>
-                <div className="menu__card menu__animalCard">
+                <div className="menu__card menu__animalCard" onClick={goToVisits}>
                     <img className="menu__icon menu__animalCard__icon" src={endedVisitsIcon} alt="endedVisitsIcon"></img>
                     <h1>Zakończone wizyty</h1>
                 </div>
@@ -58,7 +66,7 @@ function AnimalCard(){
                     <img className="menu__icon menu__animalCard__icon" src={treatmentIcon} alt="treatmentIcon"></img>
                     <h1>Zabiegi</h1>
                 </div>
-                <div className="menu__card menu__animalCard">
+                <div className="menu__card menu__animalCard" onClick={goToResearchResult}>
                     <img className="menu__icon menu__animalCard__icon" src={researchIcon} alt="researchIcon"></img>
                     <h1>Badania</h1>
                 </div>

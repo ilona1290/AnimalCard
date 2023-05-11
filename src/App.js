@@ -33,6 +33,8 @@ import Diseases from "./pages/Diseases";
 import InjectionsMenu from "./pages/InjectionsMenu";
 import RabiesVaccinations from "./pages/RabiesVaccinations";
 import OtherVaccinations from "./pages/OtherVaccinations";
+import ResearchResults from "./pages/ResearchResults";
+import Visits from "./pages/Visits";
 
 function App() {
   return (
@@ -53,10 +55,12 @@ function App() {
               <Route path="/vetMenu/animalCard/create" element={<CreateAnimalCard />} />
               <Route path="/pets/:petId" element={<AnimalCard />} />
               <Route path="/pets/:petId/injections" element={<InjectionsMenu />} />
+              <Route path="/pets/:petId/visits" element={<Visits />} />
               <Route path="/pets/:petId/injections/rabiesVacinations" element={<RabiesVaccinations />} />
               <Route path="/pets/:petId/injections/otherVacinations" element={<OtherVaccinations />} />
               <Route path="/pets/:petId/diseases" element={<Diseases />} />
               <Route path="/pets/:petId/treatments" element={<Treatments />} />
+              <Route path="/pets/:petId/researchResults" element={<ResearchResults />} />
               <Route path="/pets/:petId/weight" element={<Weight />} />
               <Route path="/pets" element={<Pets />} />
               <Route path="/confirmCustoms" element={<AdminConfirmCustoms />} />

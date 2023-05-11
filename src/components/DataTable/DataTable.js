@@ -83,7 +83,8 @@ const theme = createTheme({
       
         '& div div div div >.MuiDataGrid-cell': {
           borderBottom: 'none',
-          padding: "0.5em"
+          padding: "0.5em 1.5em",
+          textAlign: "justify",
         }},
     "& .MuiDataGrid-sortIcon": {
         opacity: 1,

@@ -49,8 +49,8 @@ const rows = [
           {'Opis leczenia'}
         </strong>
       )},
-      { field: "PrescribedMedications", headerName: "Przepisane leki", type: "string", flex: 2,
-    minWidth: 140, headerAlign: 'center', align: 'center', renderHeader: () => (
+      { field: "PrescribedMedications", headerName: "Przepisane leki", type: "string", flex: 3,
+    minWidth: 250, headerAlign: 'center', align: 'center', renderHeader: () => (
         <strong>
           {'Przepisane leki'}
         </strong>
@@ -80,7 +80,7 @@ function Diseases(){
             <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>
-            <DataTable rows={rows} columns={columns} paddingProp="2.9%"/>
+            <DataTable rows={rows} columns={columns} paddingProp="1.5%"/>
         </div>
     )
 }
