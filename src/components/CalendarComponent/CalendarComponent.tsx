@@ -279,7 +279,7 @@ Appointments.AppointmentContentProps) => {
       <div className={classes.container}>
         <div className={classes.text}>{data.title}</div>
         {/* <div className={classNames(classes.text, classes.content)}>
-          {`Priority: ${priority}`}
+          {`Priority: ${priority}`}j
         </div>
         <div className={classNames(classes.text, classes.content)}>
           {`Location: ${data.location}`}
