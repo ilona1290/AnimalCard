@@ -83,7 +83,7 @@ const theme = createTheme({
       
         '& div div div div >.MuiDataGrid-cell': {
           borderBottom: 'none',
-          padding: "0.5em 1.5em",
+          padding: "1em 1.5em",
           textAlign: "justify",
         }},
     "& .MuiDataGrid-sortIcon": {
@@ -210,12 +210,6 @@ function DataTable({ columns, rows, paddingProp }){
             item.filterOperators = dateOperators
           }
         })
-    const getRowSpacing = React.useCallback((params) => {
-        return {
-          top: params.isFirstVisible ? 0 : 10,
-          bottom: params.isLastVisible ? 0 : 10,
-        };
-      }, []);
     return(
       // <div>
       <div style={{ padding: `0% ${paddingProp}`, width: "100%"}}>
@@ -245,7 +239,6 @@ function DataTable({ columns, rows, paddingProp }){
                       }}
                       slots={{ columnMenu: CustomColumnMenu, toolbar: CustomToolbar, noResultsOverlay: NoResultsOverlay, NoRowsOverlay: NoRowsOverlay }}
                       hideFooter
-                      getRowSpacing={getRowSpacing}
                       getRowHeight={() => 'auto'}
                       freeSolo
                       sx={{
