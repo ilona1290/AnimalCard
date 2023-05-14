@@ -102,6 +102,7 @@ const theme = createTheme({
         color: "white"
         },
         [`& .${gridClasses.row}`]: {
+              backgroundColor: "#f3f3f2",
             '&:hover, &.Mui-hovered': {
                 backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
               },
