@@ -48,7 +48,7 @@ function Visits(){
     }
     return(
         <div style={{paddingTop: "9em", width: "100%"}}>
-            <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "6.5%", top: "3.5em"}}>
+            <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>
             <DataTable rows={rows} columns={columns} paddingProp="8%"/>

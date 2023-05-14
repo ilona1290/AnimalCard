@@ -47,6 +47,9 @@ function CustomAppBar(){
       if(SessionManager.getRole() === "Vet"){
         navigate("/vetMenu/profile");
       }
+      else{
+        navigate("/ownerMenu/profile")
+      }
     }
 
     const logout = () => {
@@ -72,9 +75,11 @@ function CustomAppBar(){
         <ThemeProvider theme={theme}>
                     <Typography component={'span'} variant={'body2'}>
                     <AppBar position="fixed">
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{marginLeft: 0, '@media(min-width: 1536px)': {
+        maxWidth: "none"
+        }}}>
         <Toolbar disableGutters>
-        <img src={Logo} alt="logo" onClick={goToMenu} style={{cursor: "pointer"}}/>
+        <img src={Logo} alt="logo" onClick={goToMenu} style={{cursor: "pointer", position: "absolute", left: "2%"}}/>
           <Typography
             variant="h6"
             noWrap
@@ -167,7 +172,7 @@ function CustomAppBar(){
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, position: "absolute", right: "2%" }}>
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar sx={{ transform: "scale(1.3)"}} alt="Remy Sharp" src={SessionManager.getProfilePicture()} />
               </IconButton>
@@ -188,9 +193,11 @@ function CustomAppBar(){
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+            {SessionManager.getRole() !== "Admin" ? 
             <MenuItem onClick={goToProfile}>
                 <Typography textAlign="center">Profil</Typography>
-            </MenuItem>
+            </MenuItem> : <div></div>
+            }
             <MenuItem onClick={logout}>
                 <Typography textAlign="center">Wyloguj</Typography>
             </MenuItem>

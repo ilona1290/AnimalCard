@@ -88,16 +88,95 @@
   form .content .pass-link{
     color: "";
   }
-  form .field input[type="submit"]{
+  .action__login__btn{
     color: #fff;
     border: none;
-    padding-left: 0;
+    height: 50px;
+    width: 100%;
     margin-top: -10px;
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 500;
     cursor: pointer;
     background: #4158d0;
     transition: all 0.3s ease;
+    border-radius: 25px;
+  }
+
+  .action__login__btn.animate:after {
+    position: absolute;
+    content: "";
+    width: 25px;
+    height: 25px;
+    border: 4px solid #fefefe;
+    border-radius: 50%;
+    border-left-color: transparent;
+    left: 50%;
+    top: 30%;
+    -webkit-transform: translate(-30%, -50%);
+    transform: translate(-30%, -50%);
+    animation: spin ease-in 2.5s forwards;
+    animation-name: spin;
+    -webkit-animation-name: spin;
+    transition-timing-function: ease-in-out;
+    -webkit-transition-timing-function: ease-in-out;
+    animation-duration: 2.5s;
+    -webkit-animation-duration: 2.5s;
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+  }
+  .action__login__btn.success:before {
+    position: absolute;
+    content: "";
+    width: 25px;
+    height: 12.5px;
+    border: 4px solid #fefefe;
+    border-right: 0;
+    border-top: 0;
+    left: 50%;
+    top: 25%;
+    -webkit-transform: translate(-25%, -50%) rotate(0deg) scale(0);
+    transform: translate(-25%, -50%) rotate(0deg) scale(0);
+    -webkit-animation: success ease-in 0.15s forwards;
+    animation: success ease-in 0.15s forwards;
+    /* animation-delay: 2.5s; */
+  }
+  @keyframes spin {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    90% {
+      transform: translate(-50%, -50%) rotate(1080deg) scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    98% {
+      -webkit-transform: translate(-50%, -50%) rotate(1080deg) scale(1);
+    }
+    100% {
+      -webkit-transform: translate(-50%, -50%) rotate(1080deg) scale(0);
+    }
+  }
+  @keyframes success {
+    from {
+      transform: translate(-50%, -50%) rotate(0) scale(0);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+    }
+  }
+  @-webkit-keyframes success {
+    from {
+      -webkit-transform: translate(-50%, -50%) rotate(0) scale(0);
+    }
+    to {
+      -webkit-transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+    }
   }
   form .field input[type="reset"]:active{
     transform: scale(0.95);

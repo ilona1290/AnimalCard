@@ -36,19 +36,24 @@ export default class Login extends Component {
 
     login(event) {
         event.preventDefault();
+        event.target.innerText = ""
+        //reset animation
+        event.target.classList.remove('success');
+        event.target.classList.remove('animate');
+        
+        event.target.classList.add('animate');
         let userInfo = this.state;
         this.setState({
             loading: true
         });
         postDataForLogin('api/Auth/Login', userInfo).then((result) => {
+            event.target.classList.remove('animate');
             if (result?.token) {
                 SessionManager.setUserSession(result.fullName, result.token, result.userId, result.role, result.profilePicture);
-
                 if (SessionManager.getToken()) {
                     this.setState({
                         loading: false
                     });
-
                     // <LoginMenu menuText = 'Logout' menuURL = '/logout' />
 
                     // If login successful and get token
@@ -65,6 +70,7 @@ export default class Login extends Component {
                         window.location.href = "/adminMenu"
                     }
                     else{
+                        event.target.classList.add("success")
                         window.location.href = "/ownerMenu";
                     }
                 }
@@ -107,7 +113,7 @@ export default class Login extends Component {
             <div className="container">
                 <div className="wrapper">
                     <div className="title">Zaloguj</div>
-                    <form onSubmit={this.login}>
+                    <form>
                         <div className="field">
                             <input type="text" name="email" onChange={this.onChange} onKeyDown={this.onKeyDown} required/>
                             <label>Email</label>
@@ -117,11 +123,17 @@ export default class Login extends Component {
                             <label>Hasło</label>
                         </div>
                         <div className="field">
+                            <button onClick={this.login} className="action__login__btn">Zaloguj</button>
+                        </div>
+                        <div className="field">
+                        <   Link to="/"><button className="action__login__btn">Powrót</button></Link>
+                        </div>
+                        {/* <div className="field">
                             <input type="submit" value="Zaloguj"/>
                         </div>
                         <div className="field">
                             <Link to="/"><input type="reset" value="Powrót"/></Link>
-                        </div>
+                        </div> */}
                         <div className="signup-link">Nie masz konta? <a href="/register">Zarejestruj się</a></div>
                     </form>
                 </div>

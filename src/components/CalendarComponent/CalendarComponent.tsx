@@ -17,11 +17,17 @@ import {
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { indigo, blue, teal } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
 import classNames from "clsx";
+import Room from "@mui/icons-material/Room";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import './CalendarComponent.css'
+
+import OwnerIcon from './ownerIcon4.png'
+import PetIcon from './petIcon.png'
+import VetIcon from './vetIcon.png'
 
 const theme = createTheme({
     typography: {
@@ -41,7 +47,9 @@ const classes = {
   weekEndDayScaleCell: `${PREFIX}-weekEndDayScaleCell`,
   text: `${PREFIX}-text`,
   content: `${PREFIX}-content`,
-  container: `${PREFIX}-container`
+  container: `${PREFIX}-container`,
+  textCenter: `${PREFIX}-textCenter`,
+  icon: `${PREFIX}-icon`,
 };
 
 const StyledMonthViewDayScaleCell = styled(MonthView.DayScaleCell)(
@@ -100,128 +108,7 @@ const StyledAppointmentsAppointmentContent = styled(
   }
 }));
 
-const appointments = [
-  {
-    title: "Szczepienie",
-    startDate: new Date(2023, 4, 11, 9, 0),
-    endDate: new Date(2023, 4, 11, 9, 30),
-    priority: 2,
-    location: "Room 3",
-    patient: "Fifi",
-    owner: "Elwira Kwiatkowska"
-  },
-  {
-    title: "Wizyta kontrolna",
-    startDate: new Date(2023, 4, 11, 9, 30),
-    endDate: new Date(2023, 4, 11, 10, 0),
-    priority: 1,
-    location: "Room 1",
-    patient: "Mark",
-    owner: "Julian Sokołowski"
-  },
-  {
-    title: "Zabieg",
-    startDate: new Date(2023, 4, 11, 10, 15),
-    endDate: new Date(2023, 4, 11, 11, 30),
-    priority: 1,
-    location: "Room 3",
-    patient: "Borys",
-    owner: "Adrianna Szewczyk"
-  },
-  {
-    title: "Zabieg",
-    startDate: new Date(2023, 4, 12, 10, 15),
-    endDate: new Date(2023, 4, 12, 13, 0),
-    priority: 3,
-    location: "Room 2",
-    patient: "Bethoveen",
-    owner: "Kryspin Błaszczyk"
-  },
-  {
-    title: "Badanie",
-    startDate: new Date(2023, 4, 8, 11, 0),
-    endDate: new Date(2023, 4, 8, 12, 0),
-    priority: 2,
-    location: "Room 3",
-    patient: "Barry",
-    owner: "Kornel Lewandowski"
-  },
-  {
-    title: "Szczepienie",
-    startDate: new Date(2023, 4, 8, 12, 30),
-    endDate: new Date(2023, 4, 8, 13, 0),
-    priority: 1,
-    location: "Room 1",
-    patient: "Barry",
-    owner: "Krystyna Wojciechowska"
-  },
-  {
-    title: "Zabieg",
-    startDate: new Date(2023, 4, 8, 8, 0),
-    endDate: new Date(2023, 4, 8, 9, 0),
-    priority: 3,
-    location: "Room 1",
-    patient: "Simon",
-    owner: "Łucja Michalak"
-  },
-  {
-    title: "Zabieg",
-    startDate: new Date(2023, 4, 9, 9, 30),
-    endDate: new Date(2023, 4, 9, 11, 0),
-    priority: 3,
-    location: "Room 3",
-    patient: "Koba",
-    owner: "Gabriel Duda"
-  },
-  {
-    title: "Wizyta kontrolna",
-    startDate: new Date(2023, 4, 10, 8, 0),
-    endDate: new Date(2023, 4, 10, 8, 45),
-    priority: 2,
-    patient: "Barry",
-    owner: "Józefa Kaźmierczak"
-  },
-  {
-    title: "Zabieg",
-    startDate: new Date(2023, 4, 10, 12, 0),
-    endDate: new Date(2023, 4, 10, 13, 45),
-    priority: 1,
-    patient: "Fifi",
-    owner: "Bartłomiej Szewczyk"
-  }
-];
-
-const resources = [
-  {
-    fieldName: "location",
-    title: "Location",
-    instances: [
-      { id: "Room 1", text: "Room 1", color: indigo },
-      { id: "Room 2", text: "Room 2", color: blue },
-      { id: "Room 3", text: "Room 3", color: teal }
-    ]
-  },
-  {
-    fieldName: "priority",
-    title: "Priority",
-    instances: [
-      { id: 1, text: "High Priority", color: teal },
-      { id: 2, text: "Medium Priority", color: blue },
-      { id: 3, text: "Low Priority", color: indigo }
-    ]
-  },
-  {
-    fieldName: "patient",
-    title: "Pacjent",
-    instances: []
-  },
-  {
-    fieldName: "owner",
-    title: "Właściciel",
-    instances: []
-  }
-];
-
+// Tydzień początkowo wyświetlona (zawiera dzisiejszą datę)
 const isWeekEnd = (date: Date): boolean =>
   date.getDay() === 0 || date.getDay() === 6;
 const defaultCurrentDate = new Date(2023, 4, 8, 11, 15);
@@ -252,6 +139,7 @@ const TimeTableCell = ({
   />
 );
 
+// Stylowanie kafelków, zostaje tu
 const Appointment = ({ data, ...restProps }: Appointments.AppointmentProps) => (
   <StyledAppointmentsAppointment
     {...restProps}
@@ -265,73 +153,114 @@ const Appointment = ({ data, ...restProps }: Appointments.AppointmentProps) => (
   />
 );
 
-// #FOLD_BLOCK
-const AppointmentContent = ({
-  data,
-  ...restProps
-}: // #FOLD_BLOCK
-Appointments.AppointmentContentProps) => {
-  let priority = "low";
-  if (data.priority === 2) priority = "medium";
-  if (data.priority === 3) priority = "high";
-  return (
-    <StyledAppointmentsAppointmentContent {...restProps} data={data}>
-      <div className={classes.container}>
-        <div className={classes.text}>{data.title}</div>
-        {/* <div className={classNames(classes.text, classes.content)}>
-          {`Priority: ${priority}`}j
-        </div>
-        <div className={classNames(classes.text, classes.content)}>
-          {`Location: ${data.location}`}
-        </div> */}
-        <div className={classNames(classes.text, classes.content)}>
-          {`Pacjent: ${data.patient}`}
-        </div>
-        <div className={classNames(classes.text, classes.content)}>
-          {`Właściciel: ${data.owner}`}
-        </div>
-        {/* <Link to="/vetMenu/calendar/startVisit">
-                <button className="header__buttons__end__btn">Rozpocznij wizytę</button>
-            </Link> */}
-      </div>
-    </StyledAppointmentsAppointmentContent>
+const StyledGrid = styled(Grid)(() => ({
+    [`&.${classes.textCenter}`]: {
+      textAlign: "center"
+    }
+  }));
+
+  const StyledRoom = styled(Room)(({ theme: { palette } }) => ({
+    [`&.${classes.icon}`]: {
+      color: palette.action.active
+    }
+  }));
+
+
+function CalendarComponent({ appointments, resources, who }){
+
+    const Content = ({ children, appointmentData, ...restProps }) => (
+    <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
+      <Grid container alignItems="center">
+        <StyledGrid item xs={2} className={classes.textCenter}>
+            {who === "vet"? <img src={OwnerIcon} alt="OwnerIcon"></img> : <img src={VetIcon} alt="VetIcon"></img>}
+        </StyledGrid>
+        <Grid item xs={10}>
+        {who === "vet"? <span>{appointmentData.owner}</span> : <span>{appointmentData.vet}</span>}
+        </Grid>
+        <StyledGrid item xs={2} className={classes.textCenter}>
+            <img src={PetIcon} alt="OwnerIcon"></img>
+        </StyledGrid>
+        <Grid item xs={10}>
+          <span>{appointmentData.patient}</span>
+        </Grid>
+        <StyledGrid item xs={2} className={classes.textCenter}>
+            {who !== "vet" ? <StyledRoom className={classes.icon} /> : <div></div>}
+        </StyledGrid>
+        <Grid item xs={10}>
+            {who !== "vet" ? <span>{appointmentData.address}</span> : <div></div>}
+        </Grid>
+      </Grid>
+    </AppointmentTooltip.Content>
   );
-};
-
-function CalendarComponent(){
+    //Stylowanie wnętrza kafelka
+// #FOLD_BLOCK
+    const AppointmentContent = ({
+        data,
+        ...restProps
+    }: // #FOLD_BLOCK
+    Appointments.AppointmentContentProps) => {
+        let priority = "low";
+        if (data.priority === 2) priority = "medium";
+        if (data.priority === 3) priority = "high";
+        return (
+        <StyledAppointmentsAppointmentContent {...restProps} data={data}>
+            <div className={classes.container}>
+                <div className={classes.text}>{data.title}</div>
+                <div className={classNames(classes.text, classes.content)}>
+                    {who === "vet" ? `Właściciel: ${data.owner}`: `Weterynarz: ${data.vet}`}
+                </div>
+                <div className={classNames(classes.text, classes.content)}>
+                    {who === "vet" ? `Pacjent: ${data.patient}`: `Pupil: ${data.patient}`}
+                </div>
+                {/* {
+                    who !== "vet" ? 
+                    <div>
+                        <div className={classNames(classes.text, classes.content)}>
+                            {`Miesce wizyty: ${data.address}`}
+                        </div>
+                    </div> : <div></div>
+                } */}
+            </div>
+        </StyledAppointmentsAppointmentContent>
+        );
+    };
     return(
-        <ThemeProvider theme={theme}>
+        <div className="calendar">
+            <ThemeProvider theme={theme}>
                 <Typography component={'span'} variant={'body2'}>
-        <Paper style={{paddingTop: "9em"}}>
-    <Scheduler data={appointments} locale="pl-PL">
-      <ViewState defaultCurrentDate={defaultCurrentDate} />
+                    <Paper style={{paddingTop: "9em"}}>
+                        <Scheduler data={appointments} locale="pl-PL">
+                            <ViewState defaultCurrentDate={defaultCurrentDate} />
+                            {/* <MonthView
+                                dayScaleCellComponent={DayScaleCell}
+                                timeTableCellComponent={TimeTableCell}
+                            /> */}
+                            <DayView
+                                displayName={"Tygodniowy"}
+                                startDayHour={7.5}
+                                endDayHour={17.5}
+                                intervalCount={7}
+                            />
 
-      {/* <MonthView
-        dayScaleCellComponent={DayScaleCell}
-        timeTableCellComponent={TimeTableCell}
-      /> */}
-      <DayView
-        displayName={"Tygodniowy"}
-        startDayHour={7.5}
-        endDayHour={17.5}
-        intervalCount={7}
-      />
+                            <Appointments
+                                appointmentComponent={Appointment}
+                                appointmentContentComponent={AppointmentContent}
+                            />
+                            <Resources data={resources} />
 
-      <Appointments
-        appointmentComponent={Appointment}
-        appointmentContentComponent={AppointmentContent}
-      />
-      <Resources data={resources} />
-
-      <AppointmentTooltip showCloseButton />
-      <Toolbar />
-      <DateNavigator />
-      <ViewSwitcher />
-      <TodayButton />
-    </Scheduler>
-  </Paper>
-  </Typography>
-  </ThemeProvider>
+                            <AppointmentTooltip
+                                contentComponent={Content}
+                                showCloseButton
+                            />
+                            <Toolbar />
+                            <DateNavigator />
+                            <ViewSwitcher />
+                            <TodayButton />
+                        </Scheduler>
+                    </Paper>
+                </Typography>
+            </ThemeProvider>
+        </div>
     )
 }
 

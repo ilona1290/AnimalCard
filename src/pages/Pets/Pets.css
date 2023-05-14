@@ -1,4 +1,7 @@
 .icon__circle{
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
     border-radius: 50%;
     margin-bottom: 3em;
 }
@@ -25,8 +28,13 @@
 }
 
 .animals__card{
-    padding: 3em;
-    padding-bottom: 8em;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 250px;
+    height: 350px;
+    /* padding: 3em;
+    padding-bottom: 8em; */
 }
 
 

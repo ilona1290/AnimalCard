@@ -96,7 +96,7 @@ function Weight(){
 
         
         <div style={{ height: "90vh", width: "90%", paddingTop: "9em"}}>
-        <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "6.5%", top: "3.5em"}}>
+        <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>
             <ResponsiveLine

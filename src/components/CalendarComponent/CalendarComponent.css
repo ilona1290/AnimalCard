@@ -2,6 +2,10 @@
     font-size: 1.5rem !important;
 }
 
-.css-1l3xcnk-MuiInputBase-root-MuiOutlinedInput-root{
+.calendar .MuiInputBase-root{
+    display: none !important;
+}
+
+.calendar .MuiOutlinedInput-root{
     display: none !important;
 }

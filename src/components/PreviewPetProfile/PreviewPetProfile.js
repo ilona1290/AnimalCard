@@ -35,16 +35,16 @@ function PreviewPetProfile({handleShowPreview, pet}){
       };
     console.log(pet)
     return(
-        <div style={{width: "100%", paddingTop: "10%", display: "flex"}}>
+        <div style={{width: "100%", paddingTop: "10em", display: "flex"}}>
             <button className="header__buttons__end__btn confirm__btn success" style={{position: "absolute", right: "20em", top: "3.5em", zIndex: "1000000"}} onClick={animateButton}>
                 Zapisz
             </button>
             <button className="header__buttons__end__btn" id="backPreview" style={{position: "absolute", right: "2em", top: "3.5em"}} onClick={handleShowPreview}>
                 <p>Chcę jeszcze coś zmienić</p>
             </button>
+            <div className="pet__container">
             <div className="pet__img__container">
-                <div className="pet__info__header" style={{marginBottom: "0.4em"}}>Zdjęcie profilowe</div>
-                <img className="pet__img" id="output" src={pet.petPhoto} name="petPhoto" alt="PetProfilePicture"></img>
+                <img className="pet__img img__preview" id="output" src={pet.petPhoto} name="petPhoto" alt="PetProfilePicture"></img>
             </div>
             <div className="pet__form">
             <div className="pet__firstColumn">
@@ -77,46 +77,11 @@ function PreviewPetProfile({handleShowPreview, pet}){
                         <div className="pet__form__info">{pet.allergies}</div>
                         <div className="pet__info__header">Informacje dodatkowe</div>
                         <div className="pet__form__info">{pet.extraInfo}</div>
-                        {/* 
-                        
-                        
-
-                        <ThemeProvider theme={theme}>
-                        <Typography component={'span'} variant={'body2'}>
-                        <TextField
-                            id="outlined-multiline-static"
-                            label="Znaki szczególne"
-                            name="trademarks"
-                            multiline
-                            rows={4}
-                            className="pet__form__textarea"
-                            style={{width: "80%"}}
-                            onChange={(event) => handleChange(event)} value={pet.trademarks}
-                        />
-                        <TextField
-                            id="outlined-multiline-static"
-                            label="Ewentualne uczulenia"
-                            name="allergies"
-                            multiline
-                            rows={4}
-                            className="pet__form__textarea"
-                            style={{width: "80%"}}
-                            onChange={(event) => handleChange(event)} value={pet.allergies}
-                        />
-                        <TextField
-                            id="outlined-multiline-static"
-                            label="Informacje dodatkowe"
-                            name="extraInfo"
-                            multiline
-                            rows={4}
-                            className="pet__form__textarea"
-                            style={{width: "80%"}}
-                            onChange={(event) => handleChange(event)} value={pet.extraInfo}
-                        /> */}
-                        
                     </Typography>
                 </ThemeProvider></div>
-            </div></div>
+            </div>
+            </div>
+        </div>
     )
 }
 

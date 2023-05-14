@@ -1,12 +1,21 @@
 .menu__animalCard{
-    height: 45%;
-    width: 15%;
+    height: 350px;
+    width: 280px;
 }
 
 .animal__card{
     padding-top: 9em;
 }
 
-.menu__animalCard__icon{
-    transform: scale(0.7);
+.animal__card .menu__card{
+    padding: 1em;
+}
+
+
+
+@media (min-width: 1200px){
+    .menu__animalCard__icon{
+    transform: scale(0.8);
+    shape-rendering: crispEdges;
+}
 }

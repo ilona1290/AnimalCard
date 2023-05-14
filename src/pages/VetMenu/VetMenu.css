@@ -2,21 +2,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    column-gap: 3em;
+    /* flex-direction: column; */
+    column-gap: 2em;
+    row-gap: 2em;
     flex-wrap: wrap;
     /* Wraper musi  mieć ustawioną wysokość i szerokość, jeśli w dziecku ustawiamy wysokość i szerokość procentowo. */
     width: 100%;
     height: 100%;
+    padding-top: 9em;
 }
 
 .menu__card{
     /* 3 poniższe linijki, aby dzieci tego elementu były w nim wyśrodkowane w poziomie, a w pionie od góry rodzica. Jeśli rodzic __card ma  display: flex;
     justify-content: center; align-items: center;*/
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    height: 55%;
+    /* position: relative; */
+    /* display: flex;
+    flex-direction: column; */
+    width: 200px;
+    height: 300px;
+    /* height: 55vh; */
     border: 0.5px solid black;
     border-radius: 20px;
     box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
@@ -28,7 +32,42 @@
     transform: scale(0.8);
 }
 
+.menu__icon__title{
+    font-size: 2rem;
+}
+
 .menu__card:hover{
     transform: scale(1.1);
     cursor: pointer;
+}
+
+@media (min-width: 664px) {
+    .menu{
+        padding: 0;
+    }
+}
+
+@media (min-width: 900px) {
+    .menu{
+        column-gap: 4em;
+    }
+}
+
+@media (min-width: 1200px) {
+    .menu{
+        column-gap: 6em;
+    }
+    .menu__card{
+        padding-top: 3em;
+        width: 300px;
+        height: 400px;
+    }
+    .menu__icon{
+        transform: scale(1);
+    }
+
+    .menu__icon__title{
+        margin-top: 1em;
+        font-size: 3rem;
+    }
 }

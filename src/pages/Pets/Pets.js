@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import './Pets.css';
 
-import pet1 from './pet1.png';
+import pet1 from '../PetProfile/goldenRetriever.png'
 import SessionManager from "../../components/Auth/SessionManager";
 
 const theme = createTheme({
@@ -43,7 +43,7 @@ function Pets(){
         if(SessionManager.getRole() === "Vet"){
             return(
                 <Link to="/vetMenu">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "2%", top: "3.5em"}}>
                         <p>Powrót</p>
                     </button>
                 </Link>
@@ -52,7 +52,7 @@ function Pets(){
         else{
             return(
                 <Link to="/ownerMenu">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "2%", top: "3.5em"}}>
                         <p>Powrót</p>
                     </button>
                 </Link>

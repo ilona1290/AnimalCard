@@ -1,0 +1,21 @@
+.petProfile__img{
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    /* aby sztywne width i height nie zniekształciło zdjęcia */
+    object-fit: cover;
+}
+
+@media(min-width: 1200px) {
+    .petProfile__img{
+        width: 300px;
+        height: 300px;
+    }
+}
+
+@media(min-width: 1400px) {
+    .petProfile__img{
+        width: 400px;
+        height: 400px;
+    }
+}

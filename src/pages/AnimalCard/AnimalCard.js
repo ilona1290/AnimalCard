@@ -15,6 +15,10 @@ function AnimalCard(){
     let navigate = useNavigate();
     const {petId} = useParams();
 
+    const goToProfile = () => {
+        navigate(`/pets/${petId}/profile`)
+    }
+
     const goToVisits = () => {
         navigate(`/pets/${petId}/visits`)
     }
@@ -41,12 +45,12 @@ function AnimalCard(){
     return(
         <div style={{height: "100%", width: "100%"}}>
             <Link to="/pets">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
+                <button className="header__buttons__end__btn" style={{position: "absolute", right: "2%", top: "3.5em"}}>
                     <p>Powrót</p>
                 </button>
             </Link>
             <div className="menu animal__card">
-                <div className="menu__card menu__animalCard">
+                <div className="menu__card menu__animalCard" onClick={goToProfile}>
                     <img className="menu__icon menu__animalCard__icon" src={petProfileIcon} alt="petProfileIcon"></img>
                     <h1>Profil</h1>
                 </div>

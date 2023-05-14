@@ -29,7 +29,7 @@ const rows = [
   ];
   
   const columns = [
-    { field: "TreatmentDate", headerName: "Data zabiegu", type: "date", flex: 1, minWidth: 100, headerAlign: 'center', align: 'center', renderHeader: () => (
+    { field: "TreatmentDate", headerName: "Data zabiegu", type: "date", flex: 1, minWidth: 110, headerAlign: 'center', align: 'center', renderHeader: () => (
         <strong>
           {'Data zabiegu'}
         </strong>
@@ -66,7 +66,7 @@ function Treatments(){
     }
     return(
         <div style={{paddingTop: "9em", width: "100%"}}>
-            <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "6.5%", top: "3.5em"}}>
+            <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>
             <DataTable rows={rows} columns={columns} paddingProp="7%"/>

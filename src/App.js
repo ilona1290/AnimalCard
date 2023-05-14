@@ -9,7 +9,6 @@ import SessionManager from './components/Auth/SessionManager';
 import Login from "./components/Auth/Login";
 
 import './App.css';
-import StartPage from "./pages/StartPage";
 import Logout from "./components/Auth/Logout";
 import CreateUser from "./components/User/CreateUser";
 import Home from "./pages/Home";
@@ -35,6 +34,9 @@ import RabiesVaccinations from "./pages/RabiesVaccinations";
 import OtherVaccinations from "./pages/OtherVaccinations";
 import ResearchResults from "./pages/ResearchResults";
 import Visits from "./pages/Visits";
+import PetProfile from "./pages/PetProfile";
+import OwnerProfile from "./pages/OwnerProfile";
+import OwnerCalendar from "./pages/OwnerCalendar";
 
 function App() {
   return (
@@ -43,17 +45,19 @@ function App() {
           <Router>
             <CustomAppBar />
             <Routes>
-              <Route path="/start" element={<StartPage/>}/>
               <Route path="/logout" element={<Logout/>}/>
               <Route path="/updateVetProfile" element={<UpdateVetProfile />} />
               <Route path="/adminMenu" element={<AdminMenu />} />
               <Route path="/vetMenu" element={<VetMenu />} />
               <Route path="/ownerMenu" element={<OwnerMenu />} />
+              <Route path="/ownerMenu/profile" element={<OwnerProfile />} />
+              <Route path="/ownerMenu/calendar" element={<OwnerCalendar />} />
               <Route path="/vetMenu/profile" element={<VetProfile />} />
               <Route path="/vetMenu/calendar" element={<VetCalendar />} />
               <Route path="/vetMenu/calendar/startVisit" element={<StartVisit />} />
               <Route path="/vetMenu/animalCard/create" element={<CreateAnimalCard />} />
               <Route path="/pets/:petId" element={<AnimalCard />} />
+              <Route path="/pets/:petId/profile" element={<PetProfile />} />
               <Route path="/pets/:petId/injections" element={<InjectionsMenu />} />
               <Route path="/pets/:petId/visits" element={<Visits />} />
               <Route path="/pets/:petId/injections/rabiesVacinations" element={<RabiesVaccinations />} />

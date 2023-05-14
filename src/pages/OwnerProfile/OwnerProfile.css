@@ -1,0 +1,77 @@
+.ownerProfile__card{
+    padding-top: 9em;
+}
+
+.ownerProfile__img{
+    transform: scale(0.9);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    /* aby sztywne width i height nie zniekształciło zdjęcia */
+    object-fit: cover;
+}
+
+.ownerProfile__name{
+    font-size: 3rem;
+    margin-bottom: 1em;
+    font-weight: bold;
+}
+
+.owner__profile__contact{
+    padding-bottom: 1em;
+}
+
+.ownerProfile__label{
+    font-weight: bold;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.ownerProfile__value{
+    padding-left: 1em;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.ownerProfile__pets{
+    padding-top: 4em;
+}
+
+.ownerProfile__petImg{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 2em;
+    margin-top: 1em;
+}
+
+@media(min-width: 1200px) {
+    .ownerProfile__container{
+        width: 100%;
+        display: flex;
+    }
+
+    .ownerProfile__card{
+        width: 30%;
+        height: fit-content;
+        border-bottom-right-radius: 30px;
+        background-color: #dfded1;
+        padding-bottom: 4em;
+    }
+
+    .ownerProfile__img{
+        width: 300px;
+        height: 300px;
+    }
+
+    .ownerProfile__pets{
+        width: 70%;
+        padding-top: 9em;
+    }
+
+    .ownerProfile__petImg{
+        width: 200px;
+        height: 200px;
+    }
+}
