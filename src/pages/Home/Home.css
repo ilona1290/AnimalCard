@@ -139,16 +139,15 @@
 
 @media(min-width: 1200px){
     .header__heading{
-        margin-top: 4em;
-        font-size: 7rem;
+        margin-top: 3em;
     }
 
     .header__text{
-        font-size: 2.5rem;
+        font-size: 2.3rem;
         width: 60vw;
     }
     .header__buttons__btn{
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 }
 
