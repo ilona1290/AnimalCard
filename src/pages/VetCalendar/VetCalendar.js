@@ -3,6 +3,22 @@ import { Link } from 'react-router-dom';
 import NewVisitDialog from "../../components/NewVisitDialog";
 import CalendarComponent from "../../components/CalendarComponent/CalendarComponent.tsx";
 import { indigo, blue, teal } from "@mui/material/colors";
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+
+import './VetCalendar.css'
+
+const theme = createTheme({
+    typography: {
+      // Tell MUI what's the font-size on the html element is.
+      htmlFontSize: 10,
+    },
+  });
 
 // do zewnętrznego - kafelki w kalendarzu
 const appointments = [
@@ -129,19 +145,67 @@ const resources = [
 ];
 
 function VetCalendar(){
+    let navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [openDialog, setOpenDialog] = React.useState(false)
+    const open = Boolean(anchorEl);
+
+    const handleClickOpen = () => {
+        setOpenDialog(true);
+        setAnchorEl(null);
+    };
+
+    const handleStartVisit = () => {
+        navigate("/vetMenu/calendar/startVisit")
+    }
+
+    const handleBack = () => {
+        navigate("/vetMenu")
+    }
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     return(
         <div>
-            <NewVisitDialog />
+            <NewVisitDialog openDialog={openDialog} setOpenDialog={setOpenDialog}/>
             {/* <Link to="/vetMenu/calendar/startVisit">
                 <div className="header__buttons__end__btn" style={{position: "absolute", right: "29em", top: "3.5em", fontSize: "1.6rem", fontFamily: "Arial"}}>Zaplanuj wizytę</div>
             </Link> */}
-            <Link to="/vetMenu/calendar/startVisit">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "15em", top: "3.5em"}}>Rozpocznij wizytę</button>
-            </Link>
-            <Link to="/vetMenu">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>Powrót</button>
-            </Link>
-            <CalendarComponent appointments={appointments} resources={resources} who="vet"/>
+            <ThemeProvider theme={theme}>
+                <Typography component={'span'} variant={'body2'}>
+                  <Button
+                  className="options__btn"
+        id="demo-customized-button"
+        aria-controls={open ? 'demo-customized-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        variant="contained"
+        disableElevation
+        onClick={handleClick}
+        endIcon={<KeyboardArrowDownIcon />}
+        
+      >Opcje</Button>
+            <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClickOpen}>Zaplanuj wizytę</MenuItem>
+        <MenuItem onClick={handleStartVisit}>Rozpocznij nieumówioną wizytę</MenuItem>
+        <MenuItem onClick={handleBack}>Powrót</MenuItem>
+      </Menu>
+      </Typography>
+      </ThemeProvider>
+            <CalendarComponent appointments={appointments} resources={resources} who="vet" />
         </div>
     );
 }

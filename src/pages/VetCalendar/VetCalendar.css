@@ -1,0 +1,34 @@
+.vetCalendar__btn__startVisit{
+    right: 2rem;
+    position: absolute; 
+    top: 10rem
+}
+
+.vetCalendar__btn__startVisit__back{
+    right: 0rem;
+    position: absolute; 
+    top: 4.5rem
+}
+
+.options__btn{
+    position: absolute !important;
+    top: 8rem !important;
+    right: 2% !important;
+    width: 100px !important;
+    font-size: 1.6rem !important;
+    padding: 0.5em 3.5em !important;
+    text-transform: none !important;
+    border-radius: 25px !important;
+    background-color: green !important;
+    font-family: "Arial" !important;
+}
+
+.options__btn:hover{
+    background-color: green !important;
+}
+
+@media (min-width: 600px) {
+    .options__btn{
+        top: 9rem !important;
+    }
+}

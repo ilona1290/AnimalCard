@@ -10,6 +10,10 @@
     transition: border-radius linear 0.05s, width linear 0.05s, all 0.3s ease-in-out;
 }
 
+.visit__element__table{
+  min-width: 530px;
+}
+
 /* .confirm__btn:focus {
     transform: scale(1.2);
   } */

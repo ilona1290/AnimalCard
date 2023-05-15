@@ -26,7 +26,7 @@ const theme = createTheme({
   const StyledTreeItem = styled(TreeItem)(() => ({
     [`& .${treeItemClasses.content}`]: {
         border: "1px black solid",
-        margin: "0.3em",
+        margin: "0.4em",
         padding: "0.5em",
         borderRadius: "20px",
         boxShadow: "0.25em 0.25em  0.25em  rgba( 0, 0, 0, 0.3 )",
@@ -37,6 +37,9 @@ const theme = createTheme({
         fontSize: "3rem !important",
         padding: "0.1em 0em 0em 0em !important",
         fontFamily: "'Montserrat', sans-serif !important"
+    },
+    [`& .${treeItemClasses.group}`]:{
+        marginLeft: "4rem"
     }
   }));
   let expandedAll = false;
@@ -226,7 +229,7 @@ function AdminConfirmCustoms(){
     }
 
     return(
-        <div style={{paddingTop: "9%"}}>
+        <div style={{paddingTop: "9em"}}>
             {isLoading && <Loader />}
             <ThemeProvider theme={theme}>
                 <Typography component={'span'} variant={'body2'}>
@@ -245,7 +248,7 @@ function AdminConfirmCustoms(){
                         expanded={expanded}
                         onNodeToggle={handleToggle}
                         sx={{display:"flex", justifyContent: "center", flexDirection:"column", textAlign:"left", overflowY: "hidden",
-                        paddingLeft: "20%", paddingRight: "20%"}}
+                        paddingLeft: "18%", paddingRight: "18%"}}
                     >
                         {customs.map((elem, index) => (
 
@@ -286,9 +289,9 @@ function AdminConfirmCustoms(){
             </Typography>
             </ThemeProvider>
             {!isLoading && 
-            <button className="header__buttons__end__btn confirm__btn success" style={{position: "absolute", top: "3.5em", right: "15em"}} onClick={send}>Zapisz</button>}
+            <button className="header__buttons__end__btn confirm__btn success" style={{position: "absolute", top: "3.5em", right: "15rem"}} onClick={send}>Zapisz</button>}
             <Link to="/adminMenu">
-                <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "6em"}}>Powrót</button>
+                <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "2rem"}}>Powrót</button>
             </Link>
         </div>
     );

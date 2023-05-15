@@ -70,17 +70,17 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     onClose: PropTypes.func.isRequired,
   };
 
-function NewVisitDialog(){
-    const [open, setOpen] = React.useState(false);
+function NewVisitDialog({ openDialog, setOpenDialog }){
+    // const [open, setOpen] = React.useState(false);
     const [pets, setPets] = React.useState(["Astro", "Balto", "Barney", "Barry", "Beethoven", "Benji", "Kieł", "Boo", "Boss", "Bruiser", "Chojrak", 
     "Cywil", "Droopy", "Dżok", "Eddie", "Goofy", "Fala", "Happy", "Hooch"]);
     const [visitType, setVisitType] = React.useState('');
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
   const handleClose = () => {
-    setOpen(false);
+    setOpenDialog(false)
   };
 
 
@@ -100,7 +100,7 @@ function NewVisitDialog(){
     e.target.classList.add('animate');
     
     setTimeout(function(){
-        setOpen(false)
+      setOpenDialog(false)
       
       },3200);
     setTimeout(function(){
@@ -112,15 +112,15 @@ function NewVisitDialog(){
 
   return (
     <div style={{height: "100%"}}>
-      <button className="header__buttons__end__btn" style={{position: "absolute", right: "29em", top: "3.5em"}} onClick={handleClickOpen}>
+      {/* <button className="header__buttons__end__btn vetCalendar__btn__startVisit__newVisit" onClick={handleClickOpen}>
       Zaplanuj wizytę
-      </button>
+      </button> */}
       <ThemeProvider theme={theme}>
                         <Typography component={'span'} variant={'body2'}>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={open}
+        open={openDialog}
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           Nowa Wizyta

@@ -1,29 +1,22 @@
 .vetProfile{
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
+    margin: 0em 1em;
 }
 
-
 .vetProfile__basicInfo{
-    width: 30%;
-    border-bottom-right-radius: 30px;
-    background-color: #dfded1;
+    padding-top: 9em;
 }
 
 .vetProfile__extraInfo{
-    width: 70%;
-    margin-top: 10em;
+    padding-top: 4em;
 }
 
 .vetProfile__basicInfo_profilePicture{
-    /* Tu ustawia się procentową szerokość w stosunku do rodzica, nie do całej strony. 25% oznacza 25% rodzica, który jest 30% całej strony. */
-    width: 70%;
-    height: auto;
-    margin-top: 6em;
-    margin-bottom: 1em;
+    transform: scale(0.9);
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
+    /* aby sztywne width i height nie zniekształciło zdjęcia */
+    object-fit: cover;
 }
 
 .vetProfile__basicInfo_nameSurname{
@@ -33,9 +26,10 @@
 }
 
 .vetProfile__basicInfo_header{
+    margin-top: 0.5em;
     font-size: 2rem;
     font-weight: bold;
-    display: inline;
+    display: center;
 }
 
 .vetProfile__basicInfo_aboutMe{
@@ -78,4 +72,30 @@
 
 .showMoreLess__button2:hover{
     transform: scale(1.2);
+}
+
+@media(min-width: 1200px) {
+    .vetProfile{
+        margin: 0;
+        display: flex;
+        width: 100%;
+    }
+
+    .vetProfile__basicInfo{
+        width: 30%;
+        height: fit-content;
+        border-bottom-right-radius: 30px;
+        background-color: #dfded1;
+        padding-bottom: 4em;
+    }
+
+    .vetProfile__basicInfo_profilePicture{
+        width: 300px;
+        height: 300px;
+    }
+
+    .vetProfile__extraInfo{
+        width: 70%;
+        padding-top: 9em;
+    }
 }

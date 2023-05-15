@@ -9,6 +9,12 @@
     transition: border-radius linear 0.05s, width linear 0.05s;
 }
 
+.vetCalendar__btn__startVisit__newVisit{
+    right: 7rem;
+    position: absolute; 
+    top: 15.5rem;
+}
+
 /* .addVisit__btn:hover{
     transform: scale(1.1);
 } */

@@ -19,7 +19,7 @@
 }
 
 .updateProfile{
-    padding-top: 10%;
+    padding-top: 10em;
 }
 
 .updateProfile__avatar{
@@ -36,7 +36,7 @@
 
 .updateProfile__avatar__btn {
     background-color: green;
-    padding: 1em 1.6em;
+    padding: 1em 2em;
     margin-top: 2em;
     font-size: 1.6rem;
     border: none;

@@ -67,20 +67,20 @@ function PreviewVisit({ handleShowPreview, rabiesVaccinations }){
       };
     return(
         <div>
-            <button className="header__buttons__end__btn confirm__btn success" style={{position: "absolute", right: "20em", top: "3.5em", zIndex: "1000000"}} onClick={animateButton}>
+            <button className="header__buttons__end__btn confirm__btn success" style={{position: "absolute", right: "20em", top: "3.5em"}} onClick={animateButton}>
                 Potwierdź
             </button>
             <button className="header__buttons__end__btn" id="backPreview" style={{position: "absolute", right: "2em", top: "3.5em"}} onClick={handleShowPreview}>
                 <p>Chcę jeszcze coś zmienić</p>
             </button>
             
-            <div className="visit__element" style={{fontSize: "3.5rem"}}>Szczepienia przeciwko wściekliźnie
+            <div className="visit__element visit__element__table">Szczepienia przeciwko wściekliźnie
             {/* <TableContainer component={Paper}> */}
             <div style={{display: "flex", justifyContent: "center", paddingTop: "2em"}}>
 
             <ThemeProvider theme={theme}>
                             <Typography component={'span'} variant={'body2'}>
-      <Table  aria-label="customized table">
+      <Table  aria-label="customized table" sx={{minWidth: "500px"}}>
         <TableHead>
           <TableRow>
             <StyledTableCell style={{borderRadius: "25px 0 0 0 "}} align="center">Nazwa szczepionki</StyledTableCell>

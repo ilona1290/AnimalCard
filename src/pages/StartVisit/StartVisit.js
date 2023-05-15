@@ -109,14 +109,14 @@ function StartVisit(){
     }
 
     return(
-        <div style={{paddingTop: "7%"}}>
+        <div style={{paddingTop: "9em"}}>
             {showPreview === true ? <PreviewVisit handleShowPreview={handleShowPreview} rabiesVaccinations={rabiesVaccinations} /> : <div>
                 <Link to="/vetMenu/calendar">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "2rem", top: "3.5em"}}>
                         <p>Powrót</p>
                     </button>
                 </Link>
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "15em", top: "3.5em"}} onClick={handleShowPreview}>
+                <button className="header__buttons__end__btn" style={{position: "absolute", right: "15rem", top: "3.5em"}} onClick={handleShowPreview}>
                     <p>Zakończ wizytę</p>
                 </button>
                 <div className="visit__element">
@@ -138,7 +138,7 @@ function StartVisit(){
                                     <span className="tooltiptext">Usuń szczepienie</span>
                                 </button>
                                 <TextField className="visit__firstInput" id="outlined-basic" name="name" label="Nazwa szczepionki" onChange={(event) => handleNameChange(event, index)} variant="outlined" value={elem.name}/>
-                                <TextField type="text" id="outlined-basic" label="Nr serii" name="series" variant="outlined" onChange={(event) => handleChangeNumber(event, index)} value={elem.series}/><br></br>
+                                <TextField className="visit__secondInput" type="text" id="outlined-basic" label="Nr serii" name="series" variant="outlined" onChange={(event) => handleChangeNumber(event, index)} value={elem.series}/><br></br>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
                                     <DatePicker className="visit__dateField" name="date1" label="Data ważności szczepionki" onChange={(event) => handleNameChange(event, index, 'date1')}/>
                                 </LocalizationProvider><br></br>

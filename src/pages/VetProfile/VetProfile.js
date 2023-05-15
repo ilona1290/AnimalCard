@@ -39,7 +39,7 @@ function VetProfile(){
         <div style={{height: "100%"}}>
             {isLoading && <Loader />}
             <Link to="/vetMenu">
-                <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "6em", zIndex: "1000"}}>Powrót</button>
+                <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "2%", zIndex: "1000"}}>Powrót</button>
             </Link>
             {!isLoading && 
             <div className="vetProfile">

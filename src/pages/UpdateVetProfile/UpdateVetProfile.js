@@ -157,7 +157,7 @@ function UpdateVetProfile(){
         <div>
             <div className="header__buttons__end">
                 <Link to="/vetMenu">
-                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6em", top: "3.5em"}}>
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "6%", top: "3.5em"}}>
                         <p>Zrobię to później</p>
                     </button>
                 </Link>

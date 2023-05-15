@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import okNokIcon from './tick-and-cross.jpg';
+import okNokIcon from './tick-and-cross.png';
 
 function AdminMenu(){
     let navigate = useNavigate();
