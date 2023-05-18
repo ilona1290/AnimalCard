@@ -44,14 +44,14 @@ function PreviewPetProfile({handleShowPreview, pet}){
             </button>
             <div className="pet__container">
             <div className="pet__img__container">
-                <img className="pet__img img__preview" id="output" src={pet.petPhoto} name="petPhoto" alt="PetProfilePicture"></img>
+                <img className="pet__img img__preview" id="output" src={pet.photo} alt="PetProfilePicture"></img>
             </div>
             <div className="pet__form">
             <div className="pet__firstColumn">
                 <ThemeProvider theme={theme}>
                     <Typography component={'span'} variant={'body2'}>
                         <div className="pet__info__header">Numer indentyfikacyjny</div>
-                        <div className="pet__form__info">{pet.id}</div>
+                        <div className="pet__form__info">{pet.identityNumber}</div>
                         <div className="pet__info__header">Imię</div>
                         <div className="pet__form__info">{pet.name}</div>
                         <div className="pet__info__header">Płeć</div>

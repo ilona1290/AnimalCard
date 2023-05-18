@@ -160,11 +160,11 @@ function NewVisitDialog({ openDialog, setOpenDialog }){
               }
         ></Autocomplete>
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-            <DatePicker label="Data wizyty"/>
+            <DatePicker sx={{marginBottom: "0.6em"}} label="Data wizyty"/>
         </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
             <DemoContainer components={['TimePicker']}>
-                <TimePicker label="Godzina wizyty" />
+                <TimePicker sx={{marginBottom: "1em"}} label="Godzina wizyty" />
             </DemoContainer>
         </LocalizationProvider>
         <TextField
@@ -172,7 +172,7 @@ function NewVisitDialog({ openDialog, setOpenDialog }){
             label="Dodatkowe informacje"
             multiline
             rows={4}
-            style={{width: "95%"}}
+            style={{width: "95%", padding: "1em 0em !important"}}
         />
         </DialogContent>
         <DialogActions>

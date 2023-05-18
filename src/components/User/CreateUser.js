@@ -52,14 +52,14 @@ function CreateUser() {
                                     <input type="text" name="surname" required></input>
                                     <label>Nazwisko</label>
                                 </div>
-                                <div className="field">
+                                {/* <div className="field">
                                     <select name="sex" id="sex">
                                         <option disabled selected value></option>
                                         <option value="Kobieta">Kobieta</option>
                                         <option value="Meżczyzna">Meżczyzna</option>
                                     </select>
                                     <label>Płeć: </label>
-                                </div>
+                                </div> */}
                                 <div className="field">
                                     <input type="text" name="email" required/>
                                     <label>Email</label>
@@ -77,7 +77,7 @@ function CreateUser() {
                                     <label>Potwierdź hasło: </label>
                                 </div>
                                 <div className="field">
-                                    <input type="submit" value="Zarejestruj"/>
+                                    <button onClick={onSubmitUser} className="action__login__btn">Zarejestruj</button>
                                 </div>
                                 <div className="field">
                                     <Link to="/"><input type="reset" value="Powrót"/></Link>
@@ -105,14 +105,14 @@ function CreateUser() {
                                     <input type="text" name="surname" required></input>
                                     <label>Nazwisko</label>
                                 </div>
-                                <div className="field">
+                                {/* <div className="field">
                                     <select name="sex" id="sex">
                                         <option disabled selected value></option>
                                         <option value="Kobieta">Kobieta</option>
                                         <option value="Meżczyzna">Meżczyzna</option>
                                     </select>
                                     <label>Płeć: </label>
-                                </div>
+                                </div> */}
                                 <div className="field">
                                     <input type="text" name="email" required/>
                                     <label>Email</label>
@@ -130,7 +130,7 @@ function CreateUser() {
                                     <label>Potwierdź hasło: </label>
                                 </div>
                                 <div className="field">
-                                    <input type="submit" value="Zarejestruj"/>
+                                    <button onClick={onSubmitUser} className="action__login__btn">Zarejestruj</button>
                                 </div>
                                 <div className="field">
                                     <Link to="/"><input type="reset" value="Powrót"/></Link>

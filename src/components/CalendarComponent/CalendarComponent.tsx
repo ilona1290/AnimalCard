@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled, alpha } from "@mui/material/styles";
 import { ViewState } from "@devexpress/dx-react-scheduler";
 import {
@@ -167,7 +167,7 @@ const StyledGrid = styled(Grid)(() => ({
 
 
 function CalendarComponent({ appointments, resources, who }){
-
+    let navigate = useNavigate()
     const Content = ({ children, appointmentData, ...restProps }) => (
     <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
       <Grid container alignItems="center">
@@ -189,9 +189,16 @@ function CalendarComponent({ appointments, resources, who }){
         <Grid item xs={10}>
             {who !== "vet" ? <span>{appointmentData.address}</span> : <div></div>}
         </Grid>
+        <Grid item xs={10}>
+            {who === "vet" ? <button className="startVisit__btn" onClick={handleStartVisit}>Rozpocznij wizytę</button> : <div></div>}
+        </Grid>
       </Grid>
     </AppointmentTooltip.Content>
   );
+
+  const handleStartVisit = () => {
+    navigate("/vetMenu/calendar/startVisit")
+}
     //Stylowanie wnętrza kafelka
 // #FOLD_BLOCK
     const AppointmentContent = ({
