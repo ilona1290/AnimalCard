@@ -10,8 +10,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import { getData } from "../../components/Services/AccessAPI";
+import SessionManager from "../../components/Auth/SessionManager";
 
 import './VetCalendar.css'
+import Loader from "../../components/Loader/Loader";
 
 const theme = createTheme({
     typography: {
@@ -26,8 +29,8 @@ const appointments = [
         title: "Szczepienie",
         startDate: new Date(2023, 4, 11, 9, 0),
         endDate: new Date(2023, 4, 11, 9, 30),
-        priority: 2,
-        location: "Room 3",
+        // priority: 2,
+        // location: "Room 3",
         patient: "Fifi",
         owner: "Elwira Kwiatkowska"
     },
@@ -35,8 +38,8 @@ const appointments = [
         title: "Wizyta kontrolna",
         startDate: new Date(2023, 4, 11, 9, 30),
         endDate: new Date(2023, 4, 11, 10, 0),
-        priority: 1,
-        location: "Room 1",
+        // priority: 1,
+        // location: "Room 1",
         patient: "Mark",
         owner: "Julian Sokołowski"
     },
@@ -44,8 +47,8 @@ const appointments = [
         title: "Zabieg",
         startDate: new Date(2023, 4, 11, 10, 15),
         endDate: new Date(2023, 4, 11, 11, 30),
-        priority: 1,
-        location: "Room 3",
+        // priority: 1,
+        // location: "Room 3",
         patient: "Borys",
         owner: "Adrianna Szewczyk"
     },
@@ -148,7 +151,78 @@ function VetCalendar(){
     let navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [openDialog, setOpenDialog] = React.useState(false)
+    const [dataToNewVisit, setDataToNewVisit] = React.useState(null)
+    const [isLoading, setLoading] = React.useState(true);
+    const [disabledTermsFromAPI, setDisabledTermsFromAPI] = React.useState([])
     const open = Boolean(anchorEl);
+    // let disabledTerms = {}
+    const [disabledTerms, setDisabledTerms] = React.useState({})
+    const [scheduledVisitsFromAPI, setScheduledVisitsFromAPI] = React.useState([])
+    const [scheduledVisits, setScheduledVisits] = React.useState([{
+        title: "",
+        startDate: "",
+        endDate: "",
+        patient: "",
+        owner: ""
+    }]);
+
+
+    React.useEffect(() => {
+        getData(`api/Visit/GetDataToNewVisit/${SessionManager.getUserId()}`).then((result) => {
+            setDataToNewVisit(result);
+            setDisabledTermsFromAPI(result.disabledTerms)
+        })
+
+        getData(`api/Visit/${SessionManager.getUserId()}/GetScheduledVisits`).then((result) => {
+            setScheduledVisitsFromAPI(result.scheduledVisits);
+            setLoading(false)
+        })
+        
+        if(disabledTermsFromAPI.length !== 0 && scheduledVisitsFromAPI.length !== 0){
+            prepareDisabledTerms()
+            prepareScheduledVisits()
+        }
+        
+    }, [isLoading])
+    
+
+    const prepareScheduledVisits = () => {
+        // scheduledVisitsFromAPI.map((elem, index) => {
+        //     let data = [...scheduledVisits];
+        //     data[index] = {
+        //         title: elem.visitTypeName,
+        //         startDate: elem.startDate,
+        //         endDate: elem.endDate,
+        //         patient: elem.patient,
+        //         owner: elem.owner
+        //     }
+        //     setScheduledVisits(data);
+        // })
+        const data = scheduledVisitsFromAPI.map(obj => {
+            const { visitTypeName, startDate, endDate, patient, owner } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
+            return { title: visitTypeName, startDate, endDate, patient, owner }; // Utwórz nowy obiekt z wybranymi właściwościami
+          });
+          
+        setScheduledVisits(data)
+    }
+
+    const prepareDisabledTerms = () => {
+        disabledTermsFromAPI.forEach((interval) => {
+            const date = interval.startDate.split('T')[0]; // Pobierz datę z formatu "YYYY-MM-DD"
+            if (!disabledTerms[date]) {
+                disabledTerms[date] = []; // Utwórz pustą tablicę dla danej daty, jeśli jeszcze nie istnieje
+            }
+            let rrr = new Date(interval.startDate)
+            disabledTerms[date].push({
+              startHour: new Date(interval.startDate).getHours(),
+              startMinute: new Date(interval.startDate).getMinutes(),
+              endHour: new Date(interval.endDate).getHours(),
+              endMinute: new Date(interval.endDate).getMinutes(),
+            });
+        });
+        // Aby w komponencie dziecka obiekt nie był nullem to po stronie rodzica musi być utworzony jako stan.
+        setDisabledTerms(disabledTerms)
+    }
 
     const handleClickOpen = () => {
         setOpenDialog(true);
@@ -172,7 +246,9 @@ function VetCalendar(){
     };
     return(
         <div>
-            <NewVisitDialog openDialog={openDialog} setOpenDialog={setOpenDialog}/>
+            {isLoading && <Loader />}
+            {!isLoading && <div>
+            <NewVisitDialog openDialog={openDialog} setOpenDialog={setOpenDialog} dataToNewVisit={dataToNewVisit} disabledTerms={disabledTerms} />
             {/* <Link to="/vetMenu/calendar/startVisit">
                 <div className="header__buttons__end__btn" style={{position: "absolute", right: "29em", top: "3.5em", fontSize: "1.6rem", fontFamily: "Arial"}}>Zaplanuj wizytę</div>
             </Link> */}
@@ -205,7 +281,8 @@ function VetCalendar(){
       </Menu>
       </Typography>
       </ThemeProvider>
-            <CalendarComponent appointments={appointments} resources={resources} who="vet" />
+            <CalendarComponent appointments={scheduledVisits} resources={resources} who="vet" />
+        </div>}
         </div>
     );
 }

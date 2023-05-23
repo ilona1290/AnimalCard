@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -22,8 +22,15 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import dayjs from 'dayjs';
+import { addMinutes } from 'date-fns';
+import { yupResolver } from '@hookform/resolvers/yup';
+import FormHelperText from '@mui/material/FormHelperText'
+import * as Yup from 'yup';
+import { postData } from "../../components/Services/AccessAPI";
 
 import './NewVisitDialog.css';
+import SessionManager from "../Auth/SessionManager";
 
 const theme = createTheme({
     typography: {
@@ -70,48 +77,274 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     onClose: PropTypes.func.isRequired,
   };
 
-function NewVisitDialog({ openDialog, setOpenDialog }){
-    // const [open, setOpen] = React.useState(false);
-    const [pets, setPets] = React.useState(["Astro", "Balto", "Barney", "Barry", "Beethoven", "Benji", "Kieł", "Boo", "Boss", "Bruiser", "Chojrak", 
-    "Cywil", "Droopy", "Dżok", "Eddie", "Goofy", "Fala", "Happy", "Hooch"]);
-    const [visitType, setVisitType] = React.useState('');
+  
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
+function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTerms }){
+    // const [valid, setValid] = React.useState(false)
+    const [visitType, setVisitType] = React.useState('');
+    const [owner, setOwner] = React.useState(null);
+    const [selectedDate, setSelectedDate] = React.useState(null);
+    const [selectedTime, setSelectedTime] = React.useState(null);
+    const [minEndTime, setMinEndTime] = React.useState(null);
+    const [visit, setVisit] = React.useState({
+        vetId: SessionManager.getUserId(),
+        visitType: "",
+        customType: "",
+        owner: "",
+        patient: "",
+        dateVisit: null,
+        timeStartVisit: null,
+        timeEndVisit: null,
+        extraInfo: ""
+    });
+    const [errors, setErrors] = React.useState({ 
+        visitType: "",
+        owner: "",
+        dateVisit: "",
+    });
+
+    const schema = Yup.object().shape({
+        visitType: Yup.string()
+            .required('Pole Rodzaj wizyty jest wymagane.'),
+        // customType: Yup.string()
+        //     .required('Pole Rodzaj wizyty jest wymagane.'),
+        owner: Yup.string()
+          .required('Pole Właściciel jest wymagane.'),
+        patient: Yup.string()
+            .required("Pole Pacject jest wymagane."),
+        dateVisit : Yup.date()
+          .required('Pole Data wizyty jest wymagane.'),
+        timeStartVisit: Yup.date()
+            .required("Pole Godzina rozpoczęcia wizyty jest wymagane."),
+        timeEndVisit: Yup.string()
+            .required("Pole Godzina zakończenia wizyty jest wymagane."),
+      });
+
+    const shouldDisableTime = (time) => {
+        const hour = time.$d.getHours();
+        const minute = time.$d.getMinutes();
+        if (selectedDate) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            const dateString = selectedDate.$d.toLocaleDateString('pl-PL', options).split('.').reverse().join('-'); // Konwertuj datę na format "YYYY-MM-DD"
+      
+            if (disabledTerms[dateString]) {
+              for (let i = 0; i < disabledTerms[dateString].length; i++) {
+                const { startHour, startMinute, endHour, endMinute } = disabledTerms[dateString][i];
+      
+                if (getFullyCoveredHours(disabledTerms[dateString]).includes(hour)) {
+                    return true;
+                }
+                else if(hour === startHour && hour === endHour){
+                    if(minute === 0) return false
+                    else if(minute >= startMinute && minute < endMinute){
+                        return true
+                    }
+                }
+                else if(hour === startHour && hour !== endHour){
+                    if(minute === 0) return false
+                    else if(minute >= startMinute){
+                        return true
+                    }
+                }
+                else if(hour !== startHour && hour === endHour){
+                    if(minute === 0) return false
+                    else if(minute < endMinute){
+                        return true
+                    }
+                }
+              }
+            }
+          }
+          return false;
+        }
+      const getFullyCoveredHours = (disabledRanges) => {
+        const combinedRanges = [];
+
+        // Połącz przedziały czasowe, które mają wspólne godziny
+        disabledRanges.forEach((range) => {
+          const { startHour, startMinute, endHour, endMinute } = range;
+
+          let mergedRange = combinedRanges.find((mergedRange) => {
+            return (
+              mergedRange.endHour === startHour && mergedRange.endMinute === startMinute
+            );
+          });
+
+          if (mergedRange) {
+            mergedRange.endHour = endHour;
+            mergedRange.endMinute = endMinute;
+          } else {
+            combinedRanges.push({
+              startHour,
+              startMinute,
+              endHour,
+              endMinute,
+            });
+          }
+        });
+        // Wygeneruj listę godzin w pełni pokrytych przez połączone przedziały czasowe
+        const fullyCoveredHours = [];
+      
+        combinedRanges.forEach((range) => {
+          const { startHour, startMinute, endHour, endMinute } = range;
+      
+          for (let hour = 0; hour <= 24; hour++) {
+            if(hour > startHour && hour < endHour){
+                fullyCoveredHours.push(hour);
+            }
+            if(hour === startHour && startMinute === 0 && hour !== endHour)
+            {
+                fullyCoveredHours.push(hour);
+            }
+          }
+        });
+        return fullyCoveredHours;
+      }
+    const handleDateChange = async (date) => {
+        setSelectedDate(date);
+        validateDate("dateVisit", date)
+        if(errors.hasOwnProperty('timeStartVisit')){
+            errors.timeStartVisit = ""
+        }
+    };
+
+    const validateDate = async(name, value) => {
+        setVisit({
+            ...visit,
+            [name]: dayjs(value.$d.toISOString())
+        });
+        try {
+            await schema.validateAt( [name], { [name]: dayjs(value.$d.toISOString()) });
+            setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }));
+          } catch (error) {
+            setErrors((prevErrors) => ({ ...prevErrors, [name]: error.message }));
+          }
+    }
+
+    const handleTimeChange = (time) => {
+        setSelectedTime(time);
+        const newDate = dayjs(addMinutes(time.$d, 5));
+        setMinEndTime(newDate);
+        validateDate("timeStartVisit", time)
+        if(errors.hasOwnProperty('timeEndVisit')){
+            errors.timeEndVisit = ""
+        }
+    };
+
+    const handleEndTimeChange = (time) => {
+        validateDate("timeEndVisit", time)
+    };
+
   const handleClose = () => {
     setOpenDialog(false)
   };
 
 
-  const handleChangeVisitType = (event) => {
+  const handleChangeVisitType = async (event) => {
+    let name = event.target.name;
+    let value = event.target.value
     setVisitType(event.target.value);
+    if(value === "Inna" && errors.hasOwnProperty('customType')){
+        errors.customType = ""
+    }
+    validateString(name, value)
   };
 
+  const handleChangeOwner = async (event, value) => {
+    let chosenOwner = dataToNewVisit.owners.filter((str) => str.fullName === value)
+    // Żeby tablica obiektu też się przepisała to trzeba skopiować obiekt
+    setOwner(...chosenOwner);
+    if(errors.hasOwnProperty('patient')){
+        errors.patient = ""
+    }
+    validateString("owner", value)
+  };
+
+  const handleChangeCustomType = (event) => {
+        validateString(event.target.name, event.target.value)
+  }
+
+  const validateString = async(name, value) => {
+    setVisit({
+        ...visit,
+        [name]: value
+    });
+    try {
+        await schema.validateAt( [name], { [name]: value});
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }));
+      } catch (error) {
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: error.message }));
+      }
+}
+
+  const handleChangePatient = async (event, value) => {
+    validateString("patient", value)
+  };
+
+  const handleExtraInfo = (event) => {
+    setVisit({
+        ...visit,
+        "extraInfo": event.target.value
+    });
+  }
 
   const animateButton = (e) => {
+    schema
+      .validate(visit, { abortEarly: false })
+      .then(() => {
+        e.target.innerText = ""
+        e.preventDefault();
+        e.target.classList.remove('animate');
+        e.target.classList.remove('success');
+        
+        e.target.classList.add("circle")
+        e.target.classList.add('animate');
+        let visitToSent = {
+            vet: SessionManager.getUserId(),
+            visitType: "",
+            customType: "",
+            owner: "",
+            patient: "",
+            dateVisit: null,
+            timeStartVisit: null,
+            timeEndVisit: null,
+            extraInfo: ""
+        };
 
-    e.preventDefault();
-    //reset animation
-    e.target.classList.remove('animate');
-    
-    e.target.classList.add('animate');
-    
-    e.target.classList.add('animate');
-    
-    setTimeout(function(){
-      setOpenDialog(false)
-      
-      },3200);
-    setTimeout(function(){
-      e.target.classList.remove('animate');
-    
-    },4000);
+        visitToSent.visitType = dataToNewVisit.visitTypes.filter((str) => str.name === visit.visitType)[0].id;
+        visitToSent.customType = visit.customType;
+        visitToSent.owner = dataToNewVisit.owners.filter((str) => str.fullName === visit.owner)[0].id;
+        let ownerIndex = dataToNewVisit.owners.findIndex(x => x.fullName === visit.owner)
+        visitToSent.patient = dataToNewVisit.owners[ownerIndex].pets.filter((str) => str.name === visit.patient)[0].id;
+        visitToSent.dateVisit = visit.dateVisit.$d
+        visitToSent.timeStartVisit = visit.timeStartVisit.$d
+        visitToSent.timeEndVisit = visit.timeEndVisit.$d
+        visitToSent.extraInfo = visit.extraInfo
+        postData('api/Visit/AddNewVisit', visitToSent).then((result) => {
+            e.target.classList.remove('animate');
+            if(result === true){
+                e.target.classList.add('success');
+                setTimeout(function(){
+                    setOpenDialog(false)
+                    window.location.reload();
+                },500);
+            }
+        })
+        // Perform form submission logic here
+      })
+      .catch((validationErrors) => {
+        const errors = {};
+        validationErrors.inner.forEach((error) => {
+          errors[error.path] = error.message;
+        });
+        setErrors(errors);
+        console.error('Form validation errors:', errors);
+      });
     
   };
 
   return (
-    <div style={{height: "100%"}}>
+    <div >
       {/* <button className="header__buttons__end__btn vetCalendar__btn__startVisit__newVisit" onClick={handleClickOpen}>
       Zaplanuj wizytę
       </button> */}
@@ -125,32 +358,44 @@ function NewVisitDialog({ openDialog, setOpenDialog }){
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           Nowa Wizyta
         </BootstrapDialogTitle>
-        <DialogContent dividers>
-        <FormControl fullWidth>
+        <DialogContent dividers >
+        <FormControl fullWidth required error={!!errors.visitType}>
         <InputLabel id="demo-simple-select-label">Rodzaj wizyty</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={visitType}
+          name="visitType"
+          sx={{ width: 300}}
           label="Rodzaj wizyty"
-          className="visit__firstInput"
           onChange={handleChangeVisitType}
         >
-            <MenuItem value={"Wizyta kontrolna"}>Wizyta kontrolna</MenuItem>
-            <MenuItem value={"Szczepienie"}>Szczepienie</MenuItem>
-            <MenuItem value={"Zabieg"}>Zabieg</MenuItem>
-            <MenuItem value={"Badanie"}>Badanie</MenuItem>
-            <MenuItem value={"Inna"}>Inna</MenuItem>
+            {dataToNewVisit.visitTypes.map((visitTypeElem, index) => {
+                return(
+                    <MenuItem value={visitTypeElem.name}>{visitTypeElem.name}</MenuItem>
+                );
+            })}
         </Select>
+        <FormHelperText className="visit__firstInput">{errors.visitType}</FormHelperText>
       </FormControl>
-      {visitType === "Inna" && <TextField className="visit__firstInput" id="outlined-basic" name="name" label="Rodzaj wizyty" variant="outlined" />}
+      {visitType === "Inna" && 
+        <TextField className="visit__firstInput" sx={{ width: 300}} 
+            id="outlined-basic" name="customType" label="Rodzaj wizyty" 
+            variant="outlined" 
+            onChange={(event) => handleChangeCustomType(event)}
+            required
+            error={!!errors.customType}
+            helperText={errors.customType}
+        />}
         <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={pets}
+            options={dataToNewVisit.owners.map(a => a.fullName)}
             sx={{ width: 300}}
             className="visit__firstInput"
-            renderInput={(params) => <TextField {...params} label="Pacjent" />}
+            name="owner"
+            // renderInput={(params) => <TextField {...params} label="Właściciel" />}
+            onChange={(e, value) => handleChangeOwner(e, value)}
             ListboxProps={
                 {
                   style:{
@@ -158,25 +403,103 @@ function NewVisitDialog({ openDialog, setOpenDialog }){
                   }
                 }
               }
+              renderInput={(params) =>
+                <TextField
+                    {...params}
+                    label="Właściciel"
+                    required
+                    error={!!errors.owner}
+                    helperText={errors.owner}
+                />}
         ></Autocomplete>
+        {owner !== null && typeof owner !== "undefined" ?
+        <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={owner !== null && typeof owner !== "undefined" ? owner.pets.map(a => a.name) : []}
+            sx={{ width: 300}}
+            name="patient"
+            onChange={(e, value) => handleChangePatient(e, value)}
+            className="visit__firstInput"
+            renderInput={(params) =>
+                <TextField
+                    {...params}
+                    label="Pacjent"
+                    required
+                    error={!!errors.patient}
+                    helperText={errors.patient}
+                />}
+            ListboxProps={
+                {
+                  style:{
+                      maxHeight: '300px',
+                  }
+                }
+              }
+        ></Autocomplete>: <div></div>}
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-            <DatePicker sx={{marginBottom: "0.6em"}} label="Data wizyty"/>
+            <DatePicker sx={{marginBottom: "0.6em", width: 300}} 
+                label="Data wizyty" disablePast value={selectedDate} 
+                onChange={handleDateChange}
+                required
+                slotProps={{
+                    textField: {
+                        helperText: errors.dateVisit,
+                        error: errors.dateVisit
+                    }
+                }}
+            />
         </LocalizationProvider>
+        
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
             <DemoContainer components={['TimePicker']}>
-                <TimePicker sx={{marginBottom: "1em"}} label="Godzina wizyty" />
-            </DemoContainer>
+            {selectedDate && (
+                <TimePicker sx={{marginBottom: "0.6em", width: 300}} 
+                    label="Godzina rozpoczęcia wizyty" 
+                    value={selectedTime} 
+                    minTime={dayjs().set('hour', 8).set('minute', 0)}
+                    maxTime={dayjs().set('hour', 17).set('minute', 0)}
+                    shouldDisableTime={shouldDisableTime} 
+                    onChange={handleTimeChange}
+                    required
+                    slotProps={{
+                        textField: {
+                            helperText: errors.timeStartVisit,
+                            error: errors.timeStartVisit
+                        }
+                    }}
+                />
+            )}</DemoContainer>
         </LocalizationProvider>
+        {selectedTime && (
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
+            <DemoContainer components={['TimePicker']}>
+                <TimePicker sx={{marginBottom: "0.6em", width: 300}} 
+                    label="Godzina zakończenia wizyty" 
+                    minTime={minEndTime}
+                    maxTime={dayjs().set('hour', 17).set('minute', 0)}
+                    onChange={handleEndTimeChange}
+                    required
+                    slotProps={{
+                        textField: {
+                            helperText: errors.timeEndVisit,
+                            error: errors.timeEndVisit
+                        }
+                    }}
+                />
+            </DemoContainer>
+        </LocalizationProvider>)}
         <TextField
             id="outlined-multiline-static"
             label="Dodatkowe informacje"
             multiline
+            onChange={handleExtraInfo}
             rows={4}
-            style={{width: "95%", padding: "1em 0em !important"}}
+            style={{width: 300, padding: "1em 0em !important", marginTop: "0.6em"}}
         />
         </DialogContent>
         <DialogActions>
-          <button className="addVisit__btn success" onClick={animateButton}>
+          <button className="addVisit__btn" onClick={animateButton}>
             Zaplanuj wizytę
           </button>
         </DialogActions>

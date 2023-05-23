@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { getData } from "../../components/Services/AccessAPI";
 
 import './Pets.css';
 
-import pet1 from '../PetProfile/goldenRetriever.png'
 import SessionManager from "../../components/Auth/SessionManager";
+import Loader from "../../components/Loader/Loader";
 
 const theme = createTheme({
     typography: {
@@ -18,10 +19,17 @@ const theme = createTheme({
 
 function Pets(){
     let navigate = useNavigate();
-    const [pets, setPets] = useState(["Astro", "Balto", "Barney", "Barry", "Beethoven", "Benji", "Kieł", "Boo", "Boss", "Bruiser", "Chojrak", 
-    "Cywil", "Droopy", "Dżok", "Eddie", "Goofy", "Fala", "Happy", "Hooch"]);
-    const orginalPets = ["Astro", "Balto", "Barney", "Barry", "Beethoven", "Benji", "Kieł", "Boo", "Boss", "Bruiser", "Chojrak", 
-    "Cywil", "Droopy", "Dżok", "Eddie", "Goofy", "Fala", "Happy", "Hooch"];
+    const [pets, setPets] = useState([]);
+    const [orginalPets, setOrginalPets] = useState([])
+    const [isLoading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getData(`api/Pet/GetPetsByUserRole/${SessionManager.getRole()}/${SessionManager.getUserId()}`).then((result) => {
+            setPets(result.userPets);
+            setOrginalPets(result.userPets);
+            setLoading(false);
+        })
+    }, [])
 
     const handleChange = (event) => {
         let filteredData = orginalPets.filter((el) => {
@@ -29,7 +37,7 @@ function Pets(){
                 return el;
             }
             else {
-                return el.toLowerCase().includes(event.target.value.toLowerCase())
+                return el.name.toLowerCase().includes(event.target.value.toLowerCase())
             }
         })
         setPets(filteredData)
@@ -61,24 +69,27 @@ function Pets(){
     }
     return(
         <div style={{height: "100%", width: "100%"}}>
-            {returnBack()}
-            <div className="container__animals">
-                <ThemeProvider theme={theme}>
-                    <Typography component={'span'} variant={'body2'}>
-                        <TextField className="searchbox" id="outlined-basic" label="Wpisz imię szukanego pacjenta" variant="outlined" onChange={handleChange}/>
-                    </Typography>
-                </ThemeProvider>
-                <div className="animals">
-                    {pets.map((pet, index) => {
-                        return(
-                            <div className="menu__card animals__card" onClick={() => handleClick(index + 1)}>
-                                <img className="icon__circle" src={pet1} alt="pet1"></img>
-                                <h1>{pet}</h1>
-                            </div>
-                        );
-                    })}
+            {isLoading && <Loader />}
+            {!isLoading && <div>
+                {returnBack()}
+                <div className="container__animals">
+                    <ThemeProvider theme={theme}>
+                        <Typography component={'span'} variant={'body2'}>
+                            <TextField className="searchbox" id="outlined-basic" label="Wpisz imię szukanego pacjenta" variant="outlined" onChange={handleChange}/>
+                        </Typography>
+                    </ThemeProvider>
+                    <div className="animals">
+                        {pets.map((pet, index) => {
+                            return(
+                                <div className="menu__card animals__card" onClick={() => handleClick(pet.id)}>
+                                    <img className="icon__circle" src={pet.photo} alt="pet1"></img>
+                                    <h1>{pet.name}</h1>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
+            </div>}
         </div>
     );
 }

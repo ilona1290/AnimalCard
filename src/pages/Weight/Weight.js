@@ -139,7 +139,6 @@ function Weight(){
                 useMesh={true}
                 theme={theme}
                 tooltip={(input) => {
-                    console.log(input.point)
                     return (
                     <div className="chart__tooltip">
                       Data ważenia: {input.point.data.x}r. <br/>

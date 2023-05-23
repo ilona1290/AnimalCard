@@ -56,7 +56,6 @@ function PreviewVisit({ handleShowPreview, rabiesVaccinations }){
         e.target.classList.add('animate');
         
         e.target.classList.add('animate');
-        
         setTimeout(function(){
             navigate("/vetMenu/calendar")
           }, 3200);
@@ -67,9 +66,7 @@ function PreviewVisit({ handleShowPreview, rabiesVaccinations }){
       };
     return(
         <div>
-            <button className="header__buttons__end__btn confirm__btn success" style={{position: "absolute", right: "20em", top: "3.5em"}} onClick={animateButton}>
-                Potwierdź
-            </button>
+            
             <button className="header__buttons__end__btn" id="backPreview" style={{position: "absolute", right: "2em", top: "3.5em"}} onClick={handleShowPreview}>
                 <p>Chcę jeszcze coś zmienić</p>
             </button>
@@ -112,6 +109,9 @@ function PreviewVisit({ handleShowPreview, rabiesVaccinations }){
             <div className="visit__element">Zabiegi</div>
             <div className="visit__element">Badania</div>
             <div className="visit__element">Waga</div>
+            <button className="header__buttons__end__btn save__btn" onClick={animateButton}>
+                Zapisz
+            </button>
         </div>
     )
 }

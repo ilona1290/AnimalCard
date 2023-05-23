@@ -111,7 +111,7 @@ const StyledAppointmentsAppointmentContent = styled(
 // Tydzień początkowo wyświetlona (zawiera dzisiejszą datę)
 const isWeekEnd = (date: Date): boolean =>
   date.getDay() === 0 || date.getDay() === 6;
-const defaultCurrentDate = new Date(2023, 4, 8, 11, 15);
+const defaultCurrentDate = new Date(2023, 4, 29, 11, 15);
 
 const DayScaleCell = ({
   startDate,
