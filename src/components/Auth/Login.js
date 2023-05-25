@@ -60,13 +60,16 @@ export default class Login extends Component {
                     // redirect to dashboard
                     if(result.role === "Vet"){
                         if(result.isCompletedVetProfile === false){
+                            event.target.classList.add("success")
                             window.location.href = "/updateVetProfile";
                         }
                         else{
+                            event.target.classList.add("success")
                             window.location.href = "/vetMenu";
                         }
                     }
                     else if(result.role === "Admin"){
+                        event.target.classList.add("success")
                         window.location.href = "/adminMenu"
                     }
                     else{

@@ -171,14 +171,16 @@ function VetCalendar(){
         getData(`api/Visit/GetDataToNewVisit/${SessionManager.getUserId()}`).then((result) => {
             setDataToNewVisit(result);
             setDisabledTermsFromAPI(result.disabledTerms)
+            getData(`api/Visit/${SessionManager.getUserId()}/GetScheduledVisits`).then((result) => {
+                setScheduledVisitsFromAPI(result.scheduledVisits);
+                setLoading(false)
+            })
         })
 
-        getData(`api/Visit/${SessionManager.getUserId()}/GetScheduledVisits`).then((result) => {
-            setScheduledVisitsFromAPI(result.scheduledVisits);
-            setLoading(false)
-        })
+        
         
         if(disabledTermsFromAPI.length !== 0 && scheduledVisitsFromAPI.length !== 0){
+            
             prepareDisabledTerms()
             prepareScheduledVisits()
         }
