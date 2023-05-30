@@ -81,10 +81,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTerms }){
     // const [valid, setValid] = React.useState(false)
+    const [disabledRangesTime, setDisabledRangesTime] = React.useState([])
     const [visitType, setVisitType] = React.useState('');
     const [owner, setOwner] = React.useState(null);
     const [selectedDate, setSelectedDate] = React.useState(null);
     const [selectedTime, setSelectedTime] = React.useState(null);
+    const [selectedEndTime, setSelectedEndTime] = React.useState(null);
     const [minEndTime, setMinEndTime] = React.useState(null);
     const [visit, setVisit] = React.useState({
         vetId: SessionManager.getUserId(),
@@ -126,11 +128,12 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
         if (selectedDate) {
             const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
             const dateString = selectedDate.$d.toLocaleDateString('pl-PL', options).split('.').reverse().join('-'); // Konwertuj datę na format "YYYY-MM-DD"
-      
+            setDisabledRangesTime(disabledTerms[dateString])
+
             if (disabledTerms[dateString]) {
               for (let i = 0; i < disabledTerms[dateString].length; i++) {
                 const { startHour, startMinute, endHour, endMinute } = disabledTerms[dateString][i];
-      
+                
                 if (getFullyCoveredHours(disabledTerms[dateString]).includes(hour)) {
                     return true;
                 }
@@ -200,6 +203,48 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
         });
         return fullyCoveredHours;
       }
+
+    const setEndMaxTime = () => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const dateString = selectedDate.$d.toLocaleDateString('pl-PL', options).split('.').reverse().join('-'); // Konwertuj datę na format "YYYY-MM-DD"
+        if (disabledTerms[dateString]) {
+            const combinedRanges = [];
+
+            // Połącz przedziały czasowe, które mają wspólne godziny
+            disabledRangesTime.forEach((range) => {
+            const { startHour, startMinute, endHour, endMinute } = range;
+
+            let mergedRange = combinedRanges.find((mergedRange) => {
+                return (
+                mergedRange.endHour === startHour && mergedRange.endMinute === startMinute
+                );
+            });
+
+            if (mergedRange) {
+                mergedRange.endHour = endHour;
+                mergedRange.endMinute = endMinute;
+            } else {
+                combinedRanges.push({
+                startHour,
+                startMinute,
+                endHour,
+                endMinute,
+                });
+            }
+            });
+            console.log(combinedRanges)
+            for(let i = 0; i < combinedRanges.length - 1; i++){
+                const { startHour, startMinute, endHour, endMinute } = combinedRanges[i];
+                let actEndDate = new Date(selectedDate.$y, selectedDate.$M, selectedDate.$D, endHour, endMinute)
+                let minEndDate = new Date(selectedDate.$y, selectedDate.$M, selectedDate.$D, selectedTime.$H, selectedTime.$m)
+                if(actEndDate.getTime() === minEndDate.getTime()){
+                    return dayjs().set('hour', combinedRanges[i + 1].startHour).set('minute', combinedRanges[i + 1].startMinute)
+                }
+            }
+        }
+        return dayjs().set('hour', 17).set('minute', 0)
+    }
+
     const handleDateChange = async (date) => {
         setSelectedDate(date);
         validateDate("dateVisit", date)
@@ -232,6 +277,7 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
     };
 
     const handleEndTimeChange = (time) => {
+        setSelectedEndTime(time)
         validateDate("timeEndVisit", time)
     };
 
@@ -366,7 +412,7 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
           id="demo-simple-select"
           value={visitType}
           name="visitType"
-          sx={{ width: 300}}
+          sx={{ width: 400}}
           label="Rodzaj wizyty"
           onChange={handleChangeVisitType}
         >
@@ -391,7 +437,7 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
             disablePortal
             id="combo-box-demo"
             options={dataToNewVisit.owners.map(a => a.fullName)}
-            sx={{ width: 300}}
+            sx={{ width: 400}}
             className="visit__firstInput"
             name="owner"
             // renderInput={(params) => <TextField {...params} label="Właściciel" />}
@@ -417,7 +463,7 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
             disablePortal
             id="combo-box-demo"
             options={owner !== null && typeof owner !== "undefined" ? owner.pets.map(a => a.name) : []}
-            sx={{ width: 300}}
+            sx={{ width: 400}}
             name="patient"
             onChange={(e, value) => handleChangePatient(e, value)}
             className="visit__firstInput"
@@ -438,14 +484,15 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
               }
         ></Autocomplete>: <div></div>}
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-            <DatePicker sx={{marginBottom: "0.6em", width: 300}} 
+            <DatePicker sx={{marginBottom: "0.6em", width: 400}} 
                 label="Data wizyty" disablePast value={selectedDate} 
                 onChange={handleDateChange}
                 required
                 slotProps={{
                     textField: {
+                        readOnly: true,
                         helperText: errors.dateVisit,
-                        error: errors.dateVisit
+                        error: errors.dateVisit,
                     }
                 }}
             />
@@ -454,7 +501,7 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
             <DemoContainer components={['TimePicker']}>
             {selectedDate && (
-                <TimePicker sx={{marginBottom: "0.6em", width: 300}} 
+                <TimePicker sx={{marginBottom: "0.6em", width: 400}} 
                     label="Godzina rozpoczęcia wizyty" 
                     value={selectedTime} 
                     minTime={dayjs().set('hour', 8).set('minute', 0)}
@@ -464,6 +511,7 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
                     required
                     slotProps={{
                         textField: {
+                            readOnly: true,
                             helperText: errors.timeStartVisit,
                             error: errors.timeStartVisit
                         }
@@ -474,14 +522,16 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
         {selectedTime && (
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
             <DemoContainer components={['TimePicker']}>
-                <TimePicker sx={{marginBottom: "0.6em", width: 300}} 
+                <TimePicker sx={{marginBottom: "0.6em", width: 400}} 
                     label="Godzina zakończenia wizyty" 
                     minTime={minEndTime}
-                    maxTime={dayjs().set('hour', 17).set('minute', 0)}
+                    maxTime={setEndMaxTime()}
+                    value={selectedEndTime}
                     onChange={handleEndTimeChange}
                     required
                     slotProps={{
                         textField: {
+                            readOnly: true,
                             helperText: errors.timeEndVisit,
                             error: errors.timeEndVisit
                         }
@@ -495,7 +545,7 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
             multiline
             onChange={handleExtraInfo}
             rows={4}
-            style={{width: 300, padding: "1em 0em !important", marginTop: "0.6em"}}
+            style={{width: 400, padding: "1em 0em !important", marginTop: "0.6em"}}
         />
         </DialogContent>
         <DialogActions>

@@ -190,14 +190,14 @@ function CalendarComponent({ appointments, resources, who }){
             {who !== "vet" ? <span>{appointmentData.address}</span> : <div></div>}
         </Grid>
         <Grid item xs={10}>
-            {who === "vet" ? <button className="startVisit__btn" onClick={handleStartVisit}>Rozpocznij wizytę</button> : <div></div>}
+            {who === "vet" ? <button className="startVisit__btn" onClick={() => handleStartVisit(appointmentData.visitTypeId)}>Rozpocznij wizytę</button> : <div></div>}
         </Grid>
       </Grid>
     </AppointmentTooltip.Content>
   );
 
-  const handleStartVisit = () => {
-    navigate("/vetMenu/calendar/startVisit")
+  const handleStartVisit = (type) => {
+    navigate(`/vetMenu/calendar/startVisit/${type}`)
 }
     //Stylowanie wnętrza kafelka
 // #FOLD_BLOCK

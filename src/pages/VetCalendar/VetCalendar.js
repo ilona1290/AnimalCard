@@ -159,6 +159,7 @@ function VetCalendar(){
     const [disabledTerms, setDisabledTerms] = React.useState({})
     const [scheduledVisitsFromAPI, setScheduledVisitsFromAPI] = React.useState([])
     const [scheduledVisits, setScheduledVisits] = React.useState([{
+        visitTypeId: "",
         title: "",
         startDate: "",
         endDate: "",
@@ -201,8 +202,8 @@ function VetCalendar(){
         //     setScheduledVisits(data);
         // })
         const data = scheduledVisitsFromAPI.map(obj => {
-            const { visitTypeName, startDate, endDate, patient, owner } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
-            return { title: visitTypeName, startDate, endDate, patient, owner }; // Utwórz nowy obiekt z wybranymi właściwościami
+            const { visitTypeId, visitTypeName, startDate, endDate, patient, owner } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
+            return { visitTypeId, title: visitTypeName, startDate, endDate, patient, owner }; // Utwórz nowy obiekt z wybranymi właściwościami
           });
           
         setScheduledVisits(data)
