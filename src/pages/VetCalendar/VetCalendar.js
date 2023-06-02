@@ -159,12 +159,14 @@ function VetCalendar(){
     const [disabledTerms, setDisabledTerms] = React.useState({})
     const [scheduledVisitsFromAPI, setScheduledVisitsFromAPI] = React.useState([])
     const [scheduledVisits, setScheduledVisits] = React.useState([{
+        id: "",
         visitTypeId: "",
         title: "",
         startDate: "",
         endDate: "",
         patient: "",
-        owner: ""
+        owner: "",
+        isCompleted: ""
     }]);
 
 
@@ -172,8 +174,10 @@ function VetCalendar(){
         getData(`api/Visit/GetDataToNewVisit/${SessionManager.getUserId()}`).then((result) => {
             setDataToNewVisit(result);
             setDisabledTermsFromAPI(result.disabledTerms)
+            console.log(result.disabledTerms)
             getData(`api/Visit/${SessionManager.getUserId()}/GetScheduledVisits`).then((result) => {
                 setScheduledVisitsFromAPI(result.scheduledVisits);
+                console.log(result.scheduledVisits)
                 setLoading(false)
             })
         })
@@ -202,10 +206,10 @@ function VetCalendar(){
         //     setScheduledVisits(data);
         // })
         const data = scheduledVisitsFromAPI.map(obj => {
-            const { visitTypeId, visitTypeName, startDate, endDate, patient, owner } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
-            return { visitTypeId, title: visitTypeName, startDate, endDate, patient, owner }; // Utwórz nowy obiekt z wybranymi właściwościami
+            const { id, visitTypeId, visitTypeName, startDate, endDate, patient, owner, isCompleted, extraInfo } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
+            return { id, visitTypeId, title: visitTypeName, startDate, endDate, patient, owner, isCompleted, extraInfo }; // Utwórz nowy obiekt z wybranymi właściwościami
           });
-          
+          console.log(data)
         setScheduledVisits(data)
     }
 
@@ -279,7 +283,7 @@ function VetCalendar(){
         }}
       >
         <MenuItem onClick={handleClickOpen}>Zaplanuj wizytę</MenuItem>
-        <MenuItem onClick={handleStartVisit}>Rozpocznij nieumówioną wizytę</MenuItem>
+        {/* <MenuItem onClick={handleStartVisit}>Rozpocznij nieumówioną wizytę</MenuItem> */}
         <MenuItem onClick={handleBack}>Powrót</MenuItem>
       </Menu>
       </Typography>

@@ -38,7 +38,7 @@ function AddWeight({weight, onWeightChanged }){
     const handleAddNewItem = () => {
         setToggle(false)
         isRemoving = false
-        let newfield = {id: nodeId++, weightValue: ''}
+        let newfield = {id: nodeId++, weightValue: ""}
         setAddedWeight([...addedWeight, newfield])
         onWeightChanged(addedWeight)
         if(addedWeight.length === 0){

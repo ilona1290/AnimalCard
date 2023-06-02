@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ResponsiveLine } from '@nivo/line'
 import { useParams, useNavigate } from 'react-router-dom'
+import { getData } from "../../components/Services/AccessAPI";
+import Loader from "../../components/Loader";
 import "./Weight.css"
 
 const data = [
@@ -10,11 +12,11 @@ const data = [
       "data": [
         {
           "x": "05.09.2021",
-          "y": 10
+          "y": 10.345
         },
         {
           "x": "05.11.2021",
-          "y": 13
+          "y": 13.56
         },
         {
           "x": "10.01.2022",
@@ -88,13 +90,33 @@ function Weight(){
     let navigate = useNavigate();
     const {petId} = useParams();
 
+    const [data, setData] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    useEffect(() => {
+        getData(`api/Pet/${petId}/Weights`).then((result) => {
+          const weights = result.petWeights.map(obj => {
+            const { weighingDate, value } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
+            return { x: weighingDate, y: value}; // Utwórz nowy obiekt z wybranymi właściwościami
+          })
+          const data = [
+            {
+              "id": "waga",
+              "color": "hsl(126, 70%, 50%)",
+              "data": weights
+            }
+          ]
+            setData(data);
+            setLoading(false);
+        })
+    }, [])
+
     const handleBack = () => {
         navigate(`/pets/${petId}`)
     }
     return(
         <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
-
-        
+          {isLoading && <Loader />}
+          {!isLoading && 
         <div style={{ height: "90vh", width: "90%", paddingTop: "9em"}}>
         <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
@@ -172,7 +194,7 @@ function Weight(){
                 //     }
                 // ]}
             />
-        </div>
+        </div>}
         </div>
     )
 }

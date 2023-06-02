@@ -1,57 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "../../components/DataTable";
 import { useParams, useNavigate } from 'react-router-dom'
-
-const rows = [
-    {
-        id: 1, 
-        VaccinationDate: new Date("2023-07-12"),
-        DiseaseName: "Nosówka",
-        VaccineName: "Versican Plus DHPPi/L4R", 
-        VaccineBatchNumer: "569865",
-        Vet: "Marcin Klimczak"
-    },
-    {
-        id: 2, 
-        VaccinationDate: new Date("2022-02-08"),
-        DiseaseName: "Parwowiroza",
-        VaccineName: "Eryseng Parvo",
-        VaccineBatchNumer: "365478",
-        Vet: "Marcin Klimczak"
-    },
-    {
-        id: 3, 
-        VaccinationDate: new Date("2021-09-25"),
-        DiseaseName: "Kaszel psi",
-        VaccineName: "Versican Plus DHPPi/L4",
-        VaccineBatchNumer: "569889",
-        Vet: "Marcin Klimczak"
-    },
-  ];
+import { getData } from "../../components/Services/AccessAPI";
+import Loader from "../../components/Loader";
   
   const columns = [
-    { field: "VaccinationDate", headerName: "Data szczepienia", type: "date", flex: 1, minWidth: 140, headerAlign: 'center', align: 'center', renderHeader: () => (
+    { field: "vaccinationDate", headerName: "Data szczepienia", type: "date", flex: 1, minWidth: 140, headerAlign: 'center', align: 'center', renderHeader: () => (
         <strong>
           {'Data szczepienia'}
         </strong>
       )},
-      { field: "DiseaseName", headerName: "Nazwa choroby", type: "string", flex: 1, minWidth: 140, headerAlign: 'center',align: 'center', renderHeader: () => (
+      { field: "diseaseName", headerName: "Nazwa choroby", type: "string", flex: 1, minWidth: 140, headerAlign: 'center',align: 'center', renderHeader: () => (
         <strong>
           {'Nazwa choroby'}
         </strong>
       )},
-    { field: "VaccineName", headerName: "Nazwa szczepionki", type: "string", flex: 1, minWidth: 140, headerAlign: 'center',align: 'center', renderHeader: () => (
+    { field: "name", headerName: "Nazwa szczepionki", type: "string", flex: 1, minWidth: 140, headerAlign: 'center',align: 'center', renderHeader: () => (
         <strong>
           {'Nazwa szczepionki'}
         </strong>
       )},
-    { field: "VaccineBatchNumer", headerName: "Nr serii szczepionki", type: "string", flex: 1,
+    { field: "series", headerName: "Nr serii szczepionki", type: "string", flex: 1,
     minWidth: 140, headerAlign: 'center', align: 'center', renderHeader: () => (
         <strong>
           {'Nr serii szczepionki'}
         </strong>
       )},
-    { field: "Vet", headerName: "Weterynarz", type: "string", flex:1, minWidth: 120, headerAlign: 'center', align: 'center', renderHeader: () => (
+    { field: "vet", headerName: "Weterynarz", type: "string", flex:1, minWidth: 120, headerAlign: 'center', align: 'center', renderHeader: () => (
         <strong>
           {'Weterynarz'}
         </strong>
@@ -62,15 +37,32 @@ function OtherVaccinations(){
     let navigate = useNavigate();
     const {petId} = useParams();
 
+    const [rows, setRows] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getData(`api/Pet/${petId}/OtherVaccinations`).then((result) => {
+          const data = result.petOtherVaccinations.map(obj => {
+            const { id, diseaseName, name, series, vaccinationDate, vet } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
+            return { id, diseaseName, name, series, vaccinationDate: new Date(vaccinationDate), vet }; // Utwórz nowy obiekt z wybranymi właściwościami
+          })
+            setRows(data);
+            setLoading(false);
+        })
+    }, [])
+
     const handleBack = () => {
         navigate(`/pets/${petId}/injections`)
     }
     return(
         <div style={{paddingTop: "9em", width: "100%"}}>
+          {isLoading && <Loader />}
+          {!isLoading && <div>
             <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>
             <DataTable rows={rows} columns={columns} paddingProp="7%"/>
+            </div>}
         </div>
     )
 }

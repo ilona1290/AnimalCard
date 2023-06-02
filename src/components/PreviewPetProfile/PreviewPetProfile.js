@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { postData } from "../../components/Services/AccessAPI";
 import SessionManager from "../../components/Auth/SessionManager";
+import { BASE_URL } from "../Services/Settings";
 
 import "./PreviewPetProfile.css";
 
@@ -33,7 +34,7 @@ function PreviewPetProfile({handleShowPreview, pet, owners, formPhoto}){
             })
         }
         else{
-            fetch('https://localhost:7099/api/upload/petsphotos',
+            fetch(`${BASE_URL}api/upload/petsphotos`,
                 {
                     method: 'POST',
                     mode: 'cors',

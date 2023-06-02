@@ -1,5 +1,6 @@
 import React from "react";
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { postData } from "../../components/Services/AccessAPI";
 import "./PreviewVisit.css";
 import PreviewVisitRabiesVaccination from "../PreviewVisitRabiesVaccination/PreviewVisitRabiesVaccination";
 import PreviewVisitOtherVaccinations from "../PreviewVisitOtherVaccinations/PreviewVisitOtherVaccinations";
@@ -7,12 +8,26 @@ import PreviewTreatments from "../PreviewTreatments/PreviewTreatments";
 import PreviewDiseases from "../PreviewDiseases/PreviewDiseases";
 import PreviewResearches from "../PreviewResearches/PreviewResearches";
 import PreviewWeight from "../PreviewWeight/PreviewWeight";
+import SessionManager from "../Auth/SessionManager";
 
 
-function PreviewVisit({ handleShowPreview, rabiesVaccinations, infectiousDiseaseVaccinations, treatments, diseases, researches, weights }){
+function PreviewVisit({ visitId, handleShowPreview, rabiesVaccinations, infectiousDiseaseVaccinations, treatments, diseases, researches, weights }){
     let navigate = useNavigate();
-
     const animateButton = (e) => {
+        let weightToSend = 0;
+        if(weights.length !== 0 && weights[0].weightValue !== ""){
+            weightToSend = Number(weights[0].weightValue);
+        }
+        let objToSend = {
+            visitId: visitId,
+            rabiesVaccination: rabiesVaccinations[0],
+            otherVaccinations: infectiousDiseaseVaccinations,
+            treatments: treatments,
+            treatedDiseases: diseases,
+            research: researches[0],
+            weight: weightToSend
+        }
+        console.log(objToSend)
         e.target.innerText = ""
         e.preventDefault();
         //reset animation
@@ -20,49 +35,61 @@ function PreviewVisit({ handleShowPreview, rabiesVaccinations, infectiousDisease
 
         e.target.classList.add('animate');
 
+        e.target.classList.add("circle")
         e.target.classList.add('animate');
-        setTimeout(function(){
-            navigate("/vetMenu/calendar")
-        }, 3200);
-        setTimeout(function(){
+
+        postData(`api/Visit/${SessionManager.getUserId()}/CompleteVisit`, objToSend).then((result) => {
             e.target.classList.remove('animate');
-        },4000);
+            if(result === true){
+                e.target.classList.add('success');
+                setTimeout(function(){
+                    navigate("/vetMenu/calendar");
+                  },500);
+            }
+        })
+        // setTimeout(function(){
+        //     navigate("/vetMenu/calendar")
+        // }, 3200);
+        // setTimeout(function(){
+        //     e.target.classList.remove('animate');
+        // },4000);
     };
 
     const returnPreviewVisits = () => {
+        console.log(weights)
         if(rabiesVaccinations.length !== 0){
             return(
                 <>
                     <PreviewVisitRabiesVaccination rabiesVaccinations={rabiesVaccinations}/>
-                    <PreviewWeight weights={weights}/>
+                    {weights.length !== 0 && weights[0].weightValue !== "" && <PreviewWeight weights={weights}/>}
                 </>)
         }
         if(infectiousDiseaseVaccinations.length !== 0){
             return(
                 <>
                     <PreviewVisitOtherVaccinations otherVaccinations={infectiousDiseaseVaccinations}/>
-                    <PreviewWeight weights={weights}/>
+                    {weights.length !== 0 && weights[0].weightValue !== "" && <PreviewWeight weights={weights}/>}
                 </>)
         }
         if(treatments.length !== 0){
             return(
                 <>
                     <PreviewTreatments treatments={treatments}/>
-                    <PreviewWeight weights={weights}/>
+                    {weights.length !== 0 && weights[0].weightValue !== "" && <PreviewWeight weights={weights}/>}
                 </>)
         }
         if(diseases.length !== 0){
             return(
                 <>
                     <PreviewDiseases diseases={diseases}/>
-                    <PreviewWeight weights={weights}/>
+                    {weights.length !== 0 && weights[0].weightValue !== "" && <PreviewWeight weights={weights}/>}
                 </>)
         }
         if(researches.length !== 0){
             return(
                 <>
                     <PreviewResearches researches={researches}/>
-                    <PreviewWeight weights={weights}/>
+                    {weights.length !== 0 && weights[0].weightValue !== "" && <PreviewWeight weights={weights}/>}
                 </>)
         }
     }

@@ -51,9 +51,7 @@ function PreviewVisitOtherVaccinations({ otherVaccinations }){
                                 <TableRow>
                                     <StyledTableCell style={{borderRadius: "25px 0 0 0 "}} align="center">Nazwa Choroby</StyledTableCell>
                                     <StyledTableCell align="center">Nazwa szczepionki</StyledTableCell>
-                                    <StyledTableCell align="center">Nr serii</StyledTableCell>
-                                    <StyledTableCell align="center">Data ważności szczepionki</StyledTableCell>
-                                    <StyledTableCell style={{borderRadius: "0 25px 0 0 "}} align="center">Termin następnego szczepienia</StyledTableCell>
+                                    <StyledTableCell style={{borderRadius: "0 25px 0 0 "}} align="center">Nr serii</StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -62,8 +60,6 @@ function PreviewVisitOtherVaccinations({ otherVaccinations }){
                                         <StyledTableCell component="th" scope="row" align="center">{row.diseaseName}</StyledTableCell>
                                         <StyledTableCell align="center">{row.name}</StyledTableCell>
                                         <StyledTableCell align="center">{row.series}</StyledTableCell>
-                                        <StyledTableCell align="center">{row.termValidity.$d.toLocaleDateString()}</StyledTableCell>
-                                        <StyledTableCell align="center">{row.termNext.$d.toLocaleDateString()}</StyledTableCell>
                                     </StyledTableRow>
                                 ))}
                             </TableBody>

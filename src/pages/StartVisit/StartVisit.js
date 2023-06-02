@@ -15,7 +15,7 @@ import AddWeight from "../../components/AddWeight/AddWeight";
 
 
 function StartVisit(){
-    const {visitType} = useParams();
+    const {visitId, visitType} = useParams();
     const [showPreview, setShowPreview] = useState(false);
 
     const [rabiesVaccinations, setrabiesVaccinations] = useState([]);
@@ -191,7 +191,7 @@ function StartVisit(){
 
     return(
         <div style={{paddingTop: "9em"}}>
-            {showPreview === true ? <PreviewVisit handleShowPreview={handleChangePreview} 
+            {showPreview === true ? <PreviewVisit visitId={visitId} handleShowPreview={handleChangePreview} 
             rabiesVaccinations={rabiesVaccinations} infectiousDiseaseVaccinations={infectiousDiseaseVaccinations} treatments={treatments}
             diseases={diseases} researches={researches} weights={weight}/> : <div>
                 <Link to="/vetMenu/calendar">

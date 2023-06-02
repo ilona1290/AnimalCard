@@ -27,7 +27,7 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
         if(isFirstRender === true){
             let data = [...errors]
             for(let i = 0; i < otherVaccinations.length; i++){
-                let newfieldError = {diseaseName: '', name: '', series: '', termValidity: '', termNext: ''}
+                let newfieldError = {diseaseName: '', name: '', series: ''}
                 data[i] = { errors: newfieldError };
                 setErrors(data)
             }
@@ -42,11 +42,7 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
         name: Yup.string()
             .required('Pole Nazwa Szczepionki jest wymagane.'),
         series: Yup.string()
-          .required('Pole Nr serii jest wymagane.'),
-        termValidity: Yup.date()
-            .required("Pole Data ważności szczepionki jest wymagane."),
-        termNext : Yup.date()
-          .required('Pole Termin następnej wizyty jest wymagane.'),
+          .required('Pole Nr serii jest wymagane.')
       });
 
       React.useImperativeHandle(ref, () => ({
@@ -57,10 +53,10 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
         const validationPromises = addedOtherVaccinations.map((vaccination, index) => {
           return schema.validate(vaccination, { abortEarly: false })
             .then(() => {
-              return { errors: {diseaseName: '', name: '', series: "", termValidity: '', termNext: ''} }; // Brak błędów
+              return { errors: {diseaseName: '', name: '', series: ""} }; // Brak błędów
             })
             .catch((validationErrors) => {
-              const errors = {diseaseName: '', name: '', series: "", termValidity: '', termNext: ''};
+              const errors = {diseaseName: '', name: '', series: ""};
               validationErrors.inner.forEach((error) => {
                 errors[error.path] = error.message;
               });
@@ -71,7 +67,7 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
         let isCorrect = true;
         const results = await Promise.all(validationPromises);
         const _ = require('lodash');
-        const expectedErrors = {diseaseName: '', name: '', series: "", termValidity: '', termNext: ''};
+        const expectedErrors = {diseaseName: '', name: '', series: ""};
         console.log(results)
         const updatedErrors = [];
         results.forEach(( errors, index ) => {
@@ -129,8 +125,8 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
     const handleAddNewItem = () => {
         setToggle(false)
         isRemoving = false
-        let newfield = {id: nodeId++, diseaseName: '', name: '', series: "", termValidity: null, termNext: null}
-        let newfieldError = {diseaseName: '', name: '', series: "", termValidity: '', termNext: ''}
+        let newfield = {id: nodeId++, diseaseName: '', name: '', series: ""}
+        let newfieldError = {diseaseName: '', name: '', series: ""}
         setAddedOtherVaccinations([...addedOtherVaccinations, newfield])
         let data = [...errors]
         data[errors.length] = { errors: newfieldError };;
@@ -162,16 +158,10 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
         }, 700)
     }
 
-    const handleNameChange = (event, index, date) => {
+    const handleNameChange = (event, index) => {
         let data = [...addedOtherVaccinations];
-        if(typeof date === "undefined"){
-            data[index][event.target.name] = event.target.value;
-            validate(event.target.name, event.target.value, index)
-        }
-        else{
-            data[index][date] = dayjs(event.$d.toISOString());
-            validate(date, dayjs(event.$d.toISOString()), index)
-        }
+        data[index][event.target.name] = event.target.value;
+        validate(event.target.name, event.target.value, index)
 
         setAddedOtherVaccinations(data);
         onOtherVaccinationsChanged(data)
@@ -231,34 +221,6 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
                                     error={errors.length !== 0 && !!errors[index].errors.series}
                                     helperText={errors.length !== 0 && errors[index].errors.series}
                                 /><br></br>
-                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-                                    <DatePicker className="visit__dateField" name="termValidity" label="Data ważności szczepionki" 
-                                        onChange={(event) => handleNameChange(event, index, 'termValidity')} 
-                                        value={elem.termValidity}
-                                        disablePast
-                                        slotProps={{
-                                            textField: {
-                                                readOnly: true,
-                                                helperText: errors.length !== 0 && errors[index].errors.termValidity,
-                                                error: errors.length !== 0 && errors[index].errors.termValidity,
-                                            }
-                                        }}
-                                    />
-                                </LocalizationProvider><br></br>
-                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-                                    <DatePicker className="visit__dateField" name="termNext" label="Termin następnego szczepienia" 
-                                        onChange={(event) => handleNameChange(event, index, 'termNext')} 
-                                        value={elem.termNext}
-                                        disablePast
-                                        slotProps={{
-                                            textField: {
-                                                readOnly: true,
-                                                helperText: errors.length !== 0 && errors[index].errors.termNext,
-                                                error: errors.length !== 0 && errors[index].errors.termNext,
-                                            }
-                                        }}
-                                    />
-                                </LocalizationProvider>
                             </Typography>
                         </ThemeProvider>
                     </div>

@@ -28,6 +28,7 @@ import './CalendarComponent.css'
 import OwnerIcon from './ownerIcon4.png'
 import PetIcon from './petIcon.png'
 import VetIcon from './vetIcon.png'
+import InfoIcon from './info.png'
 
 const theme = createTheme({
     typography: {
@@ -167,6 +168,7 @@ const StyledGrid = styled(Grid)(() => ({
 
 
 function CalendarComponent({ appointments, resources, who }){
+  console.log(appointments)
     let navigate = useNavigate()
     const Content = ({ children, appointmentData, ...restProps }) => (
     <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
@@ -189,15 +191,21 @@ function CalendarComponent({ appointments, resources, who }){
         <Grid item xs={10}>
             {who !== "vet" ? <span>{appointmentData.address}</span> : <div></div>}
         </Grid>
+        <StyledGrid item xs={2} className={classes.textCenter}>
+            <img src={InfoIcon} alt="InfoIcon"></img>
+        </StyledGrid>
         <Grid item xs={10}>
-            {who === "vet" ? <button className="startVisit__btn" onClick={() => handleStartVisit(appointmentData.visitTypeId)}>Rozpocznij wizytę</button> : <div></div>}
+            {appointmentData.extraInfo !== '' ? <span>{appointmentData.extraInfo}</span> : <span>Brak</span>}
+          </Grid>
+        <Grid item xs={10}>
+            {who === "vet" && appointmentData.isCompleted === false ? <button className="startVisit__btn" onClick={() => handleStartVisit(appointmentData.id, appointmentData.visitTypeId)}>Rozpocznij wizytę</button> : <div></div>}
         </Grid>
       </Grid>
     </AppointmentTooltip.Content>
   );
 
-  const handleStartVisit = (type) => {
-    navigate(`/vetMenu/calendar/startVisit/${type}`)
+  const handleStartVisit = (id, type) => {
+    navigate(`/vetMenu/calendar/startVisit/${id}/type/${type}`)
 }
     //Stylowanie wnętrza kafelka
 // #FOLD_BLOCK

@@ -54,7 +54,7 @@ function App() {
               <Route path="/ownerMenu/calendar" element={<OwnerCalendar />} />
               <Route path="/vetMenu/profile" element={<VetProfile />} />
               <Route path="/vetMenu/calendar" element={<VetCalendar />} />
-              <Route path="/vetMenu/calendar/startVisit/:visitType" element={<StartVisit />} />
+              <Route path="/vetMenu/calendar/startVisit/:visitId/type/:visitType" element={<StartVisit />} />
               <Route path="/vetMenu/animalCard/create" element={<CreateAnimalCard />} />
               <Route path="/pets/:petId" element={<AnimalCard />} />
               <Route path="/pets/:petId/profile" element={<PetProfile />} />
