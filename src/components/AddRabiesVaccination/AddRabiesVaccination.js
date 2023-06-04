@@ -7,6 +7,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
+
+import './AddRabiesVaccination.css'
 const theme = createTheme({
     typography: {
       // Tell MUI what's the font-size on the html element is.
@@ -79,16 +81,16 @@ const AddRabiesVaccination = React.forwardRef(( {rabiesVaccinations, onRabiesVac
         setToggle(true);
         // toggle class w React'ie 
         event.target.classList.toggle('active');
-        if(event.target.className === "arrow"){
-            let element = document.getElementsByClassName('visit__container__form')[0]
-            element.className = "visit__container__form animateOut";
+        if(event.target.className === "addRabiesVaccination__arrow"){
+            let element = document.getElementsByClassName('addRabiesVaccination__visit__container__form')[0]
+            element.className = "addRabiesVaccination__visit__container__form animateOut";
             setTimeout(function() {
-                element.className = "displayNone__div"
+                element.className = "addRabiesVaccination__displayNone__div"
             }, 700)
         }
         else{
-            let element = document.getElementsByClassName('displayNone__div')[0]
-            element.className = "visit__container__form displayBlock__div animateIn";
+            let element = document.getElementsByClassName('addRabiesVaccination__displayNone__div')[0]
+            element.className = "addRabiesVaccination__visit__container__form addRabiesVaccination__displayBlock__div animateIn";
         }
     }
 
@@ -97,21 +99,21 @@ const AddRabiesVaccination = React.forwardRef(( {rabiesVaccinations, onRabiesVac
         isRemoving = false
         let newfield = {id: nodeId++, name: '', series: "", termValidityRabies: null, termNextRabies: null}
         setAddedRabiesVaccinations([...addedRabiesVaccinations, newfield])
-        onRabiesVaccinationsChanged(addedRabiesVaccinations)
+        onRabiesVaccinationsChanged([...addedRabiesVaccinations, newfield])
         if(addedRabiesVaccinations.length === 0){
-            let elem = document.getElementsByClassName("arrow")
-            elem[0].className = "arrow active"
+            let elem = document.getElementsByClassName("addRabiesVaccination__arrow")
+            elem[0].className = "addRabiesVaccination__arrow active"
         }
-        if(arrowRef.current != null && arrowRef.current.className === "arrow"){
+        if(arrowRef.current != null && arrowRef.current.className === "addRabiesVaccination__arrow"){
             arrowRef.current.click();
         }
-        let button = document.getElementsByClassName("visit__addNewItem")
+        let button = document.getElementsByClassName("addRabiesVaccination__visit__addNewItem")
         button[0].style.visibility = "hidden"
     }
 
     const removeNewItem = (index, elemId) => {
-        let element = document.getElementById(`elem-${elemId}`)
-        element.className = "visit__form animateOut"
+        let element = document.getElementById(`addRabiesVaccination__elem-${elemId}`)
+        element.className = "addRabiesVaccination__visit__form animateOut"
         isRemoving = true;
         // splice zwraca to co usuwa, dlatego w copy dostawaliśmy jeden element.
         // let copy = rabiesVaccinations.splice(index, 1);
@@ -124,7 +126,7 @@ const AddRabiesVaccination = React.forwardRef(( {rabiesVaccinations, onRabiesVac
             // Aby następnemu elementowi nie ustawiła się animacja wyjścia!!!!!!!!!!!!!!!!!!!!!!!!!!
             element.className = "visit__form"
         }, 700)
-        let button = document.getElementsByClassName("visit__addNewItem")
+        let button = document.getElementsByClassName("addRabiesVaccination__visit__addNewItem")
         button[0].style.visibility = "visible"
     }
 
@@ -162,23 +164,23 @@ const AddRabiesVaccination = React.forwardRef(( {rabiesVaccinations, onRabiesVac
 
     return(
         <div>
-            <div className="visit__element">
-                    <div className={addedRabiesVaccinations.length === 0 ? "displayNone__div" : ""}><span ref={arrowRef} className="arrow" onClick={toggleArrow}><span></span><span></span></span></div>
+            <div className="addRabiesVaccination__visit__element">
+                    <div className={addedRabiesVaccinations.length === 0 ? "addRabiesVaccination__displayNone__div" : ""}><span ref={arrowRef} className="addRabiesVaccination__arrow" onClick={toggleArrow}><span></span><span></span></span></div>
                     Szczepienia przeciwko wściekliźnie
-                    <button className="visit__addNewItem" style={{visibility: addedRabiesVaccinations.length === 0 ? "visible": "hidden"}} onClick={handleAddNewItem}>
+                    <button className="addRabiesVaccination__visit__addNewItem" style={{visibility: addedRabiesVaccinations.length === 0 ? "visible": "hidden"}} onClick={handleAddNewItem}>
                         +
-                        <span className="tooltiptext">Dodaj szczepienie</span>
+                        <span className="addRabiesVaccination__tooltiptext">Dodaj szczepienie</span>
                     </button>
                 </div>
-                <div className="visit__container__form">
+                <div className="addRabiesVaccination__visit__container__form">
                     {addedRabiesVaccinations.map((elem, index) => {
                         return (
-                    <div className={`visit__form  ${index === addedRabiesVaccinations.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`elem-${elem.id}`}>
+                    <div className={`addRabiesVaccination__visit__form  ${index === addedRabiesVaccinations.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`addRabiesVaccination__elem-${elem.id}`}>
                         <ThemeProvider theme={theme}>
                             <Typography component={'span'} variant={'body2'}>
-                                <button className="visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
+                                <button className="addRabiesVaccination__visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
                                     x
-                                    <span className="tooltiptext">Usuń szczepienie</span>
+                                    <span className="addRabiesVaccination__tooltiptext">Usuń szczepienie</span>
                                 </button>
                                 <TextField className="visit__firstInput" id="outlined-basic" name="name" label="Nazwa szczepionki"
                                     onChange={(event) => handleNameChange(event, index)} 

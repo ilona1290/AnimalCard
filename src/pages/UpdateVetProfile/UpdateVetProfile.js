@@ -120,7 +120,7 @@ function UpdateVetProfile(){
     }
 
     const addImage = (form) => {
-        fetch('https://localhost:7099/api/upload/profilePicture',
+        fetch('https://animalcardapi.somee.com/api/upload/profilePicture',
             {
                 method: 'POST',
                 mode: 'cors',

@@ -7,6 +7,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
+
+import './AddResearches.css'
+
 const theme = createTheme({
     typography: {
       // Tell MUI what's the font-size on the html element is.
@@ -56,16 +59,16 @@ const AddResearches = React.forwardRef(( {researches, onResearchesChanged }, ref
         setToggle(true);
         // toggle class w React'ie 
         event.target.classList.toggle('active');
-        if(event.target.className === "arrow"){
-            let element = document.getElementsByClassName('visit__container__form')[0]
-            element.className = "visit__container__form animateOut";
+        if(event.target.className === "addResearch__arrow"){
+            let element = document.getElementsByClassName('addResearch__visit__container__form')[0]
+            element.className = "addResearch__visit__container__form animateOut";
             setTimeout(function() {
-                element.className = "displayNone__div"
+                element.className = "addResearch__displayNone__div"
             }, 700)
         }
         else{
-            let element = document.getElementsByClassName('displayNone__div')[0]
-            element.className = "visit__container__form displayBlock__div animateIn";
+            let element = document.getElementsByClassName('addResearch__displayNone__div')[0]
+            element.className = "addResearch__visit__container__form addResearch__displayBlock__div animateIn";
         }
     }
 
@@ -74,21 +77,21 @@ const AddResearches = React.forwardRef(( {researches, onResearchesChanged }, ref
         isRemoving = false
         let newfield = {id: nodeId++, researchesList: ''}
         setAddedResearches([...addedResearches, newfield])
-        onResearchesChanged(addedResearches)
+        onResearchesChanged([...addedResearches, newfield])
         if(addedResearches.length === 0){
-            let elem = document.getElementsByClassName("arrow")
-            elem[0].className = "arrow active"
+            let elem = document.getElementsByClassName("addResearch__arrow")
+            elem[0].className = "addResearch__arrow active"
         }
-        if(arrowRef.current != null && arrowRef.current.className === "arrow"){
+        if(arrowRef.current != null && arrowRef.current.className === "addResearch__arrow"){
             arrowRef.current.click();
         }
-        let button = document.getElementsByClassName("visit__addNewItem")
+        let button = document.getElementsByClassName("addResearch__visit__addNewItem")
         button[0].style.visibility = "hidden"
     }
 
     const removeNewItem = (index, elemId) => {
-        let element = document.getElementById(`elem-${elemId}`)
-        element.className = "visit__form animateOut"
+        let element = document.getElementById(`addResearch__elem-${elemId}`)
+        element.className = "addResearch__visit__form animateOut"
         isRemoving = true;
 
         
@@ -98,9 +101,9 @@ const AddResearches = React.forwardRef(( {researches, onResearchesChanged }, ref
             setAddedResearches(copy)
             onResearchesChanged(copy)
             // Aby następnemu elementowi nie ustawiła się animacja wyjścia!!!!!!!!!!!!!!!!!!!!!!!!!!
-            element.className = "visit__form"
+            element.className = "addResearch__visit__form"
         }, 700)
-        let button = document.getElementsByClassName("visit__addNewItem")
+        let button = document.getElementsByClassName("addResearch__visit__addNewItem")
         button[0].style.visibility = "visible"
     }
 
@@ -125,23 +128,23 @@ const AddResearches = React.forwardRef(( {researches, onResearchesChanged }, ref
 
     return(
         <div>
-            <div className="visit__element">
-                    <div className={addedResearches.length === 0 ? "displayNone__div" : ""}><span ref={arrowRef} className="arrow" onClick={toggleArrow}><span></span><span></span></span></div>
+            <div className="addResearch__visit__element">
+                    <div className={addedResearches.length === 0 ? "addResearch__displayNone__div" : ""}><span ref={arrowRef} className="addResearch__arrow" onClick={toggleArrow}><span></span><span></span></span></div>
                     Badania
-                    <button className="visit__addNewItem" style={{visibility: addedResearches.length === 0 ? "visible": "hidden"}} onClick={handleAddNewItem}>
+                    <button className="addResearch__visit__addNewItem" style={{visibility: addedResearches.length === 0 ? "visible": "hidden"}} onClick={handleAddNewItem}>
                         +
-                        <span className="tooltiptext">Dodaj badanie</span>
+                        <span className="addResearch__tooltiptext">Dodaj badanie</span>
                     </button>
                 </div>
-                <div className="visit__container__form">
+                <div className="addResearch__visit__container__form">
                     {addedResearches.map((elem, index) => {
                         return (
-                    <div className={`visit__form  ${index === addedResearches.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`elem-${elem.id}`}>
+                    <div className={`addResearch__visit__form  ${index === addedResearches.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`addResearch__elem-${elem.id}`}>
                         <ThemeProvider theme={theme}>
                             <Typography component={'span'} variant={'body2'}>
-                                <button className="visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
+                                <button className="addResearch__visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
                                     x
-                                    <span className="tooltiptext">Usuń badanie</span>
+                                    <span className="addResearch__tooltiptext">Usuń badanie</span>
                                 </button>
                                 <TextField className="visit__textAreaField" id="outlined-basic" name="researchesList" label="Lista badań (wypisz badane czynniki)"
                                     onChange={(event) => handleNameChange(event, index)}
@@ -150,6 +153,9 @@ const AddResearches = React.forwardRef(( {researches, onResearchesChanged }, ref
                                     error={!!errors.researchesList}
                                     helperText={errors.researchesList}
                                 />
+                                <h4>Z uwagi na to, że wyniki badań nie muszą być odrazu dostępne, nie wymagamy wgrania ich teraz. Jeżeli wyniki będą 
+                                    dostępne możesz je przesłać w panelu książeczki zdrowia zwierzęcia w zakładce Badania.
+                                </h4>
                             </Typography>
                         </ThemeProvider>
                     </div>

@@ -7,6 +7,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
+
+import './AddTreatments.css';
+
 const theme = createTheme({
     typography: {
       // Tell MUI what's the font-size on the html element is.
@@ -101,16 +104,16 @@ const theme = createTheme({
         setToggle(true);
         // toggle class w React'ie 
         event.target.classList.toggle('active');
-        if(event.target.className === "arrow"){
-            let element = document.getElementsByClassName('visit__container__form')[0]
-            element.className = "visit__container__form animateOut";
+        if(event.target.className === "addTreatment__arrow"){
+            let element = document.getElementsByClassName('addTreatment__visit__container__form')[0]
+            element.className = "addTreatment__visit__container__form animateOut";
             setTimeout(function() {
-                element.className = "displayNone__div"
+                element.className = "addTreatment__displayNone__div"
             }, 700)
         }
         else{
-            let element = document.getElementsByClassName('displayNone__div')[0]
-            element.className = "visit__container__form displayBlock__div animateIn";
+            let element = document.getElementsByClassName('addTreatment__displayNone__div')[0]
+            element.className = "addTreatment__visit__container__form addTreatment__displayBlock__div animateIn";
         }
     }
 
@@ -123,19 +126,19 @@ const theme = createTheme({
         let data = [...errors]
         data[errors.length] = { errors: newfieldError };;
         setErrors(data)
-        onTreatmentsChanged(addedTreatments)
+        onTreatmentsChanged([...addedTreatments, newfield])
         if(addedTreatments.length === 0){
-            let elem = document.getElementsByClassName("arrow")
-            elem[0].className = "arrow active"
+            let elem = document.getElementsByClassName("addTreatment__arrow")
+            elem[0].className = "addTreatment__arrow active"
         }
-        if(arrowRef.current != null && arrowRef.current.className === "arrow"){
+        if(arrowRef.current != null && arrowRef.current.className === "addTreatment__arrow"){
             arrowRef.current.click();
         }
     }
 
     const removeNewItem = (index, elemId) => {
-        let element = document.getElementById(`elem-${elemId}`)
-        element.className = "visit__form animateOut"
+        let element = document.getElementById(`addTreatment__elem-${elemId}`)
+        element.className = "addTreatment__visit__form animateOut"
         isRemoving = true;
         // splice zwraca to co usuwa, dlatego w copy dostawaliśmy jeden element.
         // let copy = rabiesVaccinations.splice(index, 1);
@@ -146,7 +149,7 @@ const theme = createTheme({
             setAddedTreatments(copy)
             onTreatmentsChanged(copy)
             // Aby następnemu elementowi nie ustawiła się animacja wyjścia!!!!!!!!!!!!!!!!!!!!!!!!!!
-            element.className = "visit__form"
+            element.className = "addTreatment__visit__form"
         }, 700)
     }
 
@@ -177,23 +180,23 @@ const theme = createTheme({
 
     return(
         <div>
-            <div className="visit__element">
-                    <div className={addedTreatments.length === 0 ? "displayNone__div" : ""}><span ref={arrowRef} className="arrow" onClick={toggleArrow}><span></span><span></span></span></div>
+            <div className="addTreatment__visit__element">
+                    <div className={addedTreatments.length === 0 ? "addTreatment__displayNone__div" : ""}><span ref={arrowRef} className="addTreatment__arrow" onClick={toggleArrow}><span></span><span></span></span></div>
                     Zabiegi
-                    <button className="visit__addNewItem" onClick={handleAddNewItem}>
+                    <button className="addTreatment__visit__addNewItem" onClick={handleAddNewItem}>
                         +
-                        <span className="tooltiptext">Dodaj zabieg</span>
+                        <span className="addTreatment__tooltiptext">Dodaj zabieg</span>
                     </button>
                 </div>
-                <div className="visit__container__form">
+                <div className="addTreatment__visit__container__form">
                     {addedTreatments.map((elem, index) => {
                         return (
-                    <div className={`visit__form  ${index === addedTreatments.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`elem-${elem.id}`}>
+                    <div className={`addTreatment__visit__form  ${index === addedTreatments.length - 1 && isRemoving === false && isToggle === false ? "animateIn" : ""}`} id={`addTreatment__elem-${elem.id}`}>
                         <ThemeProvider theme={theme}>
                             <Typography component={'span'} variant={'body2'}>
-                                <button className="visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
+                                <button className="addTreatment__visit__removeItem" onClick={() => removeNewItem(index, elem.id)}>
                                     x
-                                    <span className="tooltiptext">Usuń zabieg</span>
+                                    <span className="addTreatment__tooltiptext">Usuń zabieg</span>
                                 </button>
                                 <TextField className="visit__textAreaField" id="outlined-basic" name="treatmentName" label="Nazwa zabiegu"
                                     onChange={(event) => handleNameChange(event, index)} 

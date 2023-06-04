@@ -14,7 +14,7 @@ import { getData } from "../../components/Services/AccessAPI";
 import SessionManager from "../../components/Auth/SessionManager";
 
 import './VetCalendar.css'
-import Loader from "../../components/Loader/Loader";
+import Loader from "../../components/Loader";
 
 const theme = createTheme({
     typography: {
@@ -237,7 +237,7 @@ function VetCalendar(){
     };
 
     const handleStartVisit = () => {
-        navigate("/vetMenu/calendar/startVisit")
+        navigate("/vetMenu/calendar/startVisit/0/type/0")
     }
 
     const handleBack = () => {
@@ -283,7 +283,7 @@ function VetCalendar(){
         }}
       >
         <MenuItem onClick={handleClickOpen}>Zaplanuj wizytę</MenuItem>
-        {/* <MenuItem onClick={handleStartVisit}>Rozpocznij nieumówioną wizytę</MenuItem> */}
+        <MenuItem onClick={handleStartVisit}>Rozpocznij nieumówioną wizytę</MenuItem>
         <MenuItem onClick={handleBack}>Powrót</MenuItem>
       </Menu>
       </Typography>

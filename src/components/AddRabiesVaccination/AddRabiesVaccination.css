@@ -1,0 +1,363 @@
+.addRabiesVaccination__visit__element{
+    font-size: 1.8rem;
+    padding: 1em 4em;
+    margin: 1em 1em;
+    border: 1px solid black;
+    border-radius: 40px;
+    position: relative;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    opacity: 0.9;
+    /* box-shadow: 0.25em 0.25em  0.25em  rgba( 0, 0, 0, 0.3 ); */
+}
+
+.addRabiesVaccination__displayNone__div{
+  display: none;
+}
+
+.addRabiesVaccination__displayBlock__div{
+  display: block;
+}
+
+.addRabiesVaccination__arrow {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: inline-block;
+  position: absolute;
+  margin: 0 1rem;
+  left: 1em;
+  cursor: pointer;
+}
+.addRabiesVaccination__arrow span {
+  top: 1.7rem;
+  position: absolute;
+  width: 1.9rem;
+  height: 0.1rem;
+  background-color: black;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+.addRabiesVaccination__arrow span:first-of-type {
+  left: 0;
+  transform: rotate(45deg);
+}
+.addRabiesVaccination__arrow span:last-of-type {
+  right: 0;
+  transform: rotate(-45deg);
+}
+.addRabiesVaccination__arrow.active span:first-of-type {
+  transform: rotate(-45deg);
+}
+.addRabiesVaccination__arrow.active span:last-of-type {
+  transform: rotate(45deg);
+}
+
+.addRabiesVaccination__visit__addNewItem{
+    font-size: 2.5rem;
+    float: right;
+    border-radius: 50%;
+    padding: 0.5em;
+    line-height: 0.5em;
+    margin-top: -0.5%;
+    top: 30px;
+    right: 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    position: absolute;
+}
+
+.addRabiesVaccination__visit__removeItem{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 2.5rem;
+    border-radius: 55%;
+    padding: 0.5em;
+    line-height: 0.5em;
+    background-color: red;
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.addRabiesVaccination__visit__addNewItem:hover{
+    transform: scale(1);
+}
+
+.addRabiesVaccination__visit__removeItem:hover{
+  transform: scale(1);
+}
+
+.addRabiesVaccination__visit__addNewItem .addRabiesVaccination__tooltiptext {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.703);
+    color: #fff;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px; 
+    font-size: 1.3rem;
+  }
+
+  .addRabiesVaccination__tooltiptext{
+    display: none;
+  }
+
+.addRabiesVaccination__visit__removeItem .addRabiesVaccination__tooltiptext {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.703);
+    color: #fff;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px; 
+    font-size: 1.3rem;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .addRabiesVaccination__visit__addNewItem:hover .addRabiesVaccination__tooltiptext {
+    visibility: visible;
+  }
+
+  .addRabiesVaccination__visit__removeItem:hover .addRabiesVaccination__tooltiptext {
+    visibility: visible;
+  }
+
+  .addRabiesVaccination__visit__addNewItem .addRabiesVaccination__tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+
+  .addRabiesVaccination__visit__removeItem .addRabiesVaccination__tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+
+/* Rodzic musi mieć display flex i justify-content center, aby dziecko wyświetliło się na środku jeśli flex Direcrion = row. Jeśli flex-direction = column
+to centrujemy w poziomie używając align-items*/
+.addRabiesVaccination__visit__container__form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.addRabiesVaccination__visit__form{
+    border: 1px solid black;
+    width: 85%;
+    padding: 1em;
+    padding-top: 4em;
+    border-radius: 40px;
+    margin-bottom: 1em;
+    position: relative;
+}
+
+
+
+@media (min-width: 363px) {
+    .addRabiesVaccination__visit__addNewItem{
+        top: 23px;
+    }
+}
+
+@media (min-width: 464px) {
+    .addRabiesVaccination__visit__addNewItem{
+        top: 13px;
+    }
+}
+
+@media (min-width: 712px) {
+    .addRabiesVaccination__visit__addNewItem{
+        top: 15px;
+    }
+}
+
+
+@media (min-width: 900px) {
+  .addRabiesVaccination__visit__element{
+    font-size: 2.8rem;
+    padding: 1em;
+    margin: 1em 10%;
+    border: 1px solid black;
+    border-radius: 40px;
+    position: relative;
+    /* box-shadow: 0.25em 0.25em  0.25em  rgba( 0, 0, 0, 0.3 ); */
+}
+
+.addRabiesVaccination__displayNone__div{
+  display: none;
+}
+
+.addRabiesVaccination__displayBlock__div{
+  display: block;
+}
+
+.addRabiesVaccination__tooltiptext{
+    display: block;
+  }
+
+.addRabiesVaccination__arrow {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: inline-block;
+  position: absolute;
+  margin: 0 1rem;
+  left: 1em;
+  cursor: pointer;
+}
+.addRabiesVaccination__arrow span {
+  top: 1.7rem;
+  position: absolute;
+  width: 1.9rem;
+  height: 0.1rem;
+  background-color: black;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+.addRabiesVaccination__arrow span:first-of-type {
+  left: 0;
+  transform: rotate(45deg);
+}
+.addRabiesVaccination__arrow span:last-of-type {
+  right: 0;
+  transform: rotate(-45deg);
+}
+.addRabiesVaccination__arrow.active span:first-of-type {
+  transform: rotate(-45deg);
+}
+.addRabiesVaccination__arrow.active span:last-of-type {
+  transform: rotate(45deg);
+}
+
+.addRabiesVaccination__visit__addNewItem{
+    font-size: 3rem;
+    top: 28px;
+    right: 25px;
+}
+
+.addRabiesVaccination__visit__removeItem{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 3rem;
+    border-radius: 55%;
+    padding: 0.5em;
+    line-height: 0.5em;
+    background-color: red;
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.addRabiesVaccination__visit__addNewItem:hover{
+    transform: scale(1);
+}
+
+.addRabiesVaccination__visit__removeItem:hover{
+  transform: scale(1);
+}
+
+.addRabiesVaccination__visit__addNewItem .addRabiesVaccination__tooltiptext {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.703);
+    color: #fff;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px; 
+    font-size: 1.3rem;
+  }
+
+.addRabiesVaccination__visit__removeItem .addRabiesVaccination__tooltiptext {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.703);
+    color: #fff;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 120px;
+    top: 110%;
+    left: 50%;
+    margin-left: -60px; 
+    font-size: 1.3rem;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .addRabiesVaccination__visit__addNewItem:hover .addRabiesVaccination__tooltiptext {
+    visibility: visible;
+  }
+
+  .addRabiesVaccination__visit__removeItem:hover .addRabiesVaccination__tooltiptext {
+    visibility: visible;
+  }
+
+  .addRabiesVaccination__visit__addNewItem .addRabiesVaccination__tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+
+  .addRabiesVaccination__visit__removeItem .addRabiesVaccination__tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+  }
+
+/* Rodzic musi mieć display flex i justify-content center, aby dziecko wyświetliło się na środku jeśli flex Direcrion = row. Jeśli flex-direction = column
+to centrujemy w poziomie używając align-items*/
+.addRabiesVaccination__visit__container__form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.addRabiesVaccination__visit__form{
+    border: 1px solid black;
+    width: 60%;
+    border-radius: 40px;
+    margin-bottom: 1em;
+    position: relative;
+}
+}

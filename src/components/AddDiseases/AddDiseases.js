@@ -121,7 +121,7 @@ const theme = createTheme({
         let data = [...errors]
         data[errors.length] = { errors: newfieldError };;
         setErrors(data)
-        onDiseasesChanged(addedDiseases)
+        onDiseasesChanged([...addedDiseases, newfield])
         if(addedDiseases.length === 0){
             let elem = document.getElementsByClassName("arrow")
             elem[0].className = "arrow active"
