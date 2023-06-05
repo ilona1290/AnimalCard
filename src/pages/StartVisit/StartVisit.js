@@ -14,9 +14,15 @@ import AddDiseases from "../../components/AddDiseases/AddDiseases";
 import AddResearches from "../../components/AddResearches/AddResearches";
 import AddWeight from "../../components/AddWeight/AddWeight";
 import ChooseOwnerAndPet from "../../components/ChooseOwnerAndPet/ChooseOwnerAndPet";
+import { FormControl, InputLabel, MenuItem, Select, Checkbox, ListItemText } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
-
+const theme = createTheme({
+    typography: {
+        htmlFontSize: 10,
+    },
+});
 
 function StartVisit(){
     const {visitId, visitType} = useParams();
@@ -29,14 +35,15 @@ function StartVisit(){
         patient: "",
         patientId: 0
     });
+    const [visitTypesOptions, setVisitTypesOptions] = React.useState([]);
+    const [additionalVisitTypes, setAdditionalVisitTypes] = useState([]);
+
     const [rabiesVaccinations, setrabiesVaccinations] = useState([]);
     const [infectiousDiseaseVaccinations, setInfectiousDiseaseVaccinations] = useState([]);
     const [diseases, setDiseases] = useState([]);
     const [treatments, setTreatments] = useState([]);
     const [researches, setResearches] = useState([]);
     const [weight, setWeight] = useState([]);
-
-    const [results, setResults] = useState([]);
 
     const rabiesVacinationRef = React.useRef(null);
     const otherVacinationsRef = React.useRef(null);
@@ -48,10 +55,11 @@ function StartVisit(){
     React.useEffect(() => {
         getData(`api/Visit/GetDataToNewVisit/${SessionManager.getUserId()}`).then((result) => {
             setOwnersWithPets(result.owners)
-            console.log(result.owners)
+            generateVisitOptions(result.visitTypes)
             setLoading(false)
         })
     }, [])
+
     const handleShowPreview = async () => {
         
         const resultOfValidation = await checkValidity();
@@ -59,28 +67,35 @@ function StartVisit(){
         if (resultOfValidation === true) {
             setShowPreview(!showPreview);
         }
-        // switch(visitType){
-        //     case "0":
-        //         checkOwnerPatient()
-        //         break
-        //     case "1":
-        //         checkRabiesVaccination()
-        //         break
-        //     case "2":
-        //         checkOtherVaccinations()
-        //         break;
-        //     case "3":
-        //         checkTreatments()
-        //         break;
-        //     case "4":
-        //         checkDiseases()
-        //         break;
-        //     case "5":
-        //         checkResearches()
-        //         break;
-        //     default:
-        //         return ""
-        // }
+    }
+
+    const generateVisitOptions = (visitTypes) => {
+        let options = [];
+        for (let i = 0; i < visitTypes.length; i++) {
+            let element = visitTypes[i];
+            if (element.id !== Number(visitType) && element.name !== "Inna") {
+                options.push(element.name);
+            }
+        }
+        console.log(options)
+        setVisitTypesOptions(options)
+    }
+
+    const handleChangeAdditionalVisitType = (event) => {
+        setAdditionalVisitTypes(event.target.value);
+        console.log(additionalVisitTypes)
+    };
+
+    const returnAdditionalType = () => {
+        return(
+            <>
+                {additionalVisitTypes.includes("Szczepienie przeciwko wściekliźnie") && <AddRabiesVaccination ref={rabiesVacinationRef} rabiesVaccinations={rabiesVaccinations} onRabiesVaccinationsChanged={handleRabiesVaccinationsChanged}/>}
+                {additionalVisitTypes.includes("Szczepienie przeciwko innej chorobie zakaźnej") && <AddOtherVaccinations ref={otherVacinationsRef} otherVaccinations={infectiousDiseaseVaccinations} onOtherVaccinationsChanged={handleOtherVaccinationsChanged}/>}
+                {additionalVisitTypes.includes("Zabieg") && <AddTreatments ref={treatmentsRef} treatments={treatments} onTreatmentsChanged={handleTreatmentsChanged}/>}
+                {additionalVisitTypes.includes("Leczenie choroby") && <AddDiseases ref={diseasesRef} diseases={diseases} onDiseasesChanged={handleDiseasesChanged}/>}
+                {additionalVisitTypes.includes("Badanie") && <AddResearches ref={researchesRef} researches={researches} onResearchesChanged={handleResearchesChanged}/>}
+            </>
+        )
     }
 
     const checkValidity = async () => {
@@ -118,13 +133,11 @@ function StartVisit(){
         const isValid = results.every((result) => result === true);
         const hasEmptyArrays = arrays.every((arr) => arr.length === 0);
       
-        let element = document.getElementsByClassName("information")[0]
+        
         if(visitId === "0" && hasEmptyArrays){
+            let element = document.getElementsByClassName("information")[0]
             element.textContent = "Musisz uzupełnić przynajmniej jeden element wizyty."
             return false;
-        }
-        else{
-            element.textContent = "";
         }
         if (isValid) {
           return true;
@@ -286,12 +299,14 @@ function StartVisit(){
                 <>
                     <AddRabiesVaccination ref={rabiesVacinationRef} rabiesVaccinations={rabiesVaccinations} onRabiesVaccinationsChanged={handleRabiesVaccinationsChanged}/>
                     <AddWeight weight={weight} onWeightChanged={handleWeightChanged}/>
+                    {returnAdditionalType()}
                 </>)
             case "2":
                 return(
                     <>
                         <AddOtherVaccinations ref={otherVacinationsRef} otherVaccinations={infectiousDiseaseVaccinations} onOtherVaccinationsChanged={handleOtherVaccinationsChanged}/>
                         <AddWeight weight={weight} onWeightChanged={handleWeightChanged}/>
+                        {returnAdditionalType()}
                     </>
                 )
             case "3":
@@ -299,12 +314,14 @@ function StartVisit(){
                 <>
                     <AddTreatments ref={treatmentsRef} treatments={treatments} onTreatmentsChanged={handleTreatmentsChanged}/>
                     <AddWeight weight={weight} onWeightChanged={handleWeightChanged}/>
+                    {returnAdditionalType()}
                 </>)
             case "4":
                 return(
                     <>
                         <AddDiseases ref={diseasesRef} diseases={diseases} onDiseasesChanged={handleDiseasesChanged}/>
                         <AddWeight weight={weight} onWeightChanged={handleWeightChanged}/>
+                        {returnAdditionalType()}
                     </>
                 )
             case "5":
@@ -312,6 +329,7 @@ function StartVisit(){
                     <>
                         <AddResearches ref={researchesRef} researches={researches} onResearchesChanged={handleResearchesChanged}/>
                         <AddWeight weight={weight} onWeightChanged={handleWeightChanged}/>
+                        {returnAdditionalType()}
                     </>
                 )
             default:
@@ -329,6 +347,30 @@ function StartVisit(){
                         <p>Powrót</p>
                     </button>
                 </Link>
+                {visitId !== "0" &&
+                <ThemeProvider theme={theme}>
+                    <Typography component={'span'} variant={'body2'}>
+                        <FormControl sx={{ m: 1, minWidth: 320 }}>
+                            <InputLabel id="demo-simple-select-label">Dodatkowy element wizyty</InputLabel>
+                            <Select
+                                multiple
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={additionalVisitTypes}
+                                label="Dodatkowy element wizyty"
+                                onChange={handleChangeAdditionalVisitType}
+                                renderValue={(selected) => selected.join(', ')}
+                            >
+                                {visitTypesOptions.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    <Checkbox checked={additionalVisitTypes.indexOf(option) > -1} />
+                                    <ListItemText primary={option} />
+                                </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Typography>
+                </ThemeProvider>}
                 <button className="header__buttons__end__btn" style={{position: "absolute", right: "15rem", top: "3.5em"}} onClick={handleShowPreview}>
                     <p>Zakończ wizytę</p>
                 </button>

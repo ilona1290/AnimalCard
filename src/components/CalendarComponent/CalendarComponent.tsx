@@ -112,7 +112,17 @@ const StyledAppointmentsAppointmentContent = styled(
 // Tydzień początkowo wyświetlona (zawiera dzisiejszą datę)
 const isWeekEnd = (date: Date): boolean =>
   date.getDay() === 0 || date.getDay() === 6;
-const defaultCurrentDate = new Date(2023, 4, 29, 11, 15);
+const getDefaultCurrentDate = () => {
+    const currentDate = new Date();
+    const defaultCurrentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+
+    const dayOfWeek = defaultCurrentDate.getDay();
+    const diff = defaultCurrentDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Poniedziałek: 1, Niedziela: 0
+    defaultCurrentDate.setDate(diff);
+    return(defaultCurrentDate)
+// console.log(defaultCurrentDate);
+//   new Date(2023, 4, 29, 11, 15);
+}
 
 const DayScaleCell = ({
   startDate,
@@ -245,7 +255,7 @@ function CalendarComponent({ appointments, resources, who }){
                 <Typography component={'span'} variant={'body2'}>
                     <Paper style={{paddingTop: "9em"}}>
                         <Scheduler data={appointments} locale="pl-PL">
-                            <ViewState defaultCurrentDate={defaultCurrentDate} />
+                            <ViewState defaultCurrentDate={getDefaultCurrentDate()} />
                             {/* <MonthView
                                 dayScaleCellComponent={DayScaleCell}
                                 timeTableCellComponent={TimeTableCell}
