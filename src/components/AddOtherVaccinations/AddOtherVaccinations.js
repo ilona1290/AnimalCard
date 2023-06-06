@@ -71,11 +71,9 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
         const results = await Promise.all(validationPromises);
         const _ = require('lodash');
         const expectedErrors = {diseaseName: '', name: '', series: ""};
-        console.log(results)
         const updatedErrors = [];
         results.forEach(( errors, index ) => {
             updatedErrors[index] = errors;
-            console.log(errors)
             if (_.isEqual(errors.errors, expectedErrors)) {
                 isCorrect = true
             }
@@ -85,8 +83,6 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
             }
         });
         setErrors(updatedErrors);
-        console.log(updatedErrors)
-        console.log(isCorrect)
         return new Promise((resolve, reject) => {
             if(isCorrect === true){
                 resolve(true)
@@ -171,7 +167,6 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
     }
 
     const validate = async(name, value, index) => {
-        console.log(name, value, index)
         try {
             await schema.validateAt( name, { [name]: value});
             let updateErrors = [...errors]
@@ -179,7 +174,6 @@ const AddOtherVaccinations = React.forwardRef(( {otherVaccinations, onOtherVacci
             updateErrors[index].errors[name] = ''
             setErrors(updateErrors);
           } catch (error) {
-            console.log(error)
             let updateErrors = [...errors]
             updateErrors[index].errors[name] = error.message
             setErrors(updateErrors);

@@ -41,7 +41,6 @@ function ResearchResults(){
             const { id, researchesList, researchesDate, resultFileName, resultPath, resultDate, vet } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
             let formattedResultDate = resultDate;
             setResultPath(resultPath)
-            console.log(formattedResultDate)
             if (resultDate) {
               formattedResultDate = new Date(resultDate);
             }

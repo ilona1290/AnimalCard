@@ -81,7 +81,6 @@ function RabiesVaccinations(){
             return { id, name, series, termNext: new Date(termNext), termValidity: new Date(termValidity), vaccinationDate: new Date(vaccinationDate), vet }; // Utwórz nowy obiekt z wybranymi właściwościami
           })
             setRows(data);
-            console.log(result.petRabiesVaccinations);
             setLoading(false);
         })
     }, [])

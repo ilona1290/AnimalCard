@@ -10,10 +10,11 @@ import PreviewResearches from "../PreviewResearches/PreviewResearches";
 import PreviewWeight from "../PreviewWeight/PreviewWeight";
 import SessionManager from "../Auth/SessionManager";
 import PreviewOwnerAndPet from "../PreviewOwnerAndPet/PreviewOwnerAndPet";
+import AddVisitCard from "../AddVisitCard/AddVisitCard";
 
 
 function PreviewVisit({ visitId, handleShowPreview, rabiesVaccinations, infectiousDiseaseVaccinations, treatments, diseases, researches, weights, ownerAndPatient }){
-    const [visitCard, setVisitCard] = React.useState({visitCardFileName: "", visitCardPath: ""});
+    const [visitCard, setVisitCard] = React.useState(null);
     let navigate = useNavigate();
     const animateButton = (e) => {
         let weightToSend = 0;
@@ -29,10 +30,8 @@ function PreviewVisit({ visitId, handleShowPreview, rabiesVaccinations, infectio
             treatments: treatments,
             treatedDiseases: diseases,
             research: researches[0],
-            weight: weightToSend,
-            completedVisit: visitCard
+            weight: weightToSend
         }
-        console.log(objToSend)
         e.target.innerText = ""
         e.preventDefault();
         //reset animation
@@ -45,19 +44,20 @@ function PreviewVisit({ visitId, handleShowPreview, rabiesVaccinations, infectio
 
         postData(`api/Visit/${SessionManager.getUserId()}/CompleteVisit`, objToSend).then((result) => {
             e.target.classList.remove('animate');
-            if(result === true){
+            if(result.result === true){
                 e.target.classList.add('success');
-                setTimeout(function(){
-                    navigate("/vetMenu/calendar");
-                  },500);
+                let cardInfo = {
+                    visitCardFileName: result.generatedCardFileName,
+                    visitCardPath: result.generatedCardPath
+                }
+                setVisitCard(cardInfo)
             }
         })
     };
 
     const returnPreviewVisits = () => {
-        console.log(weights)
         return(
-            <>
+            <div id="preview">
                 {visitId === "0" && <PreviewOwnerAndPet ownerAndPatient={ownerAndPatient}/>}
                 {rabiesVaccinations.length !== 0 && <PreviewVisitRabiesVaccination rabiesVaccinations={rabiesVaccinations}/>}
                 {infectiousDiseaseVaccinations.length !== 0 && <PreviewVisitOtherVaccinations otherVaccinations={infectiousDiseaseVaccinations}/>}
@@ -65,72 +65,23 @@ function PreviewVisit({ visitId, handleShowPreview, rabiesVaccinations, infectio
                 {diseases.length !== 0 && <PreviewDiseases diseases={diseases}/>}
                 {researches.length !== 0 && <PreviewResearches researches={researches}/>}
                 {weights.length !== 0 && weights[0].weightValue !== "" && <PreviewWeight weights={weights}/>}
-            </>
+            </div>
         )
     }
 
-    const handleSend = () => {
-        const fileInput = document.getElementById('visitCardFile');
-        fileInput.click();
-        fileInput.addEventListener('change', handleCompletedVisitChange);
-    }
-
-    const handleCompletedVisitChange = (e) => {
-        e.preventDefault();
-        let form = new FormData();
-        for (var index = 0; index < e.target.files.length; index++) {
-            var element = e.target.files[index];
-            form.append('image', element);
-        }
-        form.append('fileName', "Img");
-        addImage(form);
-    };
-
-    const addImage = (form) => {
-        fetch('https://animalcardapi.somee.com/api/upload/visitcards',
-            {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + SessionManager.getToken()
-                },
-                body: form
-            }
-        ).then(function(response) {
-            return response.json();
-        }).then(function(result) {
-            let cardInfo = {
-                visitCardFileName: result.name,
-                visitCardPath: result.path
-            }
-            setVisitCard(cardInfo)
-
-            // postData('api/Pet/AddResearchResult', resultToSend).then((result) => {
-            //     if(result === true){
-            //         window.location.reload();
-            //     }
-            // })
-        })
-    }
     return(
         <div>
-            <button className="header__buttons__end__btn" id="backPreview" style={{position: "absolute", right: "2em", top: "3.5em"}} onClick={handleShowPreview}>
-                <p>Chcę jeszcze coś zmienić</p>
-            </button>
+            {visitCard === null ?
             <div>
-                <h4>Jeśli chcesz przesłać kartę wizyty, którą posiadasz?</h4><br></br>
-                {visitCard.visitCardFileName !== "" && <div><a href = {visitCard.visitCardPath} style={{fontSize: "2rem", color: "black", paddingBottom: "3em"}} target = "_blank">{visitCard.visitCardFileName}</a><br></br></div>}
-                <br></br>
-                <button className="header__buttons__end__btn" style={{margin: 0}} onClick={handleSend}>
-                    <p>Prześlij</p>
+                <button className="header__buttons__end__btn" id="backPreview" style={{position: "absolute", right: "2em", top: "3.5em"}} onClick={handleShowPreview}>
+                    <p>Chcę jeszcze coś zmienić</p>
                 </button>
-                <input id = 'visitCardFile' type="file" style={{display: "none"}}/>
-            </div><br></br>
-            {returnPreviewVisits()}
-            <button className="header__buttons__end__btn save__btn" onClick={animateButton}>
-                Zapisz
-            </button>
+                {returnPreviewVisits()}
+                <button className="header__buttons__end__btn save__btn" onClick={animateButton}>
+                    Zapisz
+                </button>
+            </div>
+            : <AddVisitCard visitId ={visitId} petId={ownerAndPatient.patientId} cardInfo={visitCard}/>}
         </div>
     )
 }

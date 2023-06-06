@@ -13,14 +13,14 @@ const theme = createTheme({
   });
 
 
-const ChooseOwnerAndPet = React.forwardRef(({ ownerWithPet, ownersWithPets, onOwnerAndPetChanged }, ref) =>{
+const ChooseOwnerAndPet = React.forwardRef(({ ownerWithPet, ownersWithPets, ownerWithPets, onOwnerChanged, onOwnerAndPetChanged }, ref) =>{
     const [owner, setOwner] = React.useState(...ownerWithPet.owner);
+    // const [ownerWithPets, setOwnerWithPets] = React.useState(ownerWithPets)
     const [ownerAndPatient, setOwnerAndPatient] = React.useState(ownerWithPet)
     const [errors, setErrors] = React.useState({ 
         owner: ""
     });
     // const [isFirstRender, setFirstRender] = React.useState(true)
-
     // useEffect(() => {
     //     if(isFirstRender === true){
     //         let data = [...errors]
@@ -43,7 +43,6 @@ const ChooseOwnerAndPet = React.forwardRef(({ ownerWithPet, ownersWithPets, onOw
       }));
 
       const checkValidation = () => {
-        console.log(ownerAndPatient)
         return new Promise((resolve, reject) => {
             schema
                 .validate(ownerAndPatient, { abortEarly: false })
@@ -66,6 +65,8 @@ const ChooseOwnerAndPet = React.forwardRef(({ ownerWithPet, ownersWithPets, onOw
     let chosenOwner = ownersWithPets.filter((str) => str.fullName === value)
     // Żeby tablica obiektu też się przepisała to trzeba skopiować obiekt
     setOwner(...chosenOwner);
+    // setOwnerWithPets(...chosenOwner);
+    onOwnerChanged(...chosenOwner)
     if(errors.hasOwnProperty('patient')){
         errors.patient = ""
     }
@@ -99,7 +100,7 @@ const ChooseOwnerAndPet = React.forwardRef(({ ownerWithPet, ownersWithPets, onOw
                 <Typography component={'span'} variant={'body2'}>
             <Autocomplete
             disablePortal
-            value={owner}
+            value={ownerAndPatient.owner}
             id="combo-box-demo"
             options={ownersWithPets.map(a => a.fullName)}
             sx={{ width: 400}}
@@ -127,8 +128,8 @@ const ChooseOwnerAndPet = React.forwardRef(({ ownerWithPet, ownersWithPets, onOw
         <Autocomplete
             disablePortal
             id="combo-box-demo"
-            value={ownerWithPet.patient}
-            options={owner !== null && typeof owner !== "undefined" ? owner.pets.map(a => a.name) : []}
+            value={ownerAndPatient.patient}
+            options={ownerWithPets !== null && typeof ownerWithPets !== "undefined" ? ownerWithPets.pets.map(a => a.name) : []}
             sx={{ width: 400}}
             name="patient"
             onChange={(e, value) => handleChangePatient(e, value)}

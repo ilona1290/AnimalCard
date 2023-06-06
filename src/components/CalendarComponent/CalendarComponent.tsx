@@ -120,8 +120,6 @@ const getDefaultCurrentDate = () => {
     const diff = defaultCurrentDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Poniedziałek: 1, Niedziela: 0
     defaultCurrentDate.setDate(diff);
     return(defaultCurrentDate)
-// console.log(defaultCurrentDate);
-//   new Date(2023, 4, 29, 11, 15);
 }
 
 const DayScaleCell = ({
@@ -178,7 +176,6 @@ const StyledGrid = styled(Grid)(() => ({
 
 
 function CalendarComponent({ appointments, resources, who }){
-  console.log(appointments)
     let navigate = useNavigate()
     const Content = ({ children, appointmentData, ...restProps }) => (
     <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>

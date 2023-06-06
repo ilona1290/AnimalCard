@@ -28,6 +28,7 @@ function StartVisit(){
     const {visitId, visitType} = useParams();
     const [showPreview, setShowPreview] = useState(false);
     const [ownersWithPets, setOwnersWithPets] = useState([]);
+    const [ownerWithPets, setOwnerWithPets] = useState([]);
     const [isLoading, setLoading] = React.useState(true);
 
     const [ownerAndPatient, setOwnerAndPatient] = React.useState({
@@ -51,7 +52,6 @@ function StartVisit(){
     const diseasesRef = React.useRef(null);
     const researchesRef = React.useRef(null);
     const ownerPatientRef = React.useRef(null);
-    console.log(ownerAndPatient)
     React.useEffect(() => {
         getData(`api/Visit/GetDataToNewVisit/${SessionManager.getUserId()}`).then((result) => {
             setOwnersWithPets(result.owners)
@@ -63,7 +63,6 @@ function StartVisit(){
     const handleShowPreview = async () => {
         
         const resultOfValidation = await checkValidity();
-        console.log(resultOfValidation);
         if (resultOfValidation === true) {
             setShowPreview(!showPreview);
         }
@@ -77,13 +76,11 @@ function StartVisit(){
                 options.push(element.name);
             }
         }
-        console.log(options)
         setVisitTypesOptions(options)
     }
 
     const handleChangeAdditionalVisitType = (event) => {
         setAdditionalVisitTypes(event.target.value);
-        console.log(additionalVisitTypes)
     };
 
     const returnAdditionalType = () => {
@@ -128,7 +125,6 @@ function StartVisit(){
         }
       
         const results = await Promise.all(promises);
-        console.log(results);
       
         const isValid = results.every((result) => result === true);
         const hasEmptyArrays = arrays.every((arr) => arr.length === 0);
@@ -151,7 +147,7 @@ function StartVisit(){
           return new Promise((resolve, reject) => {
             rabiesVacinationRef.current.validateData()
               .then(result => {
-                console.log('Wynik walidacji:', result);
+
                 resolve(true);
               })
               .catch(error => {
@@ -272,6 +268,10 @@ function StartVisit(){
         setWeight(weightChanged)
     }
 
+    const handleOwnerChanged = (ownerChanged) =>{
+        setOwnerWithPets(ownerChanged)
+    }
+
     const handleOwnerPetChanged = (ownerPetChanged) =>{
         setOwnerAndPatient(ownerPetChanged)
     }
@@ -284,7 +284,7 @@ function StartVisit(){
                     <>
                         {isLoading && <Loader />}
                         {!isLoading && <div>
-                            <ChooseOwnerAndPet ref={ownerPatientRef} ownerWithPet={ownerAndPatient} ownersWithPets={ownersWithPets} onOwnerAndPetChanged={handleOwnerPetChanged}/>
+                            <ChooseOwnerAndPet ref={ownerPatientRef} ownerWithPet={ownerAndPatient} ownersWithPets={ownersWithPets} ownerWithPets={ownerWithPets} onOwnerChanged={handleOwnerChanged} onOwnerAndPetChanged={handleOwnerPetChanged}/>
                             <h5 className="information"></h5>
                             <AddRabiesVaccination ref={rabiesVacinationRef} rabiesVaccinations={rabiesVaccinations} onRabiesVaccinationsChanged={handleRabiesVaccinationsChanged}/>
                             <AddOtherVaccinations ref={otherVacinationsRef} otherVaccinations={infectiousDiseaseVaccinations} onOtherVaccinationsChanged={handleOtherVaccinationsChanged}/>

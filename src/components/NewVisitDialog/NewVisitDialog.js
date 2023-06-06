@@ -232,7 +232,6 @@ function NewVisitDialog({ openDialog, setOpenDialog, dataToNewVisit, disabledTer
                 });
             }
             });
-            console.log(combinedRanges)
             for(let i = 0; i < combinedRanges.length - 1; i++){
                 const { startHour, startMinute, endHour, endMinute } = combinedRanges[i];
                 let actEndDate = new Date(selectedDate.$y, selectedDate.$M, selectedDate.$D, endHour, endMinute)
