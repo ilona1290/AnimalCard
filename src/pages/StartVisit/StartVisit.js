@@ -372,7 +372,7 @@ function StartVisit(){
                     </Typography>
                 </ThemeProvider>}
                 <button className="header__buttons__end__btn" style={{position: "absolute", right: "15rem", top: "3.5em"}} onClick={handleShowPreview}>
-                    <p>Zakończ wizytę</p>
+                    <p>Zapisz wizytę</p>
                 </button>
                 {/* Tak wywołuje się funkcje w jsx */}
                 {returnFormToChosenVisitType()}

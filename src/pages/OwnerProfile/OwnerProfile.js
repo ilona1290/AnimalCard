@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import { getData } from "../../components/Services/AccessAPI";
+import { getData, putData } from "../../components/Services/AccessAPI";
 import SessionManager from "../../components/Auth/SessionManager";
 import { useNavigate } from 'react-router-dom';
 
@@ -19,6 +19,7 @@ function OwnerProfile(){
     let navigate = useNavigate();
     const[owner, setOwner] = useState(null);
     const [isLoading, setLoading] = useState(true);
+    const [isLoadingImage, setLoadingImage] = useState(true);
     // const [owner, setOwner] = useState(null)
     // const [isLoading, setLoading] = useState(true)
 
@@ -26,6 +27,7 @@ function OwnerProfile(){
         getData(`api/Owner/${SessionManager.getUserId()}`).then((result) => {
             setOwner(result);
             setLoading(false);
+            setLoadingImage(false)
         })
     }, [])
 
@@ -37,6 +39,48 @@ function OwnerProfile(){
         navigate('/ownerMenu')
     }
 
+    const addImage = (form) => {
+        fetch('https://animalcardapi.somee.com/api/upload/petsphotos',
+            {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + SessionManager.getToken()
+                },
+                body: form
+            }
+        ).then(function(response) {
+            return response.json();
+        }).then(function(result) {
+            setOwner({...owner, profilePicture: result})
+            SessionManager.updateProfilePicture(result);
+            let resultToSend = {
+                who: 'owner',
+                id: Number(SessionManager.getUserId()),
+                photo: result
+            }
+            putData('api/Photo/UpdatePhoto', resultToSend).then((result) => {
+                if(result === true){
+                    setLoadingImage(false)
+                }
+            })
+        })
+    }
+    
+    const handleImageChange = (e) => {
+        setLoadingImage(true)
+        e.preventDefault();
+        let form = new FormData();
+        for (var index = 0; index < e.target.files.length; index++) {
+            var element = e.target.files[index];
+            form.append('image', element);
+        }
+        form.append('fileName', "Img");
+        addImage(form);
+    };
+
+
     return(
         <div>
             {isLoading && <Loader />}
@@ -46,7 +90,11 @@ function OwnerProfile(){
                     <p>Powrót</p>
                 </button>
                 <div className="ownerProfile__card">
-                    <img className="ownerProfile__img" src={owner.profilePicture} alt="Owner" />
+                    <br></br>
+                    {isLoadingImage && <div className="ownerProfile__img" style={{position: "relative", marginLeft: "1em"}}><Loader /></div>}
+                    {!isLoadingImage && <img className="ownerProfile__img" src={owner.profilePicture} alt="Owner" />}<br></br><br></br>
+                    <label htmlFor="img" className="updateProfile__avatar__btn">Zmień zdjęcie profilowe</label><br></br>
+                    <input name="Avatar" id = 'img' type="file" style={{visibility:"hidden"}} onChange={(e)=> handleImageChange(e)}/>
                     <div className="ownerProfile__name">{owner.name} {owner.surname}</div>
                     <div className="owner__profile__contact">
                         <div className="ownerProfile__label">Email:</div> 

@@ -23,97 +23,6 @@ const theme = createTheme({
     },
   });
 
-// do zewnętrznego - kafelki w kalendarzu
-const appointments = [
-    {
-        title: "Szczepienie",
-        startDate: new Date(2023, 4, 11, 9, 0),
-        endDate: new Date(2023, 4, 11, 9, 30),
-        // priority: 2,
-        // location: "Room 3",
-        patient: "Fifi",
-        owner: "Elwira Kwiatkowska"
-    },
-    {
-        title: "Wizyta kontrolna",
-        startDate: new Date(2023, 4, 11, 9, 30),
-        endDate: new Date(2023, 4, 11, 10, 0),
-        // priority: 1,
-        // location: "Room 1",
-        patient: "Mark",
-        owner: "Julian Sokołowski"
-    },
-    {
-        title: "Zabieg",
-        startDate: new Date(2023, 4, 11, 10, 15),
-        endDate: new Date(2023, 4, 11, 11, 30),
-        // priority: 1,
-        // location: "Room 3",
-        patient: "Borys",
-        owner: "Adrianna Szewczyk"
-    },
-    {
-        title: "Zabieg",
-        startDate: new Date(2023, 4, 12, 10, 15),
-        endDate: new Date(2023, 4, 12, 13, 0),
-        priority: 3,
-        location: "Room 2",
-        patient: "Bethoveen",
-        owner: "Kryspin Błaszczyk"
-    },
-    {
-        title: "Badanie",
-        startDate: new Date(2023, 4, 8, 11, 0),
-        endDate: new Date(2023, 4, 8, 12, 0),
-        priority: 2,
-        location: "Room 3",
-        patient: "Barry",
-        owner: "Kornel Lewandowski"
-    },
-    {
-        title: "Szczepienie",
-        startDate: new Date(2023, 4, 8, 12, 30),
-        endDate: new Date(2023, 4, 8, 13, 0),
-        priority: 1,
-        location: "Room 1",
-        patient: "Barry",
-        owner: "Krystyna Wojciechowska"
-    },
-    {
-        title: "Zabieg",
-        startDate: new Date(2023, 4, 8, 8, 0),
-        endDate: new Date(2023, 4, 8, 9, 0),
-        priority: 3,
-        location: "Room 1",
-        patient: "Simon",
-        owner: "Łucja Michalak"
-    },
-    {
-        title: "Zabieg",
-        startDate: new Date(2023, 4, 9, 9, 30),
-        endDate: new Date(2023, 4, 9, 11, 0),
-        priority: 3,
-        location: "Room 3",
-        patient: "Koba",
-        owner: "Gabriel Duda"
-    },
-    {
-        title: "Wizyta kontrolna",
-        startDate: new Date(2023, 4, 10, 8, 0),
-        endDate: new Date(2023, 4, 10, 8, 45),
-        priority: 2,
-        patient: "Barry",
-        owner: "Józefa Kaźmierczak"
-    },
-    {
-        title: "Zabieg",
-        startDate: new Date(2023, 4, 10, 12, 0),
-        endDate: new Date(2023, 4, 10, 13, 45),
-        priority: 1,
-        patient: "Fifi",
-        owner: "Bartłomiej Szewczyk"
-    }
-  ];
 
   //do zewnętrznego, definicja informacji, które są w kafelku
 const resources = [
@@ -174,7 +83,7 @@ function VetCalendar(){
         getData(`api/Visit/GetDataToNewVisit/${SessionManager.getUserId()}`).then((result) => {
             setDataToNewVisit(result);
             setDisabledTermsFromAPI(result.disabledTerms)
-            getData(`api/Visit/${SessionManager.getUserId()}/GetScheduledVisits`).then((result) => {
+            getData(`api/Visit/${SessionManager.getUserId()}/GetVetScheduledVisits`).then((result) => {
                 setScheduledVisitsFromAPI(result.scheduledVisits);
                 setLoading(false)
             })
@@ -192,17 +101,6 @@ function VetCalendar(){
     
 
     const prepareScheduledVisits = () => {
-        // scheduledVisitsFromAPI.map((elem, index) => {
-        //     let data = [...scheduledVisits];
-        //     data[index] = {
-        //         title: elem.visitTypeName,
-        //         startDate: elem.startDate,
-        //         endDate: elem.endDate,
-        //         patient: elem.patient,
-        //         owner: elem.owner
-        //     }
-        //     setScheduledVisits(data);
-        // })
         const data = scheduledVisitsFromAPI.map(obj => {
             const { id, visitTypeId, visitTypeName, startDate, endDate, patient, owner, isCompleted, extraInfo } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
             return { id, visitTypeId, title: visitTypeName, startDate, endDate, patient, owner, isCompleted, extraInfo }; // Utwórz nowy obiekt z wybranymi właściwościami

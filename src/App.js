@@ -37,6 +37,7 @@ import Visits from "./pages/Visits";
 import PetProfile from "./pages/PetProfile";
 import OwnerProfile from "./pages/OwnerProfile";
 import OwnerCalendar from "./pages/OwnerCalendar";
+import UpdateAnimalCard from "./pages/UpdateAnimalCard";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               <Route path="/vetMenu/animalCard/create" element={<CreateAnimalCard />} />
               <Route path="/pets/:petId" element={<AnimalCard />} />
               <Route path="/pets/:petId/profile" element={<PetProfile />} />
+              <Route path="/pets/:petId/profile/update" element={<UpdateAnimalCard />} />
               <Route path="/pets/:petId/injections" element={<InjectionsMenu />} />
               <Route path="/pets/:petId/visits" element={<Visits />} />
               <Route path="/pets/:petId/injections/rabiesVacinations" element={<RabiesVaccinations />} />

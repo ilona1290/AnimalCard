@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useParams, useNavigate } from 'react-router-dom'
-import { getData } from "../../components/Services/AccessAPI";
+import { getData, postData, putData } from "../../components/Services/AccessAPI";
 import "./PetProfile.css"
 import Loader from "../../components/Loader/Loader";
+import SessionManager from "../../components/Auth/SessionManager";
 
 const theme = createTheme({
     typography: {
@@ -19,29 +20,84 @@ function PetProfile(){
     const {petId} = useParams();
     const [pet, setPet] = useState(null);
     const [isLoading, setLoading] = useState(true);
+    const [isLoadingImage, setLoadingImage] = useState(true);
 
     useEffect(() => {
         getData(`api/Pet/${petId}`).then((result) => {
             result.dateBirth = new Date(result.dateBirth);
             setPet(result);
             setLoading(false);
+            setLoadingImage(false)
         })
     }, [])
 
     const handleBack = () => {
         navigate(`/pets/${petId}`)
     }
+
+    const handleUpdate = () => {
+        navigate(`/pets/${petId}/profile/update`)
+    }
+
+    const addImage = (form) => {
+        fetch('https://animalcardapi.somee.com/api/upload/petsphotos',
+            {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + SessionManager.getToken()
+                },
+                body: form
+            }
+        ).then(function(response) {
+            return response.json();
+        }).then(function(result) {
+            setPet({...pet, photo: result})
+            let resultToSend = {
+                who: 'pet',
+                id: Number(petId),
+                photo: result
+            }
+            console.log(resultToSend)
+            putData('api/Photo/UpdatePhoto', resultToSend).then((result) => {
+                if(result === true){
+                    setLoadingImage(false)
+                }
+            })
+        })
+    }
+    
+    const handleImageChange = (e) => {
+        setLoadingImage(true)
+        e.preventDefault();
+        let form = new FormData();
+        for (var index = 0; index < e.target.files.length; index++) {
+            var element = e.target.files[index];
+            form.append('image', element);
+        }
+        form.append('fileName', "Img");
+        addImage(form);
+    };
+
+
     return(
-        <div style={{width: "100%", padding: "10em 1em 1em 1em", display: "flex"}}>
+        <div style={{width: "100%", padding: "10em 1em 1em 1em", display: "flex", justifyContent: "center"}}>
             {isLoading && <Loader />}
             {!isLoading &&
             <div>
-                <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
+                <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2rem", top: "3.5em"}}>
                     <p>Powrót</p>
                 </button>
+                {SessionManager.getRole() === "Vet" && <button className="header__buttons__end__btn" onClick={handleUpdate} style={{position: "absolute", right: "15rem", top: "3.5em"}}>
+                    <p>Edytuj profil</p>
+                </button>}
                 <div className="pet__container">
                     <div className="pet__img__container">
-                        <img className="pet__img img__preview petProfile__img" id="output" src={pet.photo} name="petPhoto" alt="PetProfilePicture"></img>
+                        {isLoadingImage && <div className="pet__img img__preview petProfile__img" style={{position: "relative"}}><Loader /></div>}
+                        {!isLoadingImage && <img className="pet__img img__preview petProfile__img" id="output" src={pet.photo} name="petPhoto" alt="PetProfilePicture"></img>}
+                        <label htmlFor="img" className="updateProfile__avatar__btn">Zmień zdjęcie zwierzęcia</label>
+                        <input name="Avatar" id = 'img' type="file" style={{visibility:"hidden"}} onChange={(e)=> handleImageChange(e)}/>
                     </div>
                     <div className="pet__form">
                     <div className="pet__firstColumn">

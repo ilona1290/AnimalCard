@@ -11,7 +11,8 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 
-function DiseasesAndServicesTreatments({label, optionsToShow, handleChange}){
+function DiseasesAndServicesTreatments({chosen, label, optionsToShow, handleChange}){
+    console.log(chosen)
     return(
         <Autocomplete
             multiple
@@ -19,6 +20,7 @@ function DiseasesAndServicesTreatments({label, optionsToShow, handleChange}){
             options={optionsToShow}
             // musi być e tu w parametrze, bo inaczej pod value wejdzie nam event
             onChange={(e, value) => handleChange(value)}
+            value={chosen}
             disableCloseOnSelect
             getOptionLabel={(option) => option}
             isOptionEqualToValue={(option, value) => option === value}

@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import CalendarComponent from "../../components/CalendarComponent/CalendarComponent.tsx";
 import { indigo, blue, teal } from "@mui/material/colors";
+import { getData } from "../../components/Services/AccessAPI.js";
+import SessionManager from "../../components/Auth/SessionManager.js";
+import { Loader } from "semantic-ui-react";
 
 const appointments = [
     {
@@ -48,20 +51,53 @@ const resources = [
         title: "Weterynarz",
         instances: []
     },
-    {
-        fieldName: "address",
-        title: "Adres",
-        instances: []
-    }
+    // {
+    //     fieldName: "address",
+    //     title: "Adres",
+    //     instances: []
+    // }
 ];
 
 function OwnerCalendar(){
+    const [isLoading, setLoading] = React.useState(true);
+    const [scheduledVisitsFromAPI, setScheduledVisitsFromAPI] = React.useState([])
+    const [scheduledVisits, setScheduledVisits] = React.useState([{
+        id: "",
+        visitTypeId: "",
+        title: "",
+        startDate: "",
+        endDate: "",
+        patient: "",
+        owner: "",
+        isCompleted: ""
+    }]);
+
+    React.useEffect(() => {
+        getData(`api/Visit/${SessionManager.getUserId()}/GetOwnerScheduledVisits`).then((result) => {
+            setScheduledVisitsFromAPI(result.scheduledVisits);
+            setLoading(false)
+        })
+        if(scheduledVisitsFromAPI.length !== 0){
+            prepareScheduledVisits()
+        }
+    }, [isLoading])
+
+    const prepareScheduledVisits = () => {
+        const data = scheduledVisitsFromAPI.map(obj => {
+            const { id, visitTypeId, visitTypeName, startDate, endDate, patient, vet, isCompleted, extraInfo } = obj; // Wybierz potrzebne właściwości obiektu z pierwszej tablicy
+            return { id, visitTypeId, title: visitTypeName, startDate, endDate, patient, vet, isCompleted, extraInfo }; // Utwórz nowy obiekt z wybranymi właściwościami
+          });
+        setScheduledVisits(data)
+    }
     return(
         <div>
-            <Link to="/ownerMenu">
-                <button className="header__buttons__end__btn" style={{position: "absolute", right: "3%", top: "4em"}}>Powrót</button>
-            </Link>
-            <CalendarComponent appointments={appointments} resources={resources} who="owner"/>
+            {isLoading && <Loader />}
+            {!isLoading && <div>
+                <Link to="/ownerMenu">
+                    <button className="header__buttons__end__btn" style={{position: "absolute", right: "3%", top: "4em"}}>Powrót</button>
+                </Link>
+                <CalendarComponent appointments={scheduledVisits} resources={resources} who="owner"/>
+            </div>}
         </div>
     )
 }

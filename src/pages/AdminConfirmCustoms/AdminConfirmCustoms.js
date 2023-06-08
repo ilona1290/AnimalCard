@@ -206,26 +206,23 @@ function AdminConfirmCustoms(){
     e.target.classList.add('animate');
     
     e.target.classList.add('animate');
+    e.target.classList.add('circle');
     
-    setTimeout(function(){
-        navigate("/adminMenu")
-      
-      },3200);
     setTimeout(function(){
       e.target.classList.remove('animate');
     
     },4000);
-        // const dataToSend = {
-        //     confirmedDiseases: confirmedDiseases,
-        //     rejectedDiseases: rejectedDiseases,
-        //     confirmedServicesTreatments: confirmedServicesTreatments,
-        //     rejectedServicesTreatments: rejectedServicesTreatments,
-        // }
-        // postData('api/Admin/ConfirmOrRejectCustoms', dataToSend).then((result) => {
-        //     if(result === true){
-        //         navigate("/adminMenu");
-        //     }
-        // });
+        const dataToSend = {
+            confirmedDiseases: confirmedDiseases,
+            rejectedDiseases: rejectedDiseases,
+            confirmedServicesTreatments: confirmedServicesTreatments,
+            rejectedServicesTreatments: rejectedServicesTreatments,
+        }
+        postData('api/Admin/ConfirmOrRejectCustoms', dataToSend).then((result) => {
+            if(result === true){
+                navigate("/adminMenu");
+            }
+        });
     }
 
     return(

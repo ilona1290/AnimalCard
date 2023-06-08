@@ -32,6 +32,7 @@ function UpdateVetProfile(){
     const [profilePictureUrl, setprofilePictureUrl] = useState("https://animalcard.blob.core.windows.net/profilepictures/vetDefaultProfilePicture.png");
     const [addressFields, setAddressFields] = useState([
         {
+            id: 0,
             nameOfPlace: null,
             city: '',
             district: null,
@@ -41,11 +42,22 @@ function UpdateVetProfile(){
         }
     ])
     useEffect(() => {
+        getData('api/Vet/' + SessionManager.getUserId() + "/ToEdit").then((result) => {
+            console.log(result)
+            setAboutMe(result.aboutMe);
+            setAddressFields(result.addresses)
+            setChosenDiseases(result.diseases.map(a => a.name))
+            setCustomDiseases(result.customDiseases.map(a => a.name))
+            setChosenServicesTreatments(result.servicesTreatments.map(a => a.name))
+            setCustomServicesTreatments(result.customServicesTreatments.map(a => a.name))
+            setprofilePictureUrl(result.profilePicture)
+            setLoading(false);
+        })
         getData('api/Vet/GetDiseasesAndServicesTreatments').then((result) => {
             setDiseases(result.diseases);
             setservicesTreatments(result.servicesTreatments);
-            setLoading(false);
         })
+        setLoading(false);
       }, [isLoading]);
 
     const handleClick = () => {
@@ -54,6 +66,7 @@ function UpdateVetProfile(){
 
         let providedServicesTreatmentsAll = chosenServicesTreatments.concat(customServicesTreatments.filter((str) => str !== ''));
 
+        console.log(addressFields)
         const dataToSend = {
             idVet: SessionManager.getUserId(),
             profilePicture: profilePictureUrl,
@@ -62,10 +75,10 @@ function UpdateVetProfile(){
             treatedDiseases: treatedDiseasesAll,
             providedServicesTreatments: providedServicesTreatmentsAll
         }
-
+        console.log(addressFields)
         postData('api/Vet/UpdateVetProfile', dataToSend).then((result) => {
             if(result === ""){
-                navigate("/vetMenu");
+                navigate("/vetMenu/profile");
             }
         });
     }
@@ -108,6 +121,7 @@ function UpdateVetProfile(){
 
     const addFieldsAddress = () => {
         let newfield = {
+            id: 0,
             nameOfPlace: null,
             city: '',
             district: null,
@@ -120,7 +134,7 @@ function UpdateVetProfile(){
     }
 
     const addImage = (form) => {
-        fetch('https://animalcardapi.somee.com/api/upload/profilePicture',
+        fetch('https://animalcardapi.somee.com/api/upload/profilepictures',
             {
                 method: 'POST',
                 mode: 'cors',
@@ -153,6 +167,24 @@ function UpdateVetProfile(){
         setAboutMe(event.target.value);
     }
 
+    const handleRemove = (index) => {
+        let data = [...addressFields];
+        data.splice(index, 1)
+        setAddressFields(data);
+    }
+
+    const handleRemoveDiseases = (index) => {
+        console.log(index)
+        let data = [...customDiseases];
+        data.splice(index, 1)
+        setCustomDiseases(data);
+    }
+    const handleRemoveServices = (index) => {
+        let data = [...customServicesTreatments];
+        data.splice(index, 1)
+        setCustomServicesTreatments(data);
+    }
+
     return(
         <div>
             <div className="header__buttons__end">
@@ -166,7 +198,7 @@ function UpdateVetProfile(){
             {!isLoading &&
             <div className="updateProfile">
                 <div className="updateProfile__avatar">
-                    <img className="updateProfile__avatar__img" src={SessionManager.getProfilePicture()} alt="ProfilePicture"></img>
+                    <img className="updateProfile__avatar__img" src={profilePictureUrl} alt="ProfilePicture"></img>
                     <label htmlFor="img" className="updateProfile__avatar__btn">Zmień zdjęcie profilowe</label>
                     <input name="Avatar" id = 'img' type="file" style={{visibility:"hidden"}} onChange={(e)=> handleImageChange(e)}/>
                 </div>
@@ -176,15 +208,19 @@ function UpdateVetProfile(){
                     <TextField
                         id="outlined-multiline-static"
                         label="O mnie"
+                        value={aboutMe}
                         multiline
                         rows={4}
                         style={{width: "90%"}} onChange={handleChangeAboutMe}
                     /><br /><br/>
-                    {!isLoading && <DiseasesAndServicesTreatments label="Choroby" optionsToShow={diseases} handleChange={handleChangeDiseases} />}<br></br>
-                    {!isLoading && <DiseasesAndServicesTreatments label="Usługi i zabiegi" optionsToShow={servicesTreatments} handleChange={handleChangeServicesTreatments} />}
-                    <CustomDiseasesAndServicesTreatments name='name' placeholder="Nazwa choroby" addFields={addFieldsDisease} customArray={customDiseases} handleChange={handleFormChangeDiseases}/>
-                    <CustomDiseasesAndServicesTreatments name='name' placeholder="Nazwa usługi, bądź zabiegu" addFields={addFieldsServiceTreatment} customArray={customServicesTreatments} handleChange={handleFormChangeServicesTreatments}/>
-                    <AddressesForm addFields={addFieldsAddress} addressesArray={addressFields} handleChange={handleFormChangeAddresses}/>
+                    {!isLoading && <DiseasesAndServicesTreatments label="Choroby" chosen={chosenDiseases} optionsToShow={diseases} handleChange={handleChangeDiseases}/>}<br></br>
+                    {!isLoading && <DiseasesAndServicesTreatments label="Usługi i zabiegi" chosen={chosenServicesTreatments}  optionsToShow={servicesTreatments} handleChange={handleChangeServicesTreatments}/>}
+                    <h2>Choroby</h2>
+                    <CustomDiseasesAndServicesTreatments name='name' placeholder="Nazwa choroby" addFields={addFieldsDisease} customArray={customDiseases} handleChange={handleFormChangeDiseases} handleRemove={handleRemoveDiseases}/>
+                    <h2>Usługi i zabiegi</h2>
+                    <CustomDiseasesAndServicesTreatments name='name' placeholder="Nazwa usługi, bądź zabiegu" addFields={addFieldsServiceTreatment} customArray={customServicesTreatments} handleChange={handleFormChangeServicesTreatments} handleRemove={handleRemoveServices}/>
+                    <h2>Adresy</h2>
+                    <AddressesForm addFields={addFieldsAddress} addressesArray={addressFields} handleChange={handleFormChangeAddresses} handleRemove={handleRemove}/>
                 </Typography>
                 </ThemeProvider>
                 <button className="updateProfile__send" onClick={handleClick}>Zapisz</button>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { postData } from "../../components/Services/AccessAPI";
+import { postData, putData } from "../../components/Services/AccessAPI";
 import SessionManager from "../../components/Auth/SessionManager";
 import { BASE_URL } from "../Services/Settings";
 
@@ -16,22 +16,39 @@ const theme = createTheme({
     },
   });
 
-function PreviewPetProfile({handleShowPreview, pet, owners, formPhoto}){
+function PreviewPetProfile({type, handleShowPreview, pet, owners, formPhoto}){
     let navigate = useNavigate();
     let dateToShow = pet.dateBirth.$d.toLocaleDateString()
     
     const addImage = (formPhoto, e) => {
+        console.log(pet)
+        let endpoint = "AddPet";
+        if(type === "update"){
+            endpoint = "UpdatePet"
+        }
         if(formPhoto === null){
-            postData('api/Pet/AddPet', pet).then((result) => {
-                e.target.classList.remove('animate');
-                if(result === 1){
-                    e.target.classList.add('success');
-                    setTimeout(function(){
-                        navigate("/vetMenu");
-                      },500);
-                    
-                }
-            })
+            if(type === "create"){
+                postData(`api/Pet/${endpoint}`, pet).then((result) => {
+                    e.target.classList.remove('animate');
+                    if(result === 1){
+                        e.target.classList.add('success');
+                        setTimeout(function(){
+                            navigate("/vetMenu");
+                        },500);
+                    }
+                }) 
+            }
+            else{
+                putData(`api/Pet/${endpoint}`, pet).then((result) => {
+                    e.target.classList.remove('animate');
+                    if(result === true){
+                        e.target.classList.add('success');
+                        setTimeout(function(){
+                            navigate(`/pets/${pet.id}/profile`)
+                        },500);
+                    }
+                }) 
+            }
         }
         else{
             fetch(`${BASE_URL}api/upload/petsphotos`,
@@ -48,15 +65,29 @@ function PreviewPetProfile({handleShowPreview, pet, owners, formPhoto}){
                 return response.json();
             }).then(function(result) {
                 pet.photo = result;
-                postData('api/Pet/AddPet', pet).then((result) => {
-                    e.target.classList.remove('animate');
-                    if(result === 1){
-                        e.target.classList.add('success');
-                        setTimeout(function(){
-                            navigate("/vetMenu");
-                          },500);
-                    }
-                })
+                if(type === "create"){
+                    postData(`api/Pet/${endpoint}`, pet).then((result) => {
+                        e.target.classList.remove('animate');
+                        if(result === 1){
+                            e.target.classList.add('success');
+                            setTimeout(function(){
+                                navigate("/vetMenu");
+                            },500);
+                        }
+                    })
+                }
+                else{
+                    
+                    putData(`api/Pet/${endpoint}`, pet).then((result) => {
+                        e.target.classList.remove('animate');
+                        if(result === true){
+                            e.target.classList.add('success');
+                            setTimeout(function(){
+                                navigate(`/pets/${pet.id}/profile`)
+                            },500);
+                        }
+                    }) 
+                }
             })
         }
     }
@@ -66,19 +97,18 @@ function PreviewPetProfile({handleShowPreview, pet, owners, formPhoto}){
         //reset animation
         e.target.classList.remove('animate');
         e.target.classList.remove('success');
-        
         e.target.classList.add("circle")
         e.target.classList.add('animate');
 
-        let ownerId = owners.find(x => x.fullName === pet.owner).id;
-        pet.owner = ownerId;
-        
+        // if(type === "create"){
+            let ownerId = owners.find(x => x.fullName === pet.owner).id;
+            pet.owner = ownerId;
+        // }
         // pet.dateBirth = new Date(pet.dateBirth)
         addImage(formPhoto, e)
       };
     return(
         <div><div style={{width: "100%", padding: "10em 1em 1em 1em", display: "flex"}}>
-            
             <button className="header__buttons__end__btn" id="backPreview" style={{position: "absolute", right: "2em", top: "3.5em"}} onClick={handleShowPreview}>
                 <p>Chcę jeszcze coś zmienić</p>
             </button>

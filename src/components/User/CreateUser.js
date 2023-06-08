@@ -43,7 +43,7 @@ function CreateUser() {
                     <div className="container">
                         <div className="wrapper">
                             <div className="title">Rejestracja</div>
-                            <form onSubmit={onSubmitUser}>
+                            <form onSubmit={onSubmitUser} name="registerUser">
                                 <div className="field">
                                     <input type="text" name="name" required></input>
                                     <label>Imię</label>
@@ -52,14 +52,6 @@ function CreateUser() {
                                     <input type="text" name="surname" required></input>
                                     <label>Nazwisko</label>
                                 </div>
-                                {/* <div className="field">
-                                    <select name="sex" id="sex">
-                                        <option disabled selected value></option>
-                                        <option value="Kobieta">Kobieta</option>
-                                        <option value="Meżczyzna">Meżczyzna</option>
-                                    </select>
-                                    <label>Płeć: </label>
-                                </div> */}
                                 <div className="field">
                                     <input type="text" name="email" required/>
                                     <label>Email</label>
@@ -77,7 +69,7 @@ function CreateUser() {
                                     <label>Potwierdź hasło: </label>
                                 </div>
                                 <div className="field">
-                                    <button onClick={onSubmitUser} className="action__login__btn">Zarejestruj</button>
+                                    <button className="action__login__btn">Zarejestruj</button>
                                 </div>
                                 <div className="field">
                                     <Link to="/"><input type="reset" value="Powrót"/></Link>
@@ -105,14 +97,6 @@ function CreateUser() {
                                     <input type="text" name="surname" required></input>
                                     <label>Nazwisko</label>
                                 </div>
-                                {/* <div className="field">
-                                    <select name="sex" id="sex">
-                                        <option disabled selected value></option>
-                                        <option value="Kobieta">Kobieta</option>
-                                        <option value="Meżczyzna">Meżczyzna</option>
-                                    </select>
-                                    <label>Płeć: </label>
-                                </div> */}
                                 <div className="field">
                                     <input type="text" name="email" required/>
                                     <label>Email</label>
@@ -130,7 +114,7 @@ function CreateUser() {
                                     <label>Potwierdź hasło: </label>
                                 </div>
                                 <div className="field">
-                                    <button onClick={onSubmitUser} className="action__login__btn">Zarejestruj</button>
+                                    <button className="action__login__btn">Zarejestruj</button>
                                 </div>
                                 <div className="field">
                                     <Link to="/"><input type="reset" value="Powrót"/></Link>
@@ -145,7 +129,7 @@ function CreateUser() {
 
     const onSubmitUser = (event) => {
         event.preventDefault();
-        const { name, surname, sex, email, phoneNumber, password, confirmationPassword} = event.target.elements;
+        const { name, surname, email, phoneNumber, password, confirmationPassword} = event.target.elements;
 
         if (password.value !== confirmationPassword.value) {
             alert("Password and confirm password are not same");
@@ -155,14 +139,12 @@ function CreateUser() {
         let userObj = {
             name: name.value,
             surname: surname.value,
-            sex: sex.value,
             email: email.value,
             phoneNumber: phoneNumber.value,
             password: password.value,
             confirmationPassword: confirmationPassword.value,
             roles: roles
         }
-
         postData('api/User/CreateUser', userObj).then((result) => {
             if(result === true){
                 navigate("/confirmEmailInfo");
@@ -172,7 +154,7 @@ function CreateUser() {
 
     const onSubmitVet = (event) => {
         event.preventDefault();
-        const { nrPWZ, name, surname, sex, email, phoneNumber, password, confirmationPassword} = event.target.elements;
+        const { nrPWZ, name, surname, email, phoneNumber, password, confirmationPassword} = event.target.elements;
 
         if (password.value !== confirmationPassword.value) {
             alert("Password and confirm password are not same");
@@ -183,7 +165,6 @@ function CreateUser() {
             nrPWZ: nrPWZ.value,
             name: name.value,
             surname: surname.value,
-            sex: sex.value,
             email: email.value,
             phoneNumber: phoneNumber.value,
             password: password.value,

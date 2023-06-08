@@ -41,21 +41,23 @@
     cursor: pointer;
 }
 
-@media (min-width: 664px) {
+
+@media (min-width: 896px) {
     .menu{
-        padding: 0;
+        column-gap: 4em;
     }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 992px) {
     .menu{
-        column-gap: 4em;
+        padding-top: 0;
     }
 }
 
 @media (min-width: 1200px) {
     .menu{
         column-gap: 6em;
+        padding-top: 9em;
     }
     .menu__card{
         padding-top: 3em;
@@ -69,5 +71,11 @@
     .menu__icon__title{
         margin-top: 1em;
         font-size: 3rem;
+    }
+}
+
+@media (min-width: 1488px) {
+    .menu{
+        padding-top: 0;
     }
 }

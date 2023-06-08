@@ -192,12 +192,12 @@ function CalendarComponent({ appointments, resources, who }){
         <Grid item xs={10}>
           <span>{appointmentData.patient}</span>
         </Grid>
-        <StyledGrid item xs={2} className={classes.textCenter}>
+        {/* <StyledGrid item xs={2} className={classes.textCenter}>
             {who !== "vet" ? <StyledRoom className={classes.icon} /> : <div></div>}
-        </StyledGrid>
-        <Grid item xs={10}>
+        </StyledGrid> */}
+        {/* <Grid item xs={10}>
             {who !== "vet" ? <span>{appointmentData.address}</span> : <div></div>}
-        </Grid>
+        </Grid> */}
         <StyledGrid item xs={2} className={classes.textCenter}>
             <img src={InfoIcon} alt="InfoIcon"></img>
         </StyledGrid>
