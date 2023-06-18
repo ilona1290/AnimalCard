@@ -38,6 +38,8 @@ import PetProfile from "./pages/PetProfile";
 import OwnerProfile from "./pages/OwnerProfile";
 import OwnerCalendar from "./pages/OwnerCalendar";
 import UpdateAnimalCard from "./pages/UpdateAnimalCard";
+import Vets from "./pages/Vets";
+import VetProfileToOwner from "./pages/VetProfileToOwner";
 
 function App() {
   return (
@@ -53,6 +55,8 @@ function App() {
               <Route path="/ownerMenu" element={<OwnerMenu />} />
               <Route path="/ownerMenu/profile" element={<OwnerProfile />} />
               <Route path="/ownerMenu/calendar" element={<OwnerCalendar />} />
+              <Route path="/ownerMenu/vets" element={<Vets />} />
+              <Route path="/ownerMenu/vets/:vetId" element={<VetProfileToOwner />} />
               <Route path="/vetMenu/profile" element={<VetProfile />} />
               <Route path="/vetMenu/calendar" element={<VetCalendar />} />
               <Route path="/vetMenu/calendar/startVisit/:visitId/type/:visitType" element={<StartVisit />} />
@@ -69,7 +73,7 @@ function App() {
               <Route path="/pets/:petId/researchResults" element={<ResearchResults />} />
               <Route path="/pets/:petId/weight" element={<Weight />} />
               <Route path="/pets" element={<Pets />} />
-              <Route path="/confirmCustoms" element={<AdminConfirmCustoms />} />
+              <Route path="/adminMenu/confirmCustoms" element={<AdminConfirmCustoms />} />
             </Routes>
           </Router>
           :

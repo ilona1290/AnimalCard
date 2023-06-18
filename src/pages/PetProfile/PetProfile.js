@@ -80,11 +80,10 @@ function PetProfile(){
         addImage(form);
     };
 
-
     return(
         <div style={{width: "100%", padding: "10em 1em 1em 1em", display: "flex", justifyContent: "center"}}>
             {isLoading && <Loader />}
-            {!isLoading &&
+            {!isLoading && pet !== null && SessionManager.getPets().includes(petId) &&
             <div>
                 <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2rem", top: "3.5em"}}>
                     <p>Powrót</p>

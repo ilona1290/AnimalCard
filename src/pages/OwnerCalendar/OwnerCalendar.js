@@ -4,7 +4,7 @@ import CalendarComponent from "../../components/CalendarComponent/CalendarCompon
 import { indigo, blue, teal } from "@mui/material/colors";
 import { getData } from "../../components/Services/AccessAPI.js";
 import SessionManager from "../../components/Auth/SessionManager.js";
-import { Loader } from "semantic-ui-react";
+import Loader from "../../components/Loader";
 
 const appointments = [
     {

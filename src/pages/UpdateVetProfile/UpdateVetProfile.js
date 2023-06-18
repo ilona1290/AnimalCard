@@ -216,7 +216,8 @@ function UpdateVetProfile(){
                     {!isLoading && <DiseasesAndServicesTreatments label="Choroby" chosen={chosenDiseases} optionsToShow={diseases} handleChange={handleChangeDiseases}/>}<br></br>
                     {!isLoading && <DiseasesAndServicesTreatments label="Usługi i zabiegi" chosen={chosenServicesTreatments}  optionsToShow={servicesTreatments} handleChange={handleChangeServicesTreatments}/>}
                     <h2>Choroby</h2>
-                    <CustomDiseasesAndServicesTreatments name='name' placeholder="Nazwa choroby" addFields={addFieldsDisease} customArray={customDiseases} handleChange={handleFormChangeDiseases} handleRemove={handleRemoveDiseases}/>
+                    <CustomDiseasesAndServicesTreatments name='name' placeholder="Nazwa choroby" addFields={addFieldsDisease} 
+                    customArray={customDiseases} handleChange={handleFormChangeDiseases} handleRemove={handleRemoveDiseases}/>
                     <h2>Usługi i zabiegi</h2>
                     <CustomDiseasesAndServicesTreatments name='name' placeholder="Nazwa usługi, bądź zabiegu" addFields={addFieldsServiceTreatment} customArray={customServicesTreatments} handleChange={handleFormChangeServicesTreatments} handleRemove={handleRemoveServices}/>
                     <h2>Adresy</h2>

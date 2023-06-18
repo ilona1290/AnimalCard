@@ -3,6 +3,7 @@ import DataTable from "../../components/DataTable";
 import { useParams, useNavigate } from 'react-router-dom'
 import { getData } from "../../components/Services/AccessAPI";
 import Loader from "../../components/Loader";
+import SessionManager from "../../components/Auth/SessionManager";
 
 // const rows = [
 //     {
@@ -91,7 +92,7 @@ function RabiesVaccinations(){
     return(
         <div style={{paddingTop: "9em", width: "100%"}}>
           {isLoading && <Loader />}
-          {!isLoading && <div>
+          {!isLoading && SessionManager.getPets().includes(petId) && <div>
             <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>

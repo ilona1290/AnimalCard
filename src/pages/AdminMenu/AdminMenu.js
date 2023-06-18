@@ -7,7 +7,7 @@ function AdminMenu(){
     let navigate = useNavigate();
 
     const goToConfirmCustoms = () => {
-        navigate("/confirmCustoms");
+        navigate("/adminMenu/confirmCustoms");
     }
     return(
         <div style={{height: "100%"}}>

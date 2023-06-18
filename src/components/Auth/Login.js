@@ -2,7 +2,7 @@ import { Component } from "react";
 import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { postDataForLogin } from "../Services/AccessAPI";
+import { postDataForLogin, getData } from "../Services/AccessAPI";
 import SessionManager from "./SessionManager";
 
 import "./Login.css";
@@ -50,33 +50,39 @@ export default class Login extends Component {
             event.target.classList.remove('animate');
             if (result?.token) {
                 SessionManager.setUserSession(result.fullName, result.token, result.userId, result.role, result.profilePicture);
-                if (SessionManager.getToken()) {
-                    this.setState({
-                        loading: false
-                    });
-                    // <LoginMenu menuText = 'Logout' menuURL = '/logout' />
-
-                    // If login successful and get token
-                    // redirect to dashboard
-                    if(result.role === "Vet"){
-                        if(result.isCompletedVetProfile === false){
+                getData(`api/Pet/GetPetsByUserRole/${result.role}/${result.userId}`).then((resultPets) => {
+                    const pets = resultPets.userPets.map(obj => {
+                        const id  = obj.id;
+                        return id;
+                      })
+                    SessionManager.setUserSession(result.fullName, result.token, result.userId, result.role, result.profilePicture, pets);
+                    if (SessionManager.getToken()) {
+                        this.setState({
+                            loading: false
+                        });
+                        // <LoginMenu menuText = 'Logout' menuURL = '/logout' />
+                        console.log(SessionManager.getPets())
+                        // If login successful and get token
+                        // redirect to dashboard
+                        if(result.role === "Vet"){
+                            if(result.isCompletedVetProfile === false){
+                                event.target.classList.add("success")
+                                window.location.href = "/updateVetProfile";
+                            }
+                            else{
+                                event.target.classList.add("success")
+                                window.location.href = "/vetMenu";
+                            }
+                        }
+                        else if(result.role === "Admin"){
                             event.target.classList.add("success")
-                            window.location.href = "/updateVetProfile";
+                            window.location.href = "/adminMenu"
                         }
                         else{
                             event.target.classList.add("success")
-                            window.location.href = "/vetMenu";
+                            window.location.href = "/ownerMenu";
                         }
-                    }
-                    else if(result.role === "Admin"){
-                        event.target.classList.add("success")
-                        window.location.href = "/adminMenu"
-                    }
-                    else{
-                        event.target.classList.add("success")
-                        window.location.href = "/ownerMenu";
-                    }
-                }
+                }})
             }
 
             else {

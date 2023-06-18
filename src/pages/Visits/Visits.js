@@ -5,6 +5,7 @@ import { getData } from "../../components/Services/AccessAPI";
 
 import Visit1 from './wizyta1.pdf'
 import Loader from "../../components/Loader/Loader";
+import SessionManager from "../../components/Auth/SessionManager";
 
 
 function Visits(){
@@ -54,7 +55,7 @@ function Visits(){
     return(
         <div style={{paddingTop: "9em", width: "100%"}}>
           {isLoading && <Loader />}
-          {!isLoading && <div>
+          {!isLoading && SessionManager.getPets().includes(petId) && <div>
             <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>
             </button>

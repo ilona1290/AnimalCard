@@ -4,17 +4,19 @@ import { BASE_URL } from "./Settings";
 
 export function getData(endPoint) {
 
-    let token=SessionManager.getToken();
+    let token = SessionManager.getToken();
 
-    let payload = {
+    let payload =
+    {
         method: 'GET',
-        headers: {   
-            "access-control-allow-origin" : "*", 
+        headers: {
+            "access-control-allow-origin" : "*",
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
-         },
+        },
     }
+
     return fetch(BASE_URL + endPoint, payload)
     .then(function(response) {
         if (!response.ok) {
@@ -72,15 +74,16 @@ export function postData(endPoint, inputObj) {
 
 export function deleteData(endPoint) {
     let token=SessionManager.getToken();
-    let payload = {
-        method: 'DELETE',
-        headers: {   
-            "access-control-allow-origin" : "*", 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-         },
-    }
+    let payload = 
+        {
+            method: 'DELETE',
+            headers: {
+                "access-control-allow-origin" : "*",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+        }
     return fetch(BASE_URL + endPoint, payload)
     .then(function(response) {
         if (!response.ok) {

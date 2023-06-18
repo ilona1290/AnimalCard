@@ -10,9 +10,9 @@ function CustomDiseasesAndServicesTreatments({name, placeholder, addFields, cust
           return (
             <div key={index}>
               <button className="header__buttons__end__btn" style={{backgroundColor: "red"}} onClick={() => handleRemove(index)}>Usuń</button><br></br>
-              <TextField id="outlined-basic" style={{width: "70%"}} name={name} value={input} label={placeholder} variant="outlined" onChange={event => handleChange(index, event)} /> <br></br><br></br>
+              <TextField id="outlined-basic" style={{width: "70%"}} name={name} value={input} label={placeholder} variant="outlined" 
+              onChange={event => handleChange(index, event)} /> <br></br><br></br>
             </div>)})}
-            
         </div>
     );
 }

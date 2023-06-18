@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { getData, putData } from "../../components/Services/AccessAPI";
+import { getData } from "../../components/Services/AccessAPI";
 import SessionManager from "../../components/Auth/SessionManager";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-import './VetProfile.css';
-
-import downArrowButtonIcon from './down-arrow 2 (2).svg';
-import upArrowButtonIcon from './up-arrow 2.svg';
+import downArrowButtonIcon from '../VetProfile/down-arrow 2 (2).svg'
+import upArrowButtonIcon from '../VetProfile/up-arrow 2.svg';
 import Loader from "../../components/Loader";
-import ChangeContactData from "../../components/ChangeContactData/ChangeContactData";
 
-function VetProfile(){
-    let navigate = useNavigate()
+function VetProfileToOwner(){
+    const {vetId} = useParams();
     const [isLoading, setLoading] = useState(true);
-    const [isLoadingImage, setLoadingImage] = useState(true);
-    const [showEditContactForm, setShowEditContactForm] = useState(false)
-    const [contactData, setContactData] = useState({})
     const [info, setInfo] = useState(null);
     const [addresses, setAddresses] = useState([]);
     const [diseases, setDiseases] = useState([]);
@@ -30,96 +24,28 @@ function VetProfile(){
     const servicesTreatmentsToDisplay = expandedServicesTreatments ? servicesTreatments : servicesTreatments.slice(0, 3);
 
     useEffect(() => {
-        getData('api/Vet/' + SessionManager.getUserId()).then((result) => {
+        getData('api/Vet/' + vetId).then((result) => {
             setInfo(result);
-            setContactData({
-                email: result.email,
-                phoneNumber: result.phoneNumber
-            })
             setAddresses(result.addresses)
             setDiseases(result.diseases)
             setServicesTreatments(result.servicesTreatments)
             setLoading(false);
-            setLoadingImage(false)
         })
     }, [isLoading, info])
-
-    const addImage = (form) => {
-        fetch('https://animalcardapi.somee.com/api/upload/profilepictures',
-            {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + SessionManager.getToken()
-                },
-                body: form
-            }
-        ).then(function(response) {
-            return response.json();
-        }).then(function(result) {
-            setInfo({...info, profilePicture: result})
-            SessionManager.updateProfilePicture(result);
-            let resultToSend = {
-                who: 'vet',
-                id: Number(SessionManager.getUserId()),
-                photo: result
-            }
-            
-            putData('api/Photo/UpdatePhoto', resultToSend).then((result) => {
-                if(result === true){
-                    setLoadingImage(false)
-                }
-            })
-        })
-    }
-    
-    const handleImageChange = (e) => {
-        setLoadingImage(true)
-        e.preventDefault();
-        let form = new FormData();
-        for (var index = 0; index < e.target.files.length; index++) {
-            var element = e.target.files[index];
-            form.append('image', element);
-        }
-        form.append('fileName', "Img");
-        addImage(form);
-    };
-
-    const handleUpdate = () => {
-        navigate('/updateVetProfile')
-    }
-
-    const handleChangeDataContact = () => {
-        setShowEditContactForm(!showEditContactForm)
-    }
+ 
     return(
         <div style={{height: "100%"}}>
             {isLoading && <Loader />}
-            <Link to="/vetMenu">
+            <Link to="/ownerMenu/vets">
                 <button className="header__buttons__end__btn" style={{position: "absolute", top: "3.5em", right: "2%", zIndex: "1000"}}>Powrót</button>
             </Link>
-            {SessionManager.getRole() === "Vet" && <button className="header__buttons__end__btn" onClick={handleUpdate} style={{position: "absolute", right: "15rem", top: "3.5em"}}>
-                <p>Edytuj profil</p>
-            </button>}
             {!isLoading && 
             <div className="vetProfile">
                 <div className="vetProfile__basicInfo">
-                    {isLoadingImage && <div className="vetProfile__basicInfo_profilePicture" style={{position: "relative", zIndex: "1000"}}><Loader /></div>}
-                    {!isLoadingImage && <img className="vetProfile__basicInfo_profilePicture" src={info.profilePicture} alt="VetProfilePicture"></img>}<br></br><br></br>
-                    <label htmlFor="img" className="updateProfile__avatar__btn">Zmień zdjęcie profilowe</label><br></br>
-                    <input name="Avatar" id = 'img' type="file" style={{visibility:"hidden"}} onChange={(e)=> handleImageChange(e)}/>
+                    <img className="vetProfile__basicInfo_profilePicture" src={info.profilePicture} alt="VetProfilePicture"></img><br></br><br></br>
                     <div className="vetProfile__basicInfo_nameSurname">{info.name} {info.surname}</div>
-                    {SessionManager.getRole() === "Vet" && Number(SessionManager.getUserId()) === info.id && <button className="btn__link" onClick={handleChangeDataContact}>
-                        {showEditContactForm === false ? "Zmień dane kontaktowe" : "Wyjdź z edycji"}</button>}
-                    {showEditContactForm === false ?
-                        <div>
-                            <div className="vetProfile__basicInfo_contact"><div className="vetProfile__basicInfo_header">Email:</div> {info.email}</div>
-                            <div className="vetProfile__basicInfo_contact"><div className="vetProfile__basicInfo_header">Nr telefonu:</div> {info.phoneNumber}</div><br></br>
-                        </div>
-                        :
-                        <ChangeContactData contactData={contactData}/>
-                    }
+                    <div className="vetProfile__basicInfo_contact"><div className="vetProfile__basicInfo_header">Email:</div> {info.email}</div>
+                    <div className="vetProfile__basicInfo_contact"><div className="vetProfile__basicInfo_header">Nr telefonu:</div> {info.phoneNumber}</div><br></br>
                     {info.aboutMe !== "" && <div><div className="vetProfile__basicInfo_header">O mnie:</div>
                     <div className="vetProfile__basicInfo_aboutMe">{info.aboutMe}</div></div>}
                 </div>
@@ -160,4 +86,4 @@ function VetProfile(){
     );
 }
 
-export default VetProfile;
+export default VetProfileToOwner;

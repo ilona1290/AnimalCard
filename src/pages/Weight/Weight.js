@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getData } from "../../components/Services/AccessAPI";
 import Loader from "../../components/Loader";
 import "./Weight.css"
+import SessionManager from "../../components/Auth/SessionManager";
 
 const data = [
     {
@@ -116,7 +117,7 @@ function Weight(){
     return(
         <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
           {isLoading && <Loader />}
-          {!isLoading && 
+          {!isLoading && SessionManager.getPets().includes(petId) &&
         <div style={{ height: "90vh", width: "90%", paddingTop: "9em"}}>
         <button className="header__buttons__end__btn" onClick={handleBack} style={{position: "absolute", right: "2%", top: "3.5em"}}>
                 <p>Powrót</p>

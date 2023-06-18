@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import "./OwnerProfile.css"
 import ProfilePicture from "./owner2.png"
 import Loader from "../../components/Loader/Loader";
+import ChangeContactData from "../../components/ChangeContactData/ChangeContactData";
 
 const owner = {
     name: "Właściciel",
@@ -20,12 +21,18 @@ function OwnerProfile(){
     const[owner, setOwner] = useState(null);
     const [isLoading, setLoading] = useState(true);
     const [isLoadingImage, setLoadingImage] = useState(true);
+    const [showEditContactForm, setShowEditContactForm] = useState(false)
+    const [contactData, setContactData] = useState({})
     // const [owner, setOwner] = useState(null)
     // const [isLoading, setLoading] = useState(true)
 
     useEffect(() => {
         getData(`api/Owner/${SessionManager.getUserId()}`).then((result) => {
             setOwner(result);
+            setContactData({
+                email: result.email,
+                phoneNumber: result.phoneNumber
+            })
             setLoading(false);
             setLoadingImage(false)
         })
@@ -80,6 +87,9 @@ function OwnerProfile(){
         addImage(form);
     };
 
+    const handleChangeDataContact = () => {
+        setShowEditContactForm(!showEditContactForm)
+    }
 
     return(
         <div>
@@ -96,14 +106,22 @@ function OwnerProfile(){
                     <label htmlFor="img" className="updateProfile__avatar__btn">Zmień zdjęcie profilowe</label><br></br>
                     <input name="Avatar" id = 'img' type="file" style={{visibility:"hidden"}} onChange={(e)=> handleImageChange(e)}/>
                     <div className="ownerProfile__name">{owner.name} {owner.surname}</div>
-                    <div className="owner__profile__contact">
-                        <div className="ownerProfile__label">Email:</div> 
-                        <div className="ownerProfile__value">{owner.email}</div>
-                    </div>
-                    <div className="ownerprofile__contact">
-                        <div className="ownerProfile__label">Nr telefonu:</div>
-                        <div className="ownerProfile__value">{owner.phoneNumber}</div>
-                    </div>
+                    {SessionManager.getRole() === "User" && Number(SessionManager.getUserId()) === owner.id && <button className="btn__link" onClick={handleChangeDataContact}>
+                        {showEditContactForm === false ? "Zmień dane kontaktowe" : "Wyjdź z edycji"}</button>}
+                    {showEditContactForm === false ?
+                        <div>
+                            <div className="owner__profile__contact">
+                                <div className="ownerProfile__label">Email:</div> 
+                                <div className="ownerProfile__value">{owner.email}</div>
+                            </div>
+                            <div className="ownerprofile__contact">
+                                <div className="ownerProfile__label">Nr telefonu:</div>
+                                <div className="ownerProfile__value">{owner.phoneNumber}</div>
+                            </div>
+                        </div>
+                        :
+                        <ChangeContactData contactData={contactData}/>
+                    }
                 </div>
                 <div className="ownerProfile__pets">
                     <h1>Zwierzęta</h1>

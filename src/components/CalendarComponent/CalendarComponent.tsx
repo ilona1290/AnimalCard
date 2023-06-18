@@ -15,6 +15,13 @@ import {
   Resources,
   AppointmentTooltip
 } from "@devexpress/dx-react-scheduler-material-ui";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 import { indigo, blue, teal } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -29,6 +36,7 @@ import OwnerIcon from './ownerIcon4.png'
 import PetIcon from './petIcon.png'
 import VetIcon from './vetIcon.png'
 import InfoIcon from './info.png'
+import { deleteData } from "../Services/AccessAPI";
 
 const theme = createTheme({
     typography: {
@@ -122,32 +130,6 @@ const getDefaultCurrentDate = () => {
     return(defaultCurrentDate)
 }
 
-const DayScaleCell = ({
-  startDate,
-  ...restProps
-}: MonthView.DayScaleCellProps) => (
-  <StyledMonthViewDayScaleCell
-    className={classNames({
-      [classes.weekEndDayScaleCell]: isWeekEnd(startDate)
-    })}
-    startDate={startDate}
-    {...restProps}
-  />
-);
-
-const TimeTableCell = ({
-  startDate,
-  ...restProps
-}: MonthView.TimeTableCellProps) => (
-  <StyledMonthViewTimeTableCell
-    className={classNames({
-      [classes.weekEndCell]: isWeekEnd(startDate!)
-    })}
-    startDate={startDate}
-    {...restProps}
-  />
-);
-
 // Stylowanie kafelków, zostaje tu
 const Appointment = ({ data, ...restProps }: Appointments.AppointmentProps) => (
   <StyledAppointmentsAppointment
@@ -168,15 +150,30 @@ const StyledGrid = styled(Grid)(() => ({
     }
   }));
 
-  const StyledRoom = styled(Room)(({ theme: { palette } }) => ({
-    [`&.${classes.icon}`]: {
-      color: palette.action.active
-    }
-  }));
-
 
 function CalendarComponent({ appointments, resources, who }){
     let navigate = useNavigate()
+    const [visitIdToRemove, setVisitIdToRemove] = React.useState(null)
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickToRemove = (visitId) => {
+      setVisitIdToRemove(visitId)
+      setOpen(true);
+    };
+
+    const handleConfirmVisitRemoving = () => {
+      console.log(visitIdToRemove)
+      deleteData('api/Visit/' + visitIdToRemove + '/DeleteVisit').then((result) => {
+        if(result === true){
+          window.location.reload();
+        }
+    })
+    }
+  
+    const handleRejectVisitRemoving = () => {
+      setVisitIdToRemove(null)
+      setOpen(false);
+    };
     const Content = ({ children, appointmentData, ...restProps }) => (
     <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
       <Grid container alignItems="center">
@@ -206,6 +203,9 @@ function CalendarComponent({ appointments, resources, who }){
           </Grid>
         <Grid item xs={10}>
             {who === "vet" && appointmentData.isCompleted === false ? <button className="startVisit__btn" onClick={() => handleStartVisit(appointmentData.id, appointmentData.visitTypeId)}>Rozpocznij wizytę</button> : <div></div>}
+        </Grid>
+        <Grid item xs={10}>
+            {who === "vet" && appointmentData.isCompleted === false ? <button className="startVisit__btn" style={{backgroundColor: "red"}} onClick={() => handleClickToRemove(appointmentData.id)}>Usuń wizytę</button> : <div></div>}
         </Grid>
       </Grid>
     </AppointmentTooltip.Content>
@@ -250,6 +250,30 @@ function CalendarComponent({ appointments, resources, who }){
         <div className="calendar">
             <ThemeProvider theme={theme}>
                 <Typography component={'span'} variant={'body2'}>
+                <div>
+      <Dialog
+        sx={{zIndex: 1000000000000}}
+        open={open}
+        onClose={handleRejectVisitRemoving}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Usuwanie wizyty"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Czy na pewno chce usunąć tą wizytę?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmVisitRemoving}>Tak</Button>
+          <Button onClick={handleRejectVisitRemoving} autoFocus>
+            Nie
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
                     <Paper style={{paddingTop: "9em"}}>
                         <Scheduler data={appointments} locale="pl-PL">
                             <ViewState defaultCurrentDate={getDefaultCurrentDate()} />
