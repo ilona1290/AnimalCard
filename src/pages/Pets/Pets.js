@@ -25,6 +25,11 @@ function Pets(){
 
     useEffect(() => {
         getData(`api/Pet/GetPetsByUserRole/${SessionManager.getRole()}/${SessionManager.getUserId()}`).then((result) => {
+            const petsIds = result.userPets.map(obj => {
+                const id  = obj.id;
+                return id;
+              })
+            SessionManager.updatePets(petsIds)
             setPets(result.userPets);
             setOrginalPets(result.userPets);
             setLoading(false);

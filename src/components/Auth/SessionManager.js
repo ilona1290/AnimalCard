@@ -35,6 +35,11 @@ const SessionManager = {
         sessionStorage.setItem('profilePicture', profilePicture);
     },
 
+    updatePets(pets){
+        sessionStorage.removeItem('pets');
+        sessionStorage.setItem('pets', pets)
+    },
+
     setUserSession(fullName, token, userId, role, profilePicture, pets) {
         sessionStorage.setItem('fullName', fullName);
         sessionStorage.setItem('token', token);
